@@ -62,4 +62,4 @@ See `dataset_confinement.ipynb` for data preprocessing steps including:
 - Data validation
 
 ### Citation
-If you use this dataset, please cite: [Add citation information] 
+If you want to use this dataset, please email vinakhiem120@gmail.com
