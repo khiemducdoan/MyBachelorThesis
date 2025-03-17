@@ -5,6 +5,7 @@ from omegaconf import DictConfig
 import torch
 from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
+from tensorboardX import SummaryWriter  # Import TensorBoardX
 
 from data.dataset import TBIDataset
 from data.preprocessing import DataPreprocessor
@@ -17,6 +18,9 @@ logger = logging.getLogger(__name__)
 def train(config: DictConfig):
     # Set random seed
     torch.manual_seed(config.seed)
+    
+    # Initialize TensorBoard writer
+    writer = SummaryWriter(log_dir=os.path.join(config.output_dir, 'logs'))
     
     # Load and preprocess data
     data = pd.read_csv(config.data.path)
@@ -81,6 +85,8 @@ def train(config: DictConfig):
                 logger.info(f'Train Epoch: {epoch} [{batch_idx}/{len(train_loader)} '
                           f'({100. * batch_idx / len(train_loader):.0f}%)]\t'
                           f'Loss: {loss.item():.6f}')
+                # Log training loss to TensorBoard
+                writer.add_scalar('Train/Loss', loss.item(), epoch * len(train_loader) + batch_idx)
         
         # Validation
         model.eval()
@@ -102,6 +108,10 @@ def train(config: DictConfig):
         
         # Log metrics
         logger.info(f'Epoch {epoch}: Val Loss: {val_loss:.4f}, Metrics: {metrics}')
+        # Log validation loss and metrics to TensorBoard
+        writer.add_scalar('Validation/Loss', val_loss, epoch)
+        for metric_name, metric_value in metrics.items():
+            writer.add_scalar(f'Validation/{metric_name}', metric_value, epoch)
         
         # Early stopping
         if val_loss < best_val_loss:
@@ -118,6 +128,9 @@ def train(config: DictConfig):
         
         # Update scheduler
         scheduler.step(val_loss)
+    
+    # Close the TensorBoard writer
+    writer.close()
 
 if __name__ == "__main__":
     train() 
