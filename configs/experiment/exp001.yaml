@@ -1,0 +1,19 @@
+# Inherit default configs
+defaults:
+  - override /model: tabnet
+  - override /data: tbi
+  - _self_
+
+# Experiment specific settings
+name: exp001_tabnet_baseline
+
+model:
+  params:
+    n_d: 16
+    n_a: 16
+    n_steps: 5
+
+training:
+  batch_size: 64
+  num_epochs: 200
+  learning_rate: 0.001 

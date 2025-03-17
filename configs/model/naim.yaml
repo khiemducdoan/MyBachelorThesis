@@ -1,0 +1,22 @@
+name: naim
+model:
+  _target_: src.models.naim.NAIM
+  params:
+    input_size: ${data.num_features}
+    output_size: ${data.num_classes} 
+    d_token: 64
+    num_heads: 8
+    num_layers: 3
+    feedforward_dim: 256
+    dropout_rate: 0.1
+    activation: relu
+
+optimizer:
+  _target_: torch.optim.AdamW
+  lr: ${training.learning_rate}
+  weight_decay: 0.01
+
+scheduler:
+  _target_: torch.optim.lr_scheduler.CosineAnnealingLR
+  T_max: ${training.num_epochs}
+  eta_min: 1e-6 

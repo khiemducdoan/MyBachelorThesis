@@ -1,0 +1,26 @@
+name: tbi
+data:
+  path: data/processed/tbi1.csv
+  target_column: d_kl_tl
+  num_classes: 4
+  
+preprocessing:
+  numerical:
+    strategy: standard
+    missing_values: mean
+  categorical:
+    strategy: onehot
+    missing_values: mode
+
+features:
+  numerical:
+    - age_at_record
+    - tbi_cli_pulse
+    - tbi_cli_temp
+    - systolic
+    - diastolic
+    # Add other numerical features
+  categorical:
+    - sex
+    - tbi_cli_reason
+    # Add other categorical features 
