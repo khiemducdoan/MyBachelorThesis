@@ -19,6 +19,19 @@ features:
     - tbi_cli_temp
     - systolic
     - diastolic
+    - tbi_ct_epidural_hematoma_volume
+    - tbi_ct_subdural_hematoma_volume
+    - tbi_ct_intraventricular_hematoma_volume
+    - tbi_ct_subarachnoid_hematoma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_v
     # Add other numerical features
   categorical:
     - sex
