@@ -1,16 +1,19 @@
 name: tabnet
 model:
-  _target_: src.models.tabnet.TabNetClassifier
-  params:
-    n_d: 8  # Width of decision prediction layer
-    n_a: 8  # Width of attention
-    n_steps: 3  # Number of steps
-    gamma: 1.3  # Feature selection regularization
-    n_independent: 2
-    n_shared: 2
-    virtual_batch_size: 128
-    momentum: 0.02
-    mask_type: sparsemax
+  _target_: pytorch_tabnet.tab_model.TabNetClassifier
+  # params:
+  #   input_size: ${data.num_features}
+  #   output_size: ${data.num_classes}
+  #   n_d: 8  # Width of decision prediction layer
+  #   n_a: 8  # Width of attention
+  #   n_steps: 3  # Number of steps
+  #   gamma: 1.3  # Feature selection regularization
+  #   n_independent: 2
+  #   n_shared: 2
+  #   virtual_batch_size: 128
+  #   momentum: 0.02
+  #   mask_type: sparsemax
+  #   group_matrix: ${data.group_matrix}
 
 optimizer:
   _target_: torch.optim.Adam

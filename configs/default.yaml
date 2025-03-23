@@ -1,6 +1,6 @@
 defaults:
-  - model: tabnet  # Default model
-  - data: tbi      # Default dataset
+  - model@model: naim  # Default model
+  - data@data: tbi      # Default dataset
   - _self_
 
 # General settings

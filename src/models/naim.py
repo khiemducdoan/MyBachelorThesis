@@ -3,11 +3,12 @@ import torch
 from torch import Tensor
 from torch.nn import Sigmoid
 import torch.nn.functional as F
-from .tabular_tokenizer import CategoricalFeatureTokenizer
+from src.models.tabular_tokenizer import CategoricalFeatureTokenizer
+from src.models.base import BaseModel
 from typing import Tuple, Optional
+import hydra
 
-
-__all__ = ["NAIM"]
+__all__ = ["NAIMclassifier"]
 
 
 class TabularMasker:
@@ -268,6 +269,20 @@ class NAIM(torch.nn.Module):
         logits = self.classifier(features)
 
         return logits
+class NAIMclassifier(BaseModel):
+    def __init__(self, params):
+        super(NAIMclassifier, self).__init__()
+        self.naim = NAIM(**params)
+
+    def forward(self, x):
+        return self.naim(x)
+    def configure_optimizers(self, config):
+        optimizer = hydra.utils.instantiate(config.optimizer)
+        scheduler = hydra.utils.instantiate(config.scheduler)
+        return {"optimizer": optimizer, "lr_scheduler": scheduler}
+    def configure_loss(self, config):
+        loss = hydra.utils.instantiate(config.loss)
+        return loss
 
 
 if __name__ == "__main__":

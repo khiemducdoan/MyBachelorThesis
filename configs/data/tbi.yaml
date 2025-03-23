@@ -1,9 +1,8 @@
 name: tbi
-data:
-  path: data/processed/tbi1.csv
-  target_column: d_kl_tl
-  num_classes: 4
-  
+path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/dataset.csv
+target_column: d_kl_tl
+num_classes: 4
+num_features: 64
 preprocessing:
   numerical:
     strategy: standard

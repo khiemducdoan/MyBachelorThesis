@@ -15,7 +15,7 @@ from src.utils.metrics import calculate_metrics
 
 logger = logging.getLogger(__name__)
 
-@hydra.main(config_path="../configs", config_name="default")
+@hydra.main(config_path="./configs", config_name="default")
 def train(config: DictConfig):
     # Set random seed
     torch.manual_seed(config.seed)
@@ -25,23 +25,24 @@ def train(config: DictConfig):
     
     # Load and preprocess data
     data = pd.read_csv(config.data.path)
-    preprocessor = DataPreprocessor(config)
+    # preprocessor = DataPreprocessor(config)
     
     # Split data
     train_data, val_data = train_test_split(
         data, 
         test_size=config.validation.split_ratio,
-        random_state=config.seed
+        random_state=config.seed,
+        stratify=data[config.data.target_column]
     )
     
     # Preprocess data
-    preprocessor.fit(train_data)
-    train_processed = preprocessor.transform(train_data)
-    val_processed = preprocessor.transform(val_data)
+    # preprocessor.fit(train_data)
+    # train_processed = preprocessor.transform(train_data)
+    # val_processed = preprocessor.transform(val_data)
     
     # Create datasets
-    train_dataset = TBIDataset(train_processed, config)
-    val_dataset = TBIDataset(val_processed, config)
+    train_dataset = TBIDataset(train_data, config.data)
+    val_dataset = TBIDataset(val_data, config.data)
     
     # Create dataloaders
     train_loader = DataLoader(
@@ -55,11 +56,11 @@ def train(config: DictConfig):
     )
     
     # Initialize model
-    model = hydra.utils.instantiate(config.model)
+    model = hydra.utils.instantiate(config.model.model)
     model = model.to(config.device)
     
     # Get optimizer and scheduler
-    optim_config = model.configure_optimizers(config)
+    optim_config = model.configure_optimizers(config.model)
     optimizer = optim_config['optimizer']
     scheduler = optim_config['scheduler']
     

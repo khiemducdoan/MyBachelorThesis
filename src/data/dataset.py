@@ -16,14 +16,14 @@ class TBIDataset(Dataset):
         self.transform = transform
         
         # Separate features and target
-        self.features = self.data.drop(columns=[config['data']['target_column']])
-        self.targets = self.data[config['data']['target_column']]
+        self.features = self.data.drop(columns=[config['target_column']])
+        self.targets = self.data[config['target_column']]
         
-        # Get feature indices
-        self.num_indices = [self.features.columns.get_loc(col) 
-                           for col in config['features']['numerical']]
-        self.cat_indices = [self.features.columns.get_loc(col) 
-                           for col in config['features']['categorical']]
+        # # Get feature indices
+        # self.num_indices = [self.features.columns.get_loc(col) 
+        #                    for col in config['features']['numerical']]
+        # self.cat_indices = [self.features.columns.get_loc(col) 
+        #                    for col in config['features']['categorical']]
         
     def __len__(self):
         return len(self.data)
@@ -40,3 +40,14 @@ class TBIDataset(Dataset):
             x = self.transform(x)
             
         return x, y 
+    
+def main():
+    data = pd.read_csv('/home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/dataset.csv')
+    config = {
+        'target_column': 'd_kl_tl'
+    }
+    dataset = TBIDataset(data, config)
+    print(dataset[0])
+
+if __name__ == '__main__':
+    main()

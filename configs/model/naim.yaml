@@ -1,21 +1,33 @@
 name: naim
 model:
-  _target_: src.models.naim.NAIM
+  _target_: src.models.naim.NAIMclassifier
   params:
     input_size: ${data.num_features}
-    output_size: ${data.num_classes} 
-    d_token: 64
-    num_heads: 8
-    num_layers: 3
-    feedforward_dim: 256
-    dropout_rate: 0.1
+    output_size: ${data.num_classes}
+    cat_idxs: null
+    cat_dims: null
+    d_token: 6
+    embedder_initialization: normal
+    bias: false
+    mask_type: 2
+    missing_value: ~inf
+    num_heads: 3
+    feedforward_dim: 1000
+    dropout_rate: 0.0
     activation: relu
+    num_layers: 6
+    extractor: false
 
 optimizer:
   _target_: torch.optim.AdamW
   lr: ${training.learning_rate}
+  betas: [ 0.9, 0.999 ]
+  eps: 1e-8   
   weight_decay: 0.01
-
+  amsgrad: False
+  foreach: null
+  maximize: False
+  capturable: False
 scheduler:
   _target_: torch.optim.lr_scheduler.CosineAnnealingLR
   T_max: ${training.num_epochs}
