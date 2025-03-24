@@ -1,0 +1,90 @@
+model:
+  name: naim
+  model:
+    _target_: src.models.naim.NAIMclassifier
+    params:
+      input_size: ${data.num_features}
+      output_size: ${data.num_classes}
+      cat_idxs: null
+      cat_dims: null
+      d_token: 6
+      embedder_initialization: normal
+      bias: false
+      mask_type: 2
+      missing_value: ~inf
+      num_heads: 2
+      feedforward_dim: 1000
+      dropout_rate: 0.0
+      activation: relu
+      num_layers: 1
+      extractor: false
+  optimizer:
+    lr: 0.0001
+    betas:
+    - 0.9
+    - 0.999
+    eps: 1.0e-08
+    weight_decay: 0.01
+    amsgrad: false
+    foreach: null
+    maximize: false
+    capturable: false
+  scheduler:
+    T_max: ${training.num_epochs}
+    eta_min: 1.0e-06
+    mode: min
+    factor: 0.1
+    patience: 10
+    verbose: false
+data:
+  name: tbi
+  path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/dataset.csv
+  target_column: d_kl_tl
+  num_classes: 4
+  num_features: 64
+  preprocessing:
+    numerical:
+      strategy: standard
+      missing_values: mean
+    categorical:
+      strategy: onehot
+      missing_values: mode
+  features:
+    numerical:
+    - age_at_record
+    - tbi_cli_pulse
+    - tbi_cli_temp
+    - systolic
+    - diastolic
+    - tbi_ct_epidural_hematoma_volume
+    - tbi_ct_subdural_hematoma_volume
+    - tbi_ct_intraventricular_hematoma_volume
+    - tbi_ct_subarachnoid_hematoma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_volume
+    - tbi_ct_brain_parenchyma_v
+    categorical:
+    - sex
+    - tbi_cli_reason
+seed: 42
+device: cuda
+output_dir: outputs
+training:
+  num_epochs: 100
+  batch_size: 32
+  learning_rate: 0.001
+  early_stopping:
+    patience: 10
+    monitor: val_loss
+validation:
+  split_ratio: 0.2
+  kfold: 5
+logging:
+  log_interval: 100
+  save_interval: 10

@@ -277,9 +277,24 @@ class NAIMclassifier(BaseModel):
     def forward(self, x):
         return self.naim(x)
     def configure_optimizers(self, config):
-        optimizer = hydra.utils.instantiate(config.optimizer)
-        scheduler = hydra.utils.instantiate(config.scheduler)
-        return {"optimizer": optimizer, "lr_scheduler": scheduler}
+        optimizer = torch.optim.Adam(
+            self.parameters(),
+            lr=config['optimizer']['lr'],
+            weight_decay=config['optimizer']['weight_decay']
+        )
+        
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode=config['scheduler']['mode'],
+            factor=config['scheduler']['factor'],
+            patience=config['scheduler']['patience']
+        )
+        
+        return {
+            'optimizer': optimizer,
+            'scheduler': scheduler,
+            'monitor': 'val_loss'
+        } 
     def configure_loss(self, config):
         loss = hydra.utils.instantiate(config.loss)
         return loss

@@ -121,7 +121,7 @@ def train(config: DictConfig):
             patience_counter = 0
             # Save model
             if epoch % config.logging.save_interval == 0:
-                model.save(os.path.join(config.output_dir, 'models', f'model_epoch_{epoch}.pt'))
+                model.save(os.path.join(config.output_dir, f'model_epoch_{epoch}.pt'))
         else:
             patience_counter += 1
             if patience_counter >= config.training.early_stopping.patience:

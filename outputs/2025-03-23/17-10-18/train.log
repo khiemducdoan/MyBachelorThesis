@@ -1,0 +1,200 @@
+[2025-03-23 17:10:22,168][__main__][INFO] - Train Epoch: 0 [0/13 (0%)]	Loss: 1.395205
+[2025-03-23 17:10:22,526][__main__][INFO] - Epoch 0: Val Loss: 1.1318, Metrics: {'accuracy': 0.6039603960396039, 'f1_macro': 0.23216340621403914, 'f1_weighted': 0.472273809659447, 'precision_macro': 0.398989898989899, 'recall_macro': 0.275}
+[2025-03-23 17:10:22,561][__main__][INFO] - Train Epoch: 1 [0/13 (0%)]	Loss: 1.202944
+[2025-03-23 17:10:22,935][__main__][INFO] - Epoch 1: Val Loss: 1.1455, Metrics: {'accuracy': 0.5841584158415841, 'f1_macro': 0.184375, 'f1_weighted': 0.43081683168316837, 'precision_macro': 0.14603960396039603, 'recall_macro': 0.25}
+[2025-03-23 17:10:22,966][__main__][INFO] - Train Epoch: 2 [0/13 (0%)]	Loss: 1.250469
+[2025-03-23 17:10:23,335][__main__][INFO] - Epoch 2: Val Loss: 1.1485, Metrics: {'accuracy': 0.5841584158415841, 'f1_macro': 0.184375, 'f1_weighted': 0.43081683168316837, 'precision_macro': 0.14603960396039603, 'recall_macro': 0.25}
+[2025-03-23 17:10:23,364][__main__][INFO] - Train Epoch: 3 [0/13 (0%)]	Loss: 0.911979
+[2025-03-23 17:10:23,741][__main__][INFO] - Epoch 3: Val Loss: 1.1468, Metrics: {'accuracy': 0.5841584158415841, 'f1_macro': 0.184375, 'f1_weighted': 0.43081683168316837, 'precision_macro': 0.14603960396039603, 'recall_macro': 0.25}
+[2025-03-23 17:10:23,769][__main__][INFO] - Train Epoch: 4 [0/13 (0%)]	Loss: 1.408511
+[2025-03-23 17:10:24,147][__main__][INFO] - Epoch 4: Val Loss: 1.1435, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.18471337579617833, 'f1_weighted': 0.431607491959387, 'precision_macro': 0.14795918367346939, 'recall_macro': 0.2457627118644068}
+[2025-03-23 17:10:24,176][__main__][INFO] - Train Epoch: 5 [0/13 (0%)]	Loss: 0.844702
+[2025-03-23 17:10:24,555][__main__][INFO] - Epoch 5: Val Loss: 1.1411, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.18471337579617833, 'f1_weighted': 0.431607491959387, 'precision_macro': 0.14795918367346939, 'recall_macro': 0.2457627118644068}
+[2025-03-23 17:10:24,583][__main__][INFO] - Train Epoch: 6 [0/13 (0%)]	Loss: 0.946505
+[2025-03-23 17:10:24,967][__main__][INFO] - Epoch 6: Val Loss: 1.1295, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.1870967741935484, 'f1_weighted': 0.4371766208878953, 'precision_macro': 0.15104166666666666, 'recall_macro': 0.2457627118644068}
+[2025-03-23 17:10:24,994][__main__][INFO] - Train Epoch: 7 [0/13 (0%)]	Loss: 0.995661
+[2025-03-23 17:10:25,369][__main__][INFO] - Epoch 7: Val Loss: 1.1383, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.18831168831168832, 'f1_weighted': 0.44001543011444, 'precision_macro': 0.15263157894736842, 'recall_macro': 0.2457627118644068}
+[2025-03-23 17:10:25,398][__main__][INFO] - Train Epoch: 8 [0/13 (0%)]	Loss: 1.093853
+[2025-03-23 17:10:25,776][__main__][INFO] - Epoch 8: Val Loss: 1.1310, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.1870967741935484, 'f1_weighted': 0.4371766208878953, 'precision_macro': 0.15104166666666666, 'recall_macro': 0.2457627118644068}
+[2025-03-23 17:10:25,806][__main__][INFO] - Train Epoch: 9 [0/13 (0%)]	Loss: 1.043717
+[2025-03-23 17:10:26,180][__main__][INFO] - Epoch 9: Val Loss: 1.1249, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.1895424836601307, 'f1_weighted': 0.44289134795832524, 'precision_macro': 0.15425531914893617, 'recall_macro': 0.2457627118644068}
+[2025-03-23 17:10:26,209][__main__][INFO] - Train Epoch: 10 [0/13 (0%)]	Loss: 0.940231
+[2025-03-23 17:10:26,587][__main__][INFO] - Epoch 10: Val Loss: 1.1241, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.1870967741935484, 'f1_weighted': 0.4371766208878953, 'precision_macro': 0.15104166666666666, 'recall_macro': 0.2457627118644068}
+[2025-03-23 17:10:26,622][__main__][INFO] - Train Epoch: 11 [0/13 (0%)]	Loss: 0.760921
+[2025-03-23 17:10:27,006][__main__][INFO] - Epoch 11: Val Loss: 1.1172, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.19078947368421054, 'f1_weighted': 0.4458051068264721, 'precision_macro': 0.15591397849462366, 'recall_macro': 0.2457627118644068}
+[2025-03-23 17:10:27,034][__main__][INFO] - Train Epoch: 12 [0/13 (0%)]	Loss: 0.817293
+[2025-03-23 17:10:27,410][__main__][INFO] - Epoch 12: Val Loss: 1.1101, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.2324738114423852, 'f1_weighted': 0.4750640253388756, 'precision_macro': 0.21161740558292283, 'recall_macro': 0.2705508474576271}
+[2025-03-23 17:10:27,438][__main__][INFO] - Train Epoch: 13 [0/13 (0%)]	Loss: 0.940942
+[2025-03-23 17:10:27,815][__main__][INFO] - Epoch 13: Val Loss: 1.1041, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.24625279642058165, 'f1_weighted': 0.4704520787649235, 'precision_macro': 0.4305555555555556, 'recall_macro': 0.2725154083204931}
+[2025-03-23 17:10:27,845][__main__][INFO] - Train Epoch: 14 [0/13 (0%)]	Loss: 1.092015
+[2025-03-23 17:10:28,217][__main__][INFO] - Epoch 14: Val Loss: 1.0975, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.25999149659863946, 'f1_weighted': 0.48002963561662293, 'precision_macro': 0.44791666666666663, 'recall_macro': 0.28077812018489984}
+[2025-03-23 17:10:28,248][__main__][INFO] - Train Epoch: 15 [0/13 (0%)]	Loss: 1.064126
+[2025-03-23 17:10:28,628][__main__][INFO] - Epoch 15: Val Loss: 1.0845, Metrics: {'accuracy': 0.5643564356435643, 'f1_macro': 0.26855158730158735, 'f1_weighted': 0.48210356749960714, 'precision_macro': 0.45588235294117646, 'recall_macro': 0.2848035439137134}
+[2025-03-23 17:10:28,657][__main__][INFO] - Train Epoch: 16 [0/13 (0%)]	Loss: 0.940539
+[2025-03-23 17:10:29,037][__main__][INFO] - Epoch 16: Val Loss: 1.0943, Metrics: {'accuracy': 0.5643564356435643, 'f1_macro': 0.2685429344151454, 'f1_weighted': 0.48013643149304797, 'precision_macro': 0.457641196013289, 'recall_macro': 0.2848035439137134}
+[2025-03-23 17:10:29,065][__main__][INFO] - Train Epoch: 17 [0/13 (0%)]	Loss: 0.849233
+[2025-03-23 17:10:29,442][__main__][INFO] - Epoch 17: Val Loss: 1.0759, Metrics: {'accuracy': 0.5544554455445545, 'f1_macro': 0.27657178455050796, 'f1_weighted': 0.48354959130185593, 'precision_macro': 0.46431133428981347, 'recall_macro': 0.28882896764252697}
+[2025-03-23 17:10:29,470][__main__][INFO] - Train Epoch: 18 [0/13 (0%)]	Loss: 0.914064
+[2025-03-23 17:10:29,845][__main__][INFO] - Epoch 18: Val Loss: 1.0674, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.27199121027721435, 'f1_weighted': 0.48819378895293186, 'precision_macro': 0.46054817275747506, 'recall_macro': 0.2890408320493066}
+[2025-03-23 17:10:29,874][__main__][INFO] - Train Epoch: 19 [0/13 (0%)]	Loss: 0.816955
+[2025-03-23 17:10:30,251][__main__][INFO] - Epoch 19: Val Loss: 1.0627, Metrics: {'accuracy': 0.5841584158415841, 'f1_macro': 0.2958539525440934, 'f1_weighted': 0.5077325966323317, 'precision_macro': 0.48316796598157336, 'recall_macro': 0.3098035439137134}
+[2025-03-23 17:10:30,278][__main__][INFO] - Train Epoch: 20 [0/13 (0%)]	Loss: 0.844707
+[2025-03-23 17:10:30,654][__main__][INFO] - Epoch 20: Val Loss: 1.0627, Metrics: {'accuracy': 0.5841584158415841, 'f1_macro': 0.34738430583501007, 'f1_weighted': 0.5197720979341395, 'precision_macro': 0.47329317269076304, 'recall_macro': 0.33852080123266565}
+[2025-03-23 17:10:30,682][__main__][INFO] - Train Epoch: 21 [0/13 (0%)]	Loss: 0.799594
+[2025-03-23 17:10:31,062][__main__][INFO] - Epoch 21: Val Loss: 1.0530, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.3001199040767386, 'f1_weighted': 0.5062207659614882, 'precision_macro': 0.484375, 'recall_macro': 0.31382896764252693}
+[2025-03-23 17:10:31,091][__main__][INFO] - Train Epoch: 22 [0/13 (0%)]	Loss: 0.729056
+[2025-03-23 17:10:31,474][__main__][INFO] - Epoch 22: Val Loss: 1.0521, Metrics: {'accuracy': 0.6039603960396039, 'f1_macro': 0.3593718338399189, 'f1_weighted': 0.5392959964689478, 'precision_macro': 0.4324186991869919, 'recall_macro': 0.35525808936825887}
+[2025-03-23 17:10:31,504][__main__][INFO] - Train Epoch: 23 [0/13 (0%)]	Loss: 0.690516
+[2025-03-23 17:10:31,879][__main__][INFO] - Epoch 23: Val Loss: 1.0327, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.29185330347144456, 'f1_weighted': 0.5011309081636047, 'precision_macro': 0.4779810298102981, 'recall_macro': 0.30556625577812013}
+[2025-03-23 17:10:31,908][__main__][INFO] - Train Epoch: 24 [0/13 (0%)]	Loss: 0.655723
+[2025-03-23 17:10:32,287][__main__][INFO] - Epoch 24: Val Loss: 1.0509, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.34354947652819995, 'f1_weighted': 0.5132631804213856, 'precision_macro': 0.4679878048780488, 'recall_macro': 0.33428351309707244}
+[2025-03-23 17:10:32,317][__main__][INFO] - Train Epoch: 25 [0/13 (0%)]	Loss: 0.791915
+[2025-03-23 17:10:32,697][__main__][INFO] - Epoch 25: Val Loss: 1.0287, Metrics: {'accuracy': 0.5841584158415841, 'f1_macro': 0.3288878076112119, 'f1_weighted': 0.5178985275888583, 'precision_macro': 0.48206599713055953, 'recall_macro': 0.3282935285053929}
+[2025-03-23 17:10:32,726][__main__][INFO] - Train Epoch: 26 [0/13 (0%)]	Loss: 0.737460
+[2025-03-23 17:10:33,105][__main__][INFO] - Epoch 26: Val Loss: 1.0261, Metrics: {'accuracy': 0.6039603960396039, 'f1_macro': 0.36414310327353805, 'f1_weighted': 0.5535413073079883, 'precision_macro': 0.5077713382507902, 'recall_macro': 0.36981895223420647}
+[2025-03-23 17:10:33,136][__main__][INFO] - Train Epoch: 27 [0/13 (0%)]	Loss: 0.656514
+[2025-03-23 17:10:33,517][__main__][INFO] - Epoch 27: Val Loss: 1.0269, Metrics: {'accuracy': 0.6039603960396039, 'f1_macro': 0.3681314407933113, 'f1_weighted': 0.5448551621640872, 'precision_macro': 0.43823529411764706, 'recall_macro': 0.3635208012326656}
+[2025-03-23 17:10:33,545][__main__][INFO] - Train Epoch: 28 [0/13 (0%)]	Loss: 0.690710
+[2025-03-23 17:10:33,920][__main__][INFO] - Epoch 28: Val Loss: 1.0115, Metrics: {'accuracy': 0.6039603960396039, 'f1_macro': 0.37314058527613997, 'f1_weighted': 0.5462768324758046, 'precision_macro': 0.49583333333333335, 'recall_macro': 0.3635208012326656}
+[2025-03-23 17:10:33,950][__main__][INFO] - Train Epoch: 29 [0/13 (0%)]	Loss: 0.690640
+[2025-03-23 17:10:34,327][__main__][INFO] - Epoch 29: Val Loss: 1.0058, Metrics: {'accuracy': 0.6237623762376238, 'f1_macro': 0.3892679459843639, 'f1_weighted': 0.5723771524273963, 'precision_macro': 0.4517424242424243, 'recall_macro': 0.38852080123266564}
+[2025-03-23 17:10:34,356][__main__][INFO] - Train Epoch: 30 [0/13 (0%)]	Loss: 0.772442
+[2025-03-23 17:10:34,737][__main__][INFO] - Epoch 30: Val Loss: 1.0133, Metrics: {'accuracy': 0.6039603960396039, 'f1_macro': 0.36941436112122317, 'f1_weighted': 0.5531160005334352, 'precision_macro': 0.4033333333333333, 'recall_macro': 0.3717835130970724}
+[2025-03-23 17:10:34,766][__main__][INFO] - Train Epoch: 31 [0/13 (0%)]	Loss: 0.711515
+[2025-03-23 17:10:35,147][__main__][INFO] - Epoch 31: Val Loss: 1.0044, Metrics: {'accuracy': 0.6138613861386139, 'f1_macro': 0.3786764705882353, 'f1_weighted': 0.5595806639487478, 'precision_macro': 0.4438311688311688, 'recall_macro': 0.3760208012326656}
+[2025-03-23 17:10:35,178][__main__][INFO] - Train Epoch: 32 [0/13 (0%)]	Loss: 0.834411
+[2025-03-23 17:10:35,561][__main__][INFO] - Epoch 32: Val Loss: 0.9954, Metrics: {'accuracy': 0.6138613861386139, 'f1_macro': 0.38475257912222416, 'f1_weighted': 0.5652473343155263, 'precision_macro': 0.44675381903642775, 'recall_macro': 0.3842835130970724}
+[2025-03-23 17:10:35,589][__main__][INFO] - Train Epoch: 33 [0/13 (0%)]	Loss: 0.766067
+[2025-03-23 17:10:35,969][__main__][INFO] - Epoch 33: Val Loss: 0.9952, Metrics: {'accuracy': 0.6237623762376238, 'f1_macro': 0.3892679459843639, 'f1_weighted': 0.5723771524273963, 'precision_macro': 0.4517424242424243, 'recall_macro': 0.38852080123266564}
+[2025-03-23 17:10:35,998][__main__][INFO] - Train Epoch: 34 [0/13 (0%)]	Loss: 0.633936
+[2025-03-23 17:10:36,378][__main__][INFO] - Epoch 34: Val Loss: 0.9923, Metrics: {'accuracy': 0.594059405940594, 'f1_macro': 0.3596512183468705, 'f1_weighted': 0.5376857322617116, 'precision_macro': 0.48034643570952695, 'recall_macro': 0.3510208012326656}
+[2025-03-23 17:10:36,406][__main__][INFO] - Train Epoch: 35 [0/13 (0%)]	Loss: 0.632412
+[2025-03-23 17:10:36,785][__main__][INFO] - Epoch 35: Val Loss: 1.0014, Metrics: {'accuracy': 0.6138613861386139, 'f1_macro': 0.3779584462511292, 'f1_weighted': 0.5611992093518294, 'precision_macro': 0.4418859649122807, 'recall_macro': 0.3760208012326656}
+[2025-03-23 17:10:36,813][__main__][INFO] - Train Epoch: 36 [0/13 (0%)]	Loss: 0.724923
+[2025-03-23 17:10:37,184][__main__][INFO] - Epoch 36: Val Loss: 0.9833, Metrics: {'accuracy': 0.6237623762376238, 'f1_macro': 0.3892679459843639, 'f1_weighted': 0.5723771524273963, 'precision_macro': 0.4517424242424243, 'recall_macro': 0.38852080123266564}
+[2025-03-23 17:10:37,213][__main__][INFO] - Train Epoch: 37 [0/13 (0%)]	Loss: 0.759280
+[2025-03-23 17:10:37,594][__main__][INFO] - Epoch 37: Val Loss: 0.9823, Metrics: {'accuracy': 0.6138613861386139, 'f1_macro': 0.38475257912222416, 'f1_weighted': 0.5652473343155263, 'precision_macro': 0.44675381903642775, 'recall_macro': 0.3842835130970724}
+[2025-03-23 17:10:37,619][__main__][INFO] - Train Epoch: 38 [0/13 (0%)]	Loss: 0.599521
+[2025-03-23 17:10:37,943][__main__][INFO] - Epoch 38: Val Loss: 0.9743, Metrics: {'accuracy': 0.6039603960396039, 'f1_macro': 0.37192387904066737, 'f1_weighted': 0.5495307612095933, 'precision_macro': 0.49166666666666664, 'recall_macro': 0.3635208012326656}
+[2025-03-23 17:10:37,967][__main__][INFO] - Train Epoch: 39 [0/13 (0%)]	Loss: 0.772298
+[2025-03-23 17:10:38,294][__main__][INFO] - Epoch 39: Val Loss: 0.9720, Metrics: {'accuracy': 0.6039603960396039, 'f1_macro': 0.35781845919145694, 'f1_weighted': 0.5443762225192771, 'precision_macro': 0.4246659634317862, 'recall_macro': 0.35525808936825887}
+[2025-03-23 17:10:38,319][__main__][INFO] - Train Epoch: 40 [0/13 (0%)]	Loss: 0.801325
+[2025-03-23 17:10:38,652][__main__][INFO] - Epoch 40: Val Loss: 0.9707, Metrics: {'accuracy': 0.6237623762376238, 'f1_macro': 0.40693735774155615, 'f1_weighted': 0.5765293954234422, 'precision_macro': 0.4342020592020591, 'recall_macro': 0.40701078582434513}
+[2025-03-23 17:10:38,683][__main__][INFO] - Train Epoch: 41 [0/13 (0%)]	Loss: 0.769287
+[2025-03-23 17:10:39,010][__main__][INFO] - Epoch 41: Val Loss: 0.9610, Metrics: {'accuracy': 0.6237623762376238, 'f1_macro': 0.42364471337203, 'f1_weighted': 0.5855108704232205, 'precision_macro': 0.44498910675381265, 'recall_macro': 0.4317989214175655}
+[2025-03-23 17:10:39,034][__main__][INFO] - Train Epoch: 42 [0/13 (0%)]	Loss: 0.778887
+[2025-03-23 17:10:39,360][__main__][INFO] - Epoch 42: Val Loss: 0.9745, Metrics: {'accuracy': 0.6237623762376238, 'f1_macro': 0.40688628505570495, 'f1_weighted': 0.5708588338664831, 'precision_macro': 0.4638888888888889, 'recall_macro': 0.3987480739599384}
+[2025-03-23 17:10:39,385][__main__][INFO] - Train Epoch: 43 [0/13 (0%)]	Loss: 0.751735
+[2025-03-23 17:10:39,720][__main__][INFO] - Epoch 43: Val Loss: 0.9547, Metrics: {'accuracy': 0.6237623762376238, 'f1_macro': 0.3892679459843639, 'f1_weighted': 0.5723771524273963, 'precision_macro': 0.4517424242424243, 'recall_macro': 0.38852080123266564}
+[2025-03-23 17:10:39,746][__main__][INFO] - Train Epoch: 44 [0/13 (0%)]	Loss: 0.656875
+[2025-03-23 17:10:40,118][__main__][INFO] - Epoch 44: Val Loss: 0.9457, Metrics: {'accuracy': 0.6435643564356436, 'f1_macro': 0.4049040511727079, 'f1_weighted': 0.5905254491333994, 'precision_macro': 0.46643939393939393, 'recall_macro': 0.40525808936825886}
+[2025-03-23 17:10:40,147][__main__][INFO] - Train Epoch: 45 [0/13 (0%)]	Loss: 0.598747
+[2025-03-23 17:10:40,528][__main__][INFO] - Epoch 45: Val Loss: 0.9467, Metrics: {'accuracy': 0.6534653465346535, 'f1_macro': 0.4155271900681937, 'f1_weighted': 0.6012364551720079, 'precision_macro': 0.4752497062279671, 'recall_macro': 0.41775808936825887}
+[2025-03-23 17:10:40,556][__main__][INFO] - Train Epoch: 46 [0/13 (0%)]	Loss: 0.687104
+[2025-03-23 17:10:40,928][__main__][INFO] - Epoch 46: Val Loss: 0.9411, Metrics: {'accuracy': 0.6633663366336634, 'f1_macro': 0.4205401563610519, 'f1_weighted': 0.6086737458394027, 'precision_macro': 0.48113636363636364, 'recall_macro': 0.4219953775038521}
+[2025-03-23 17:10:40,957][__main__][INFO] - Train Epoch: 47 [0/13 (0%)]	Loss: 0.698353
+[2025-03-23 17:10:41,337][__main__][INFO] - Epoch 47: Val Loss: 0.9388, Metrics: {'accuracy': 0.6534653465346535, 'f1_macro': 0.4032940295714018, 'f1_weighted': 0.5938355542460478, 'precision_macro': 0.46904520917678816, 'recall_macro': 0.4012326656394453}
+[2025-03-23 17:10:41,366][__main__][INFO] - Train Epoch: 48 [0/13 (0%)]	Loss: 0.672449
+[2025-03-23 17:10:41,739][__main__][INFO] - Epoch 48: Val Loss: 0.9339, Metrics: {'accuracy': 0.6336633663366337, 'f1_macro': 0.400139884595209, 'f1_weighted': 0.5832418947437671, 'precision_macro': 0.46100176263219744, 'recall_macro': 0.40102080123266565}
+[2025-03-23 17:10:41,768][__main__][INFO] - Train Epoch: 49 [0/13 (0%)]	Loss: 0.636084
+[2025-03-23 17:10:42,145][__main__][INFO] - Epoch 49: Val Loss: 0.9256, Metrics: {'accuracy': 0.6633663366336634, 'f1_macro': 0.4257575757575758, 'f1_weighted': 0.6116711671167117, 'precision_macro': 0.4835901826484018, 'recall_macro': 0.4302580893682589}
+[2025-03-23 17:10:42,173][__main__][INFO] - Train Epoch: 50 [0/13 (0%)]	Loss: 0.549691
+[2025-03-23 17:10:42,556][__main__][INFO] - Epoch 50: Val Loss: 0.9224, Metrics: {'accuracy': 0.6633663366336634, 'f1_macro': 0.4257575757575758, 'f1_weighted': 0.6116711671167117, 'precision_macro': 0.4835901826484018, 'recall_macro': 0.4302580893682589}
+[2025-03-23 17:10:42,591][__main__][INFO] - Train Epoch: 51 [0/13 (0%)]	Loss: 0.618048
+[2025-03-23 17:10:42,970][__main__][INFO] - Epoch 51: Val Loss: 0.9273, Metrics: {'accuracy': 0.6831683168316832, 'f1_macro': 0.4361762615493959, 'f1_weighted': 0.626822042545406, 'precision_macro': 0.49583333333333335, 'recall_macro': 0.4387326656394453}
+[2025-03-23 17:10:43,000][__main__][INFO] - Train Epoch: 52 [0/13 (0%)]	Loss: 0.669477
+[2025-03-23 17:10:43,374][__main__][INFO] - Epoch 52: Val Loss: 0.9307, Metrics: {'accuracy': 0.6435643564356436, 'f1_macro': 0.42773233150930995, 'f1_weighted': 0.591334188278415, 'precision_macro': 0.7601102941176471, 'recall_macro': 0.398959938366718}
+[2025-03-23 17:10:43,402][__main__][INFO] - Train Epoch: 53 [0/13 (0%)]	Loss: 0.969265
+[2025-03-23 17:10:43,777][__main__][INFO] - Epoch 53: Val Loss: 0.9400, Metrics: {'accuracy': 0.6534653465346535, 'f1_macro': 0.47303034489109913, 'f1_weighted': 0.6163634183559259, 'precision_macro': 0.4776470588235294, 'recall_macro': 0.48149075500770416}
+[2025-03-23 17:10:43,806][__main__][INFO] - Train Epoch: 54 [0/13 (0%)]	Loss: 0.810071
+[2025-03-23 17:10:44,183][__main__][INFO] - Epoch 54: Val Loss: 0.9227, Metrics: {'accuracy': 0.6633663366336634, 'f1_macro': 0.4257575757575758, 'f1_weighted': 0.6116711671167117, 'precision_macro': 0.4835901826484018, 'recall_macro': 0.4302580893682589}
+[2025-03-23 17:10:44,211][__main__][INFO] - Train Epoch: 55 [0/13 (0%)]	Loss: 0.570324
+[2025-03-23 17:10:44,589][__main__][INFO] - Epoch 55: Val Loss: 0.9053, Metrics: {'accuracy': 0.693069306930693, 'f1_macro': 0.5021645021645021, 'f1_weighted': 0.6542797136856542, 'precision_macro': 0.7599315068493151, 'recall_macro': 0.47994992295839756}
+[2025-03-23 17:10:44,618][__main__][INFO] - Train Epoch: 56 [0/13 (0%)]	Loss: 0.556484
+[2025-03-23 17:10:44,996][__main__][INFO] - Epoch 56: Val Loss: 0.9065, Metrics: {'accuracy': 0.6831683168316832, 'f1_macro': 0.48575498575498577, 'f1_weighted': 0.6399819469126401, 'precision_macro': 0.7493421052631579, 'recall_macro': 0.45918721109399074}
+[2025-03-23 17:10:45,024][__main__][INFO] - Train Epoch: 57 [0/13 (0%)]	Loss: 0.522734
+[2025-03-23 17:10:45,401][__main__][INFO] - Epoch 57: Val Loss: 0.9022, Metrics: {'accuracy': 0.6732673267326733, 'f1_macro': 0.4806592039800995, 'f1_weighted': 0.6325304172208266, 'precision_macro': 0.7424999999999999, 'recall_macro': 0.45494992295839753}
+[2025-03-23 17:10:45,430][__main__][INFO] - Train Epoch: 58 [0/13 (0%)]	Loss: 0.672091
+[2025-03-23 17:10:45,805][__main__][INFO] - Epoch 58: Val Loss: 0.9047, Metrics: {'accuracy': 0.693069306930693, 'f1_macro': 0.4793859649122807, 'f1_weighted': 0.648579369215117, 'precision_macro': 0.7483108108108107, 'recall_macro': 0.461459938366718}
+[2025-03-23 17:10:45,835][__main__][INFO] - Train Epoch: 59 [0/13 (0%)]	Loss: 0.571520
+[2025-03-23 17:10:46,208][__main__][INFO] - Epoch 59: Val Loss: 0.9062, Metrics: {'accuracy': 0.6831683168316832, 'f1_macro': 0.4409090909090909, 'f1_weighted': 0.6295229522952295, 'precision_macro': 0.49743150684931503, 'recall_macro': 0.44699537750385204}
+[2025-03-23 17:10:46,237][__main__][INFO] - Train Epoch: 60 [0/13 (0%)]	Loss: 0.556558
+[2025-03-23 17:10:46,632][__main__][INFO] - Epoch 60: Val Loss: 0.8972, Metrics: {'accuracy': 0.693069306930693, 'f1_macro': 0.5068764568764569, 'f1_weighted': 0.6569318470308569, 'precision_macro': 0.7616197183098592, 'recall_macro': 0.4882126348228043}
+[2025-03-23 17:10:46,668][__main__][INFO] - Train Epoch: 61 [0/13 (0%)]	Loss: 0.613842
+[2025-03-23 17:10:47,047][__main__][INFO] - Epoch 61: Val Loss: 0.8757, Metrics: {'accuracy': 0.693069306930693, 'f1_macro': 0.510850246531361, 'f1_weighted': 0.6519968302299786, 'precision_macro': 0.7642543859649124, 'recall_macro': 0.48191448382126345}
+[2025-03-23 17:10:47,076][__main__][INFO] - Train Epoch: 62 [0/13 (0%)]	Loss: 0.595492
+[2025-03-23 17:10:47,455][__main__][INFO] - Epoch 62: Val Loss: 0.8925, Metrics: {'accuracy': 0.7326732673267327, 'f1_macro': 0.5819840632114638, 'f1_weighted': 0.6988100778739988, 'precision_macro': 0.80625, 'recall_macro': 0.5606317411402156}
+[2025-03-23 17:10:47,484][__main__][INFO] - Train Epoch: 63 [0/13 (0%)]	Loss: 0.456327
+[2025-03-23 17:10:47,861][__main__][INFO] - Epoch 63: Val Loss: 0.8809, Metrics: {'accuracy': 0.7128712871287128, 'f1_macro': 0.537689503282229, 'f1_weighted': 0.6769674690222246, 'precision_macro': 0.7821969696969697, 'recall_macro': 0.5151771956856702}
+[2025-03-23 17:10:47,890][__main__][INFO] - Train Epoch: 64 [0/13 (0%)]	Loss: 0.456863
+[2025-03-23 17:10:48,266][__main__][INFO] - Epoch 64: Val Loss: 0.8820, Metrics: {'accuracy': 0.7029702970297029, 'f1_macro': 0.5274172862049477, 'f1_weighted': 0.6664193679052267, 'precision_macro': 0.7742172211350293, 'recall_macro': 0.5026771956856703}
+[2025-03-23 17:10:48,297][__main__][INFO] - Train Epoch: 65 [0/13 (0%)]	Loss: 0.841078
+[2025-03-23 17:10:48,675][__main__][INFO] - Epoch 65: Val Loss: 0.8702, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.5880566801619433, 'f1_weighted': 0.7070589650058123, 'precision_macro': 0.8150009012256669, 'recall_macro': 0.5648690292758088}
+[2025-03-23 17:10:48,704][__main__][INFO] - Train Epoch: 66 [0/13 (0%)]	Loss: 0.618598
+[2025-03-23 17:10:49,079][__main__][INFO] - Epoch 66: Val Loss: 0.8729, Metrics: {'accuracy': 0.7029702970297029, 'f1_macro': 0.5336586586586586, 'f1_weighted': 0.6630739650541629, 'precision_macro': 0.7775597080937638, 'recall_macro': 0.5046417565485362}
+[2025-03-23 17:10:49,108][__main__][INFO] - Train Epoch: 67 [0/13 (0%)]	Loss: 0.674269
+[2025-03-23 17:10:49,484][__main__][INFO] - Epoch 67: Val Loss: 0.8582, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.5880566801619433, 'f1_weighted': 0.7070589650058123, 'precision_macro': 0.8150009012256669, 'recall_macro': 0.5648690292758088}
+[2025-03-23 17:10:49,513][__main__][INFO] - Train Epoch: 68 [0/13 (0%)]	Loss: 0.504251
+[2025-03-23 17:10:49,891][__main__][INFO] - Epoch 68: Val Loss: 0.8556, Metrics: {'accuracy': 0.7326732673267327, 'f1_macro': 0.5773809523809523, 'f1_weighted': 0.6961835281272488, 'precision_macro': 0.8073385885885886, 'recall_macro': 0.5523690292758089}
+[2025-03-23 17:10:49,919][__main__][INFO] - Train Epoch: 69 [0/13 (0%)]	Loss: 0.618935
+[2025-03-23 17:10:50,298][__main__][INFO] - Epoch 69: Val Loss: 0.8606, Metrics: {'accuracy': 0.7326732673267327, 'f1_macro': 0.5773809523809523, 'f1_weighted': 0.6961835281272488, 'precision_macro': 0.8073385885885886, 'recall_macro': 0.5523690292758089}
+[2025-03-23 17:10:50,326][__main__][INFO] - Train Epoch: 70 [0/13 (0%)]	Loss: 0.605388
+[2025-03-23 17:10:50,702][__main__][INFO] - Epoch 70: Val Loss: 0.8666, Metrics: {'accuracy': 0.7326732673267327, 'f1_macro': 0.5819840632114638, 'f1_weighted': 0.6988100778739988, 'precision_macro': 0.80625, 'recall_macro': 0.5606317411402156}
+[2025-03-23 17:10:50,730][__main__][INFO] - Train Epoch: 71 [0/13 (0%)]	Loss: 0.626231
+[2025-03-23 17:10:51,110][__main__][INFO] - Epoch 71: Val Loss: 0.8489, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.5880566801619433, 'f1_weighted': 0.7070589650058123, 'precision_macro': 0.8150009012256669, 'recall_macro': 0.5648690292758088}
+[2025-03-23 17:10:51,139][__main__][INFO] - Train Epoch: 72 [0/13 (0%)]	Loss: 0.582424
+[2025-03-23 17:10:51,515][__main__][INFO] - Epoch 72: Val Loss: 0.8569, Metrics: {'accuracy': 0.7326732673267327, 'f1_macro': 0.5819840632114638, 'f1_weighted': 0.6988100778739988, 'precision_macro': 0.80625, 'recall_macro': 0.5606317411402156}
+[2025-03-23 17:10:51,544][__main__][INFO] - Train Epoch: 73 [0/13 (0%)]	Loss: 0.447316
+[2025-03-23 17:10:51,921][__main__][INFO] - Epoch 73: Val Loss: 0.8506, Metrics: {'accuracy': 0.7326732673267327, 'f1_macro': 0.5819840632114638, 'f1_weighted': 0.6988100778739988, 'precision_macro': 0.80625, 'recall_macro': 0.5606317411402156}
+[2025-03-23 17:10:51,952][__main__][INFO] - Train Epoch: 74 [0/13 (0%)]	Loss: 0.374856
+[2025-03-23 17:10:52,337][__main__][INFO] - Epoch 74: Val Loss: 0.8594, Metrics: {'accuracy': 0.7227722772277227, 'f1_macro': 0.5714482885535517, 'f1_weighted': 0.6880532182772934, 'precision_macro': 0.7984183489545782, 'recall_macro': 0.5481317411402157}
+[2025-03-23 17:10:52,367][__main__][INFO] - Train Epoch: 75 [0/13 (0%)]	Loss: 0.474594
+[2025-03-23 17:10:52,746][__main__][INFO] - Epoch 75: Val Loss: 0.8506, Metrics: {'accuracy': 0.7326732673267327, 'f1_macro': 0.5819840632114638, 'f1_weighted': 0.6988100778739988, 'precision_macro': 0.80625, 'recall_macro': 0.5606317411402156}
+[2025-03-23 17:10:52,774][__main__][INFO] - Train Epoch: 76 [0/13 (0%)]	Loss: 0.511702
+[2025-03-23 17:10:53,154][__main__][INFO] - Epoch 76: Val Loss: 0.8396, Metrics: {'accuracy': 0.7326732673267327, 'f1_macro': 0.6030356556672346, 'f1_weighted': 0.7039374439061776, 'precision_macro': 0.8016196343402225, 'recall_macro': 0.5625963020030816}
+[2025-03-23 17:10:53,183][__main__][INFO] - Train Epoch: 77 [0/13 (0%)]	Loss: 0.300854
+[2025-03-23 17:10:53,563][__main__][INFO] - Epoch 77: Val Loss: 0.8664, Metrics: {'accuracy': 0.7128712871287128, 'f1_macro': 0.572058941487881, 'f1_weighted': 0.6784728222986262, 'precision_macro': 0.8128205128205128, 'recall_macro': 0.5191063174114021}
+[2025-03-23 17:10:53,593][__main__][INFO] - Train Epoch: 78 [0/13 (0%)]	Loss: 0.588888
+[2025-03-23 17:10:53,972][__main__][INFO] - Epoch 78: Val Loss: 0.8412, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6142037786774629, 'f1_weighted': 0.7152028968078995, 'precision_macro': 0.8098839421613394, 'recall_macro': 0.5750963020030817}
+[2025-03-23 17:10:54,002][__main__][INFO] - Train Epoch: 79 [0/13 (0%)]	Loss: 0.476665
+[2025-03-23 17:10:54,385][__main__][INFO] - Epoch 79: Val Loss: 0.8334, Metrics: {'accuracy': 0.7524752475247525, 'f1_macro': 0.6249034212071577, 'f1_weighted': 0.7261342136933353, 'precision_macro': 0.8176169590643274, 'recall_macro': 0.5875963020030817}
+[2025-03-23 17:10:54,412][__main__][INFO] - Train Epoch: 80 [0/13 (0%)]	Loss: 0.399613
+[2025-03-23 17:10:54,795][__main__][INFO] - Epoch 80: Val Loss: 0.8459, Metrics: {'accuracy': 0.7326732673267327, 'f1_macro': 0.5819840632114638, 'f1_weighted': 0.6988100778739988, 'precision_macro': 0.80625, 'recall_macro': 0.5606317411402156}
+[2025-03-23 17:10:54,824][__main__][INFO] - Train Epoch: 81 [0/13 (0%)]	Loss: 0.520997
+[2025-03-23 17:10:55,201][__main__][INFO] - Epoch 81: Val Loss: 0.8348, Metrics: {'accuracy': 0.7524752475247525, 'f1_macro': 0.6249034212071577, 'f1_weighted': 0.7261342136933353, 'precision_macro': 0.8176169590643274, 'recall_macro': 0.5875963020030817}
+[2025-03-23 17:10:55,229][__main__][INFO] - Train Epoch: 82 [0/13 (0%)]	Loss: 0.387538
+[2025-03-23 17:10:55,607][__main__][INFO] - Epoch 82: Val Loss: 0.8338, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6142037786774629, 'f1_weighted': 0.7152028968078995, 'precision_macro': 0.8098839421613394, 'recall_macro': 0.5750963020030817}
+[2025-03-23 17:10:55,638][__main__][INFO] - Train Epoch: 83 [0/13 (0%)]	Loss: 0.527549
+[2025-03-23 17:10:56,016][__main__][INFO] - Epoch 83: Val Loss: 0.8314, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6188259109311741, 'f1_weighted': 0.7178738926524232, 'precision_macro': 0.8088908450704225, 'recall_macro': 0.5833590138674885}
+[2025-03-23 17:10:56,046][__main__][INFO] - Train Epoch: 84 [0/13 (0%)]	Loss: 0.476771
+[2025-03-23 17:10:56,410][__main__][INFO] - Epoch 84: Val Loss: 0.8307, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6142037786774629, 'f1_weighted': 0.7152028968078995, 'precision_macro': 0.8098839421613394, 'recall_macro': 0.5750963020030817}
+[2025-03-23 17:10:56,439][__main__][INFO] - Train Epoch: 85 [0/13 (0%)]	Loss: 0.406242
+[2025-03-23 17:10:56,811][__main__][INFO] - Epoch 85: Val Loss: 0.8372, Metrics: {'accuracy': 0.7326732673267327, 'f1_macro': 0.5819840632114638, 'f1_weighted': 0.6988100778739988, 'precision_macro': 0.80625, 'recall_macro': 0.5606317411402156}
+[2025-03-23 17:10:56,840][__main__][INFO] - Train Epoch: 86 [0/13 (0%)]	Loss: 0.443784
+[2025-03-23 17:10:57,215][__main__][INFO] - Epoch 86: Val Loss: 0.8283, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6142037786774629, 'f1_weighted': 0.7152028968078995, 'precision_macro': 0.8098839421613394, 'recall_macro': 0.5750963020030817}
+[2025-03-23 17:10:57,244][__main__][INFO] - Train Epoch: 87 [0/13 (0%)]	Loss: 0.471481
+[2025-03-23 17:10:57,616][__main__][INFO] - Epoch 87: Val Loss: 0.8177, Metrics: {'accuracy': 0.7524752475247525, 'f1_macro': 0.6249034212071577, 'f1_weighted': 0.7261342136933353, 'precision_macro': 0.8176169590643274, 'recall_macro': 0.5875963020030817}
+[2025-03-23 17:10:57,644][__main__][INFO] - Train Epoch: 88 [0/13 (0%)]	Loss: 0.426943
+[2025-03-23 17:10:58,019][__main__][INFO] - Epoch 88: Val Loss: 0.8291, Metrics: {'accuracy': 0.7524752475247525, 'f1_macro': 0.6249034212071577, 'f1_weighted': 0.7261342136933353, 'precision_macro': 0.8176169590643274, 'recall_macro': 0.5875963020030817}
+[2025-03-23 17:10:58,047][__main__][INFO] - Train Epoch: 89 [0/13 (0%)]	Loss: 0.545949
+[2025-03-23 17:10:58,424][__main__][INFO] - Epoch 89: Val Loss: 0.8241, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6188259109311741, 'f1_weighted': 0.7178738926524232, 'precision_macro': 0.8088908450704225, 'recall_macro': 0.5833590138674885}
+[2025-03-23 17:10:58,452][__main__][INFO] - Train Epoch: 90 [0/13 (0%)]	Loss: 0.539216
+[2025-03-23 17:10:58,829][__main__][INFO] - Epoch 90: Val Loss: 0.8323, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6142037786774629, 'f1_weighted': 0.7152028968078995, 'precision_macro': 0.8098839421613394, 'recall_macro': 0.5750963020030817}
+[2025-03-23 17:10:58,858][__main__][INFO] - Train Epoch: 91 [0/13 (0%)]	Loss: 0.642585
+[2025-03-23 17:10:59,228][__main__][INFO] - Epoch 91: Val Loss: 0.8500, Metrics: {'accuracy': 0.7128712871287128, 'f1_macro': 0.5702847234364982, 'f1_weighted': 0.6825055385412645, 'precision_macro': 0.7908279220779221, 'recall_macro': 0.5521571648690292}
+[2025-03-23 17:10:59,257][__main__][INFO] - Train Epoch: 92 [0/13 (0%)]	Loss: 0.698853
+[2025-03-23 17:10:59,632][__main__][INFO] - Epoch 92: Val Loss: 0.8260, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6188259109311741, 'f1_weighted': 0.7178738926524232, 'precision_macro': 0.8088908450704225, 'recall_macro': 0.5833590138674885}
+[2025-03-23 17:10:59,659][__main__][INFO] - Train Epoch: 93 [0/13 (0%)]	Loss: 0.413477
+[2025-03-23 17:11:00,031][__main__][INFO] - Epoch 93: Val Loss: 0.8160, Metrics: {'accuracy': 0.7227722772277227, 'f1_macro': 0.5913574838358814, 'f1_weighted': 0.6923041026079767, 'precision_macro': 0.7927083333333333, 'recall_macro': 0.5500963020030817}
+[2025-03-23 17:11:00,061][__main__][INFO] - Train Epoch: 94 [0/13 (0%)]	Loss: 0.610712
+[2025-03-23 17:11:00,435][__main__][INFO] - Epoch 94: Val Loss: 0.8184, Metrics: {'accuracy': 0.7524752475247525, 'f1_macro': 0.6249034212071577, 'f1_weighted': 0.7261342136933353, 'precision_macro': 0.8176169590643274, 'recall_macro': 0.5875963020030817}
+[2025-03-23 17:11:00,465][__main__][INFO] - Train Epoch: 95 [0/13 (0%)]	Loss: 0.389354
+[2025-03-23 17:11:00,840][__main__][INFO] - Epoch 95: Val Loss: 0.8260, Metrics: {'accuracy': 0.7524752475247525, 'f1_macro': 0.6249034212071577, 'f1_weighted': 0.7261342136933353, 'precision_macro': 0.8176169590643274, 'recall_macro': 0.5875963020030817}
+[2025-03-23 17:11:00,868][__main__][INFO] - Train Epoch: 96 [0/13 (0%)]	Loss: 0.539657
+[2025-03-23 17:11:01,242][__main__][INFO] - Epoch 96: Val Loss: 0.8041, Metrics: {'accuracy': 0.7524752475247525, 'f1_macro': 0.6249034212071577, 'f1_weighted': 0.7261342136933353, 'precision_macro': 0.8176169590643274, 'recall_macro': 0.5875963020030817}
+[2025-03-23 17:11:01,271][__main__][INFO] - Train Epoch: 97 [0/13 (0%)]	Loss: 0.529567
+[2025-03-23 17:11:01,640][__main__][INFO] - Epoch 97: Val Loss: 0.8166, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6142037786774629, 'f1_weighted': 0.7152028968078995, 'precision_macro': 0.8098839421613394, 'recall_macro': 0.5750963020030817}
+[2025-03-23 17:11:01,668][__main__][INFO] - Train Epoch: 98 [0/13 (0%)]	Loss: 0.413270
+[2025-03-23 17:11:02,039][__main__][INFO] - Epoch 98: Val Loss: 0.8150, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6142037786774629, 'f1_weighted': 0.7152028968078995, 'precision_macro': 0.8098839421613394, 'recall_macro': 0.5750963020030817}
+[2025-03-23 17:11:02,068][__main__][INFO] - Train Epoch: 99 [0/13 (0%)]	Loss: 0.677304
+[2025-03-23 17:11:02,437][__main__][INFO] - Epoch 99: Val Loss: 0.8024, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6142037786774629, 'f1_weighted': 0.7152028968078995, 'precision_macro': 0.8098839421613394, 'recall_macro': 0.5750963020030817}
