@@ -1,22 +1,22 @@
 import os
 import hydra
 import logging
-from omegaconf import DictConfig
 import torch
 import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
-from tensorboardX import SummaryWriter  # Import TensorBoardX
+from sklearn.metrics import confusion_matrix
+from tensorboardX import SummaryWriter
 
 from src.data.dataset import TBIDataset
-from src.data.preprocessing import DataPreprocessor
-import src.models
 from src.utils.metrics import calculate_metrics
 
 logger = logging.getLogger(__name__)
 
 @hydra.main(config_path="./configs", config_name="default")
-def train(config: DictConfig):
+def train(config):
     # Set random seed
     torch.manual_seed(config.seed)
     
@@ -25,8 +25,7 @@ def train(config: DictConfig):
     
     # Load and preprocess data
     data = pd.read_csv(config.data.path)
-    # preprocessor = DataPreprocessor(config)
-    
+
     # Split data
     train_data, val_data = train_test_split(
         data, 
@@ -34,12 +33,7 @@ def train(config: DictConfig):
         random_state=config.seed,
         stratify=data[config.data.target_column]
     )
-    
-    # Preprocess data
-    # preprocessor.fit(train_data)
-    # train_processed = preprocessor.transform(train_data)
-    # val_processed = preprocessor.transform(val_data)
-    
+
     # Create datasets
     train_dataset = TBIDataset(train_data, config.data)
     val_dataset = TBIDataset(val_data, config.data)
@@ -66,8 +60,10 @@ def train(config: DictConfig):
     
     # Training loop
     best_val_loss = float('inf')
+    best_accuracy = 0.0
     patience_counter = 0
-    
+    best_conf_matrix = None  # Lưu confusion matrix tốt nhất
+
     for epoch in range(config.training.num_epochs):
         # Training
         model.train()
@@ -87,7 +83,6 @@ def train(config: DictConfig):
                 logger.info(f'Train Epoch: {epoch} [{batch_idx}/{len(train_loader)} '
                           f'({100. * batch_idx / len(train_loader):.0f}%)]\t'
                           f'Loss: {loss.item():.6f}')
-                # Log training loss to TensorBoard
                 writer.add_scalar('Train/Loss', loss.item(), epoch * len(train_loader) + batch_idx)
         
         # Validation
@@ -107,19 +102,38 @@ def train(config: DictConfig):
         
         val_loss /= len(val_loader)
         metrics = calculate_metrics(val_targets, val_predictions)
-        
-        # Log metrics
-        logger.info(f'Epoch {epoch}: Val Loss: {val_loss:.4f}, Metrics: {metrics}')
-        # Log validation loss and metrics to TensorBoard
+        val_accuracy = metrics.get("accuracy", 0.0)
+        # Log validation loss and metrics
+        logger.info(f'Epoch {epoch}: Val Loss: {val_loss:.4f}, Accuracy: {val_accuracy:.4f}, Metrics: {metrics}')
         writer.add_scalar('Validation/Loss', val_loss, epoch)
         for metric_name, metric_value in metrics.items():
             writer.add_scalar(f'Validation/{metric_name}', metric_value, epoch)
         
+        # Lưu confusion matrix nếu đạt accuracy cao nhất
+        if val_accuracy > best_accuracy:
+            best_accuracy = val_accuracy
+            best_conf_matrix = confusion_matrix(val_targets, val_predictions)
+            
+            # Vẽ confusion matrix
+            plt.figure(figsize=(8, 6))
+            sns.heatmap(best_conf_matrix, annot=True, fmt='d', cmap='Blues')
+            plt.xlabel('Predicted Label')
+            plt.ylabel('True Label')
+            plt.title(f'Confusion Matrix (Epoch {epoch})')
+
+            # Lưu hình ảnh confusion matrix
+            cm_path = os.path.join(config.output_dir, f'best_confusion_matrix.png')
+            plt.savefig(cm_path)
+            plt.close()
+
+            # Ghi confusion matrix vào TensorBoard
+            writer.add_image('Validation/Confusion Matrix', 
+                             torch.tensor(plt.imread(cm_path)), epoch, dataformats='HWC')
+
         # Early stopping
         if val_loss < best_val_loss:
             best_val_loss = val_loss
             patience_counter = 0
-            # Save model
             if epoch % config.logging.save_interval == 0:
                 model.save(os.path.join(config.output_dir, f'model_epoch_{epoch}.pt'))
         else:
@@ -131,8 +145,20 @@ def train(config: DictConfig):
         # Update scheduler
         scheduler.step(val_loss)
     
-    # Close the TensorBoard writer
+    # Lưu confusion matrix tốt nhất
+    if best_conf_matrix is not None:
+        logger.info(f'Saving best confusion matrix with accuracy: {best_accuracy:.4f}')
+        cm_path_final = os.path.join(config.output_dir, 'final_best_confusion_matrix.png')
+        plt.figure(figsize=(8, 6))
+        sns.heatmap(best_conf_matrix, annot=True, fmt='d', cmap='Blues')
+        plt.xlabel('Predicted Label')
+        plt.ylabel('True Label')
+        plt.title(f'Best Confusion Matrix (Accuracy: {best_accuracy:.4f})')
+        plt.savefig(cm_path_final)
+        plt.close()
+    
+    # Close TensorBoard writer
     writer.close()
 
 if __name__ == "__main__":
-    train() 
+    train()

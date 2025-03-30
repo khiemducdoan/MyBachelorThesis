@@ -62,7 +62,7 @@ class MultiHeadAttention(torch.nn.Module):
         self.input_size = input_size
         self.num_heads = num_heads
         self.bias = bias
-        activation_options = dict(relu=F.relu, gelu=F.gelu)
+        activation_options = dict(relu=F.relu, gelu=F.gelu, tanh=F.tanh)
         self.activation = activation_options[activation]
         self.dropout_rate = dropout_rate
 

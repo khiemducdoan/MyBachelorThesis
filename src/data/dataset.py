@@ -42,7 +42,7 @@ class TBIDataset(Dataset):
         return x, y 
     
 def main():
-    data = pd.read_csv('/home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/dataset.csv')
+    data = pd.read_csv("/home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/modality1_499_records.csv")
     config = {
         'target_column': 'd_kl_tl'
     }
