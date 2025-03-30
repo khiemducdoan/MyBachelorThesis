@@ -3,21 +3,26 @@ from torch.utils.data import Dataset
 import pandas as pd
 import numpy as np
 from typing import Dict, Optional
+import transformers
 
 class TBIDataset(Dataset):
     def __init__(
         self,
         data: pd.DataFrame,
-        config: Dict,
+        target_column: str,
+        num_classes: int,
+        num_features: 64,
         transform: Optional[callable] = None
     ):
         self.data = data
-        self.config = config
+        self.target_column = target_column
+        self.num_classes = num_classes
+        self.num_features = num_features
         self.transform = transform
         
         # Separate features and target
-        self.features = self.data.drop(columns=[config['target_column']])
-        self.targets = self.data[config['target_column']]
+        self.features = self.data.drop(columns=[self.target_column])
+        self.targets = self.data[self.target_column]
         
         # # Get feature indices
         # self.num_indices = [self.features.columns.get_loc(col) 
@@ -41,13 +46,36 @@ class TBIDataset(Dataset):
             
         return x, y 
     
-def main():
-    data = pd.read_csv("/home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/modality1_499_records.csv")
-    config = {
-        'target_column': 'd_kl_tl'
-    }
-    dataset = TBIDataset(data, config)
-    print(dataset[0])
+class ViTBERT(Dataset):
+    def __init__(self, data : pd.DataFrame,
+                 tokenizer: str,
+                 transform: Optional[callable] = None):
+        self.data = data
+        #only get dataset in index, index is taken from train ids by kfold from sklearn
+        #if type = "train", augment dataset 
+        self.tokenizer = transformers.AutoTokenizer.from_pretrained(tokenizer)
 
-if __name__ == '__main__':
-    main()
+    def __getitem__(self, idx):
+        text = self.dataset.iloc[idx, 0]  # Extract text from dataframe
+        label = self.dataset.iloc[idx, 1]-1.0  # Extract label
+
+        # Tokenization
+        tokenized_text = self.tokenizer(text, 
+                                        add_special_tokens=True, 
+                                        max_length=100, 
+                                        padding='max_length', 
+                                        truncation=True, 
+                                        return_tensors='pt')
+
+        # Extract fields from tokenized text
+        input_ids = tokenized_text['input_ids'].squeeze()
+        attention_mask = tokenized_text['attention_mask'].squeeze()
+
+        # Convert label to tensor
+        # label = torch.tensor(label, dtype=torch.long)  # Changed dtype to torch.long
+
+        # Return tensors
+        return (input_ids, attention_mask) , label  # Return attention_mask
+
+    def __len__(self):
+        return len(self.data)

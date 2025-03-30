@@ -1,38 +1,9 @@
-name: tbi
-path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/modality1_499_records.csv
-target_column: d_kl_tl
-num_classes: 4
-num_features: 64
-preprocessing:
-  numerical:
-    strategy: standard
-    missing_values: mean
-  categorical:
-    strategy: onehot
-    missing_values: mode
+caller:
+  _target_: src.data.dataset.TBIDataset
+  data: None
+  target_column: d_kl_tl
+  num_classes: 4
+  num_features: 64
+  transform: null
 
-features:
-  numerical:
-    - age_at_record
-    - tbi_cli_pulse
-    - tbi_cli_temp
-    - systolic
-    - diastolic
-    - tbi_ct_epidural_hematoma_volume
-    - tbi_ct_subdural_hematoma_volume
-    - tbi_ct_intraventricular_hematoma_volume
-    - tbi_ct_subarachnoid_hematoma_volume
-    - tbi_ct_brain_parenchyma_volume
-    - tbi_ct_brain_parenchyma_volume
-    - tbi_ct_brain_parenchyma_volume
-    - tbi_ct_brain_parenchyma_volume
-    - tbi_ct_brain_parenchyma_volume
-    - tbi_ct_brain_parenchyma_volume
-    - tbi_ct_brain_parenchyma_volume
-    - tbi_ct_brain_parenchyma_volume
-    - tbi_ct_brain_parenchyma_v
-    # Add other numerical features
-  categorical:
-    - sex
-    - tbi_cli_reason
-    # Add other categorical features 
+data_path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/modality1_499_records.csv

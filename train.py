@@ -24,19 +24,19 @@ def train(config):
     writer = SummaryWriter(log_dir=os.path.join(config.output_dir, 'logs'))
     
     # Load and preprocess data
-    data = pd.read_csv(config.data.path)
+    data = pd.read_csv(config.data.data_path)
 
     # Split data
     train_data, val_data = train_test_split(
         data, 
         test_size=config.validation.split_ratio,
         random_state=config.seed,
-        stratify=data[config.data.target_column]
+        stratify=data[config.data.caller.target_column]
     )
 
     # Create datasets
-    train_dataset = TBIDataset(train_data, config.data)
-    val_dataset = TBIDataset(val_data, config.data)
+    train_dataset = hydra.utils.instantiate(config.data.caller, data = train_data)
+    val_dataset = hydra.utils.instantiate(config.data.caller, data = val_data)
     
     # Create dataloaders
     train_loader = DataLoader(
@@ -68,11 +68,11 @@ def train(config):
         # Training
         model.train()
         train_loss = 0
-        for batch_idx, (data, target) in enumerate(train_loader):
-            data, target = data.to(config.device), target.to(config.device)
+        for batch_idx, batch in enumerate(train_loader):
+            *features, target = [item.to(config.device) for item in batch]
             
             optimizer.zero_grad()
-            output = model(data)
+            output = model(*features)  # Pass all feature sets to the model
             loss = torch.nn.functional.cross_entropy(output, target)
             loss.backward()
             optimizer.step()
@@ -92,9 +92,9 @@ def train(config):
         val_targets = []
         
         with torch.no_grad():
-            for data, target in val_loader:
-                data, target = data.to(config.device), target.to(config.device)
-                output = model(data)
+            for batch in val_loader:
+                *features, target = [item.to(config.device) for item in batch]
+                output = model(*features)  # Pass all feature sets to the model
                 val_loss += torch.nn.functional.cross_entropy(output, target).item()
                 
                 val_predictions.extend(output.argmax(dim=1).cpu().numpy())

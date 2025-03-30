@@ -2,8 +2,8 @@ name: naim
 model:
   _target_: src.models.naim.NAIMclassifier
   params:
-    input_size: ${data.num_features}
-    output_size: ${data.num_classes}
+    input_size: ${data.caller.num_features}
+    output_size: ${data.caller.num_classes}
     cat_idxs: null
     cat_dims: null
     d_token: 64
