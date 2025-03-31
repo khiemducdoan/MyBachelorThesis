@@ -2,6 +2,7 @@ caller:
   _target_: src.data.dataset.ViTBERT
   tokenizer: demdecuong/vihealthbert-base-word
   data: None
+  target_column: d_kl_tl
   transform: null
 
 data_path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/text_modality/tbi_text.csv

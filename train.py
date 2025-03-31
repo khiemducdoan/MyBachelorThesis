@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 @hydra.main(config_path="./configs", config_name="default")
 def train(config):
     # Set random seed
+    print("Training started...")
     torch.manual_seed(config.seed)
     
     # Initialize TensorBoard writer
@@ -69,8 +70,10 @@ def train(config):
         model.train()
         train_loss = 0
         for batch_idx, batch in enumerate(train_loader):
-            *features, target = [item.to(config.device) for item in batch]
-            
+            features,target = batch
+            features = [f.to(config.device) for f in features]
+            target = target.to(config.device)
+            # lets go
             optimizer.zero_grad()
             output = model(*features)  # Pass all feature sets to the model
             loss = torch.nn.functional.cross_entropy(output, target)

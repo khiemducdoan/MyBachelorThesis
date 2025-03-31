@@ -1,7 +1,10 @@
 import torch
 import torch.nn as nn
 from transformers import AutoModel
+from torch.utils.data import DataLoader
 from transformers import AutoTokenizer
+from src.models.base import BaseModel
+import hydra
 class DynamicClassifier(nn.Module):
     def __init__(self, 
                 input_dim=768, 
@@ -53,3 +56,40 @@ class ViTBERTClassifier(nn.Module):
             logits = self.classifier(last_hidden_state.mean(dim=1))
         
         return logits
+
+class viTBI(BaseModel):
+    def __init__(self, params):
+        super(viTBI, self).__init__()
+        self.vitbi = ViTBERTClassifier(**params)
+
+    def forward(self, input_ids, attention_mask=None):
+        # input_ids, attention_mask = x
+        return self.vitbi(input_ids, attention_mask)
+    def configure_optimizers(self, config):
+        optimizer = torch.optim.Adam(
+            self.parameters(),
+            lr=config['optimizer']['lr'],
+            weight_decay=config['optimizer']['weight_decay']
+        )
+        
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode=config['scheduler']['mode'],
+            factor=config['scheduler']['factor'],
+            patience=config['scheduler']['patience']
+        )
+        
+        return {
+            'optimizer': optimizer,
+            'scheduler': scheduler,
+            'monitor': 'val_loss'
+        } 
+    def configure_loss(self, config):
+        loss = hydra.utils.instantiate(config.loss)
+        return loss
+ 
+# To use your modified classifier, you just need to specify the desired number of layers and dropout rate when initializing it:
+def main():
+    pass
+if __name__ == "__main__":
+    main()

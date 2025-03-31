@@ -49,6 +49,7 @@ class TBIDataset(Dataset):
 class ViTBERT(Dataset):
     def __init__(self, data : pd.DataFrame,
                  tokenizer: str,
+                 target_column: str,
                  transform: Optional[callable] = None):
         self.data = data
         #only get dataset in index, index is taken from train ids by kfold from sklearn
@@ -56,8 +57,8 @@ class ViTBERT(Dataset):
         self.tokenizer = transformers.AutoTokenizer.from_pretrained(tokenizer)
 
     def __getitem__(self, idx):
-        text = self.dataset.iloc[idx, 0]  # Extract text from dataframe
-        label = self.dataset.iloc[idx, 1]-1.0  # Extract label
+        text = self.data.iloc[idx, 0]  # Extract text from dataframe
+        label = self.data.iloc[idx, 1]  # Extract label
 
         # Tokenization
         tokenized_text = self.tokenizer(text, 
@@ -72,10 +73,18 @@ class ViTBERT(Dataset):
         attention_mask = tokenized_text['attention_mask'].squeeze()
 
         # Convert label to tensor
-        # label = torch.tensor(label, dtype=torch.long)  # Changed dtype to torch.long
+        label = torch.tensor(label - 1, dtype=torch.long)  # Changed dtype to torch.long
 
         # Return tensors
         return (input_ids, attention_mask) , label  # Return attention_mask
 
     def __len__(self):
         return len(self.data)
+def main():
+    dataset = ViTBERT(data, tokenizer='bert-base-uncased')
+    
+    for i in range(len(dataset)):
+        print(dataset[i])
+
+if __name__ == "__main__":
+    main()
