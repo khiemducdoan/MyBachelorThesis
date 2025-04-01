@@ -6,7 +6,7 @@ model:
     output_size: ${data.caller.num_classes}
     cat_idxs: null
     cat_dims: null
-    d_token: 64
+    d_token: 6
     embedder_initialization: normal
     bias: false
     mask_type: 2
@@ -15,11 +15,21 @@ model:
     feedforward_dim: 1000
     dropout_rate: 0.2
     activation: relu
-    num_layers: 5
+    num_layers: 6
     extractor: false
-
+# back bone embedding (quan trong nhat)
+# xem feature importance của cái này.
+# feature engineering thông thường 
+# xem thử 1 subset nhỏ hơn với dataset missing value ít hơn 1 threshold (cáo màu để so sánh với)
+# hiểu về trường dữ liệu
+# raise ra được problem của dữ liệu 
+# xem cái mạng có thể học được như nào
+# chạy thử trên TBI 102
+# fuse của text và tabnet = MMiunet chủ yếu là cross
+# trước hết là cái này, còn text thì làm thêm
+# phân tích Mij 
 optimizer:
-  lr: 0.005
+  lr: ${training.learning_rate}
   betas: [ 0.9, 0.999 ]
   eps: 1e-8   
   weight_decay: 0.01

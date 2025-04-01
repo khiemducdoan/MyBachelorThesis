@@ -63,7 +63,7 @@ class ViTBERT(Dataset):
         # Tokenization
         tokenized_text = self.tokenizer(text, 
                                         add_special_tokens=True, 
-                                        max_length=100, 
+                                        max_length=50, 
                                         padding='max_length', 
                                         truncation=True, 
                                         return_tensors='pt')

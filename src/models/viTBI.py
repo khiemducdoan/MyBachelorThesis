@@ -5,6 +5,27 @@ from torch.utils.data import DataLoader
 from transformers import AutoTokenizer
 from src.models.base import BaseModel
 import hydra
+class Classifier(nn.Module):
+    def __init__(self, config, dropout_rate=0.1):
+        super().__init__()
+
+        self.dropout_1 = nn.Dropout(dropout_rate*2)
+        self.dense_1  = nn.Linear(config.hidden_size, 128)
+        self.relu = nn.ReLU()
+        self.dropout_2 = nn.Dropout(dropout_rate)
+        self.dense_2 = nn.Linear(128,4)
+        self.sigmoid = nn.Sigmoid()
+    
+    def forward(self, feature):
+
+        feature = self.dropout_1(feature)
+        feature = self.dense_1(feature)
+        feature = self.relu(feature)
+        feature = self.dropout_2(feature)
+        feature = self.dense_2(feature)
+
+        feature = self.sigmoid(feature)
+        return feature
 class DynamicClassifier(nn.Module):
     def __init__(self, 
                 input_dim=768, 
@@ -16,7 +37,7 @@ class DynamicClassifier(nn.Module):
         for i in range(num_layers):
             output_dim = input_dim // 2
             layers.append(nn.Linear(input_dim, output_dim))
-            layers.append(nn.GELU())
+            layers.append(nn.ReLU())
             input_dim = output_dim
         layers.append(nn.Linear(input_dim, num_classes))
         layers.append(nn.Softmax(dim=1))
@@ -34,27 +55,30 @@ class ViTBERTClassifier(nn.Module):
                 num_layers=4):
         super().__init__()
         self.bert = AutoModel.from_pretrained(pretrained_model_name)
-        for param in self.bert.parameters():
-            param.requires_grad = False
-        self.classifier = DynamicClassifier(input_dim=self.bert.config.hidden_size,
+        # for param in self.bert.parameters():
+        #     param.requires_grad = False
+        self.dynamic_classifier = DynamicClassifier(input_dim=self.bert.config.hidden_size,
                                             num_classes=num_classes,
                                             dropout_rate=dropout_rate,
                                             num_layers=num_layers)
-    
+        self.static_classifier = Classifier(self.bert.config, dropout_rate=dropout_rate)
+        self.dropout = nn.Dropout(dropout_rate)
+        self.classifier = nn.Linear(self.bert.config.hidden_size, num_classes)
     def forward(self, input_ids, attention_mask=None):
         outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
-        
+        features_bert = outputs[0] # Last hidden state
+        features_cls = features_bert[:, 0, :].unsqueeze(1) # CLS token
+        pooled_output = outputs[1] # Pooled output
         # Access last_hidden_state (mandatory) and optionally pooler_output
-        last_hidden_state = outputs.last_hidden_state  # Always available
-        pooler_output = outputs.pooler_output if hasattr(outputs, 'pooler_output') else None
-
+        # last_hidden_state = outputs.last_hidden_state  # Always available
+        # pooler_output = outputs.pooler_output if hasattr(outputs, 'pooler_output') else None
         # Use pooler_output if available; otherwise, use mean pooling
-        if pooler_output is not None:
-            logits = self.classifier(pooler_output)
-        else:
-            # Mean pooling over the last hidden state
-            logits = self.classifier(last_hidden_state.mean(dim=1))
-        
+        # if pooler_output is not None:
+        #     logits = self.classifier(pooler_output)
+        # else:
+        #     # Mean pooling over the last hidden state
+        #     logits = self.classifier(last_hidden_state.mean(dim=1))
+        logits = self.static_classifier(pooled_output)
         return logits
 
 class viTBI(BaseModel):

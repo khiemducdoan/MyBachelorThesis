@@ -6,4 +6,4 @@ caller:
   num_features: 64
   transform: null
 
-data_path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/modality1_499_records.csv
+data_path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/dataset.csv
