@@ -9,13 +9,13 @@ from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
 from tensorboardX import SummaryWriter
-
+import wandb
 from src.data.dataset import TBIDataset
 from src.utils.metrics import calculate_metrics
 
 logger = logging.getLogger(__name__)
 
-@hydra.main(config_path="./configs", config_name="default")
+# @hydra.main(config_path="./configs", config_name="default")
 def train(config):
     # Set random seed
     print("Training started...")
@@ -182,6 +182,13 @@ def train(config):
     
     # Close TensorBoard writer
     writer.close()
-
+def train_with_sweep(config):
+    pass 
+@hydra.main(config_path="./configs", config_name="main")
+def main(config):
+    if not config.logging.sweep:
+        train(config.default)
+    else:
+        train_with_sweep(config.default_sweep)
 if __name__ == "__main__":
-    train()
+    main()

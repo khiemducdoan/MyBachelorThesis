@@ -1,0 +1,19 @@
+name: net
+
+model:
+  _target_: src.models.net.Net
+  params:
+    D_in: ${data.num_features}
+    D_out: ${data.num_classes}  
+    H: 15
+
+optimizer:
+  _target_: torch.optim.Adam
+  lr: ${training.learning_rate}
+  weight_decay: 0.0001
+
+scheduler:
+  _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
+  mode: min
+  factor: 0.5
+  patience: 5 

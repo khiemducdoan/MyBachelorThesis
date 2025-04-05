@@ -12,7 +12,7 @@ output_dir: outputs_for_tables
 training:
   num_epochs: 100
   batch_size: 32
-  learning_rate: 0.005
+  learning_rate: 0.001
   early_stopping:
     patience: 10
     monitor: val_loss

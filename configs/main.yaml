@@ -1,0 +1,19 @@
+defaults:
+  - default@default: default
+  - default_sweep@default_sweep: default_sweep
+  - _self_
+logging:
+  sweep : true
+  wandb:
+    project: naim
+    entity: naim
+    name: naim
+    tags: [naim, tbi]
+    group: naim
+    notes: "NAIM model for TBI dataset"
+    config:
+      model: naim
+      dataset: tbi
+      batch_size: ${training.batch_size}
+      learning_rate: ${training.learning_rate}
+      num_epochs: ${training.num_epochs}

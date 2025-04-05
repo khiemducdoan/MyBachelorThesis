@@ -1,0 +1,9 @@
+caller:
+  _target_: src.data.dataset.TBIDataset
+  data: None
+  target_column: d_kl_tl
+  num_classes: 4
+  num_features: 64
+  transform: null
+
+data_path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/dataset.csv
