@@ -26,14 +26,15 @@ validation:
 logging:
   sweep: true
   wandb:
-    project: naim
+    project: naim_tbi
     entity: naim
-    name: naim_run_${hydra.job.num}
+    name: $naim_run_${now:%m-%d_%H-%M}
     tags: [naim, tbi]
     group: naim_sweep
     notes: "NAIM model for TBI dataset"
   log_interval: 100
   save_interval: 10
+  sweep_count : 50
 sweep_configuration:
   method: grid
   metric:

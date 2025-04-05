@@ -135,9 +135,10 @@ def train(config):
         for metric_name, metric_value in metrics.items():
             writer.add_scalar(f'Validation/{metric_name}', metric_value, epoch)
         
-        # Lưu confusion matrix nếu đạt accuracy cao nhất
+        # Log best accuracy to wandb
         if val_accuracy > best_accuracy:
             best_accuracy = val_accuracy
+            wandb.log({"Best Accuracy": best_accuracy})  # Log best accuracy to wandb
             best_conf_matrix = confusion_matrix(val_targets, val_predictions)
             
             # Vẽ confusion matrix
@@ -190,9 +191,10 @@ def train(config):
 def train_with_sweep(config):
     # Define sweep configuration
     sweep_config = {
+        "name": config.logging.wandb.name,
         'method': 'bayes',  # Optimization method (e.g., grid, random, bayes)
         'metric': {
-            'name': 'Validation/Accuracy',  # Metric to optimize
+            'name': 'Best Accuracy',  # Metric to optimize
             'goal': 'maximize'  # Goal: maximize or minimize
         },
         'parameters': {
@@ -220,13 +222,13 @@ def train_with_sweep(config):
         # Update config with sweep parameters
         config.training.batch_size = sweep_params.batch_size
         config.model.optimizer.lr = sweep_params.learning_rate
-        config.model.model.num_layers = sweep_params.num_layers
+        config.model.model.params.num_layers = sweep_params.num_layers
 
         # Call the train function with updated config
         train(config)
 
     # Start the sweep agent
-    wandb.agent(sweep_id, function=sweep_train)
+    wandb.agent(sweep_id, function=sweep_train,count=config.logging.sweep_count)
 
 
 @hydra.main(config_path="./configs", config_name="main")
