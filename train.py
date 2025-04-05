@@ -6,15 +6,17 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
+from omegaconf import OmegaConf
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix
+from tqdm.auto import tqdm
 from tensorboardX import SummaryWriter
 import wandb
 from src.data.dataset import TBIDataset
 from src.utils.metrics import calculate_metrics
 
 logger = logging.getLogger(__name__)
-
+wandb.login()
 # @hydra.main(config_path="./configs", config_name="default")
 def train(config):
     # Set random seed
@@ -69,7 +71,8 @@ def train(config):
         # Training
         model.train()
         train_loss = 0
-        for batch_idx, batch in enumerate(train_loader):
+        train_bar = tqdm(train_loader, desc=f"Epoch {epoch} [Train]", leave=False)
+        for batch_idx, batch in enumerate(train_bar):
             features,target = batch
             target = target.to(config.device)
             optimizer.zero_grad()
@@ -102,9 +105,9 @@ def train(config):
         val_loss = 0
         val_predictions = []
         val_targets = []
-        
+        val_bar = tqdm(val_loader, desc=f"Epoch {epoch} [Val]", leave=False)
         with torch.no_grad():
-            for batch in val_loader:
+            for batch in val_bar:
                 features,target = batch
                 target = target.to(config.device)
                 if isinstance(features, list):
@@ -182,8 +185,50 @@ def train(config):
     
     # Close TensorBoard writer
     writer.close()
+
+
 def train_with_sweep(config):
-    pass 
+    # Define sweep configuration
+    sweep_config = {
+        'method': 'bayes',  # Optimization method (e.g., grid, random, bayes)
+        'metric': {
+            'name': 'Validation/Accuracy',  # Metric to optimize
+            'goal': 'maximize'  # Goal: maximize or minimize
+        },
+        'parameters': {
+            'batch_size': {
+                'values': [16, 32, 64]  # Possible values for batch size
+            },
+            'learning_rate': {
+                'min': 0.0001,  # Minimum value for learning rate
+                'max': 0.1   # Maximum value for learning rate
+            },
+            "num_layers": {
+                "values": [1, 2, 3,4,5,6,7,8,9,10]  # Possible values for number of layers
+            },
+            }
+        }
+
+    # Initialize sweep
+    sweep_id = wandb.sweep(sweep_config, project=config.logging.wandb.project)
+
+    def sweep_train():
+        # Initialize wandb with sweep configuration
+        wandb.init()
+        sweep_params = wandb.config
+
+        # Update config with sweep parameters
+        config.training.batch_size = sweep_params.batch_size
+        config.model.optimizer.lr = sweep_params.learning_rate
+        config.model.model.num_layers = sweep_params.num_layers
+
+        # Call the train function with updated config
+        train(config)
+
+    # Start the sweep agent
+    wandb.agent(sweep_id, function=sweep_train)
+
+
 @hydra.main(config_path="./configs", config_name="main")
 def main(config):
     if not config.logging.sweep:
