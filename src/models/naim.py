@@ -256,7 +256,9 @@ class NAIM(torch.nn.Module):
 
         # transformer
         for encoder_layer in self.encoder:
+            residual = embeddings
             embeddings = encoder_layer(embeddings, mask=masks, mask2=masks2)
+            embeddings = embeddings + residual  # residual connection
 
         embeddings = self.norm(embeddings)
 

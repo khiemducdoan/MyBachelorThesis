@@ -11,8 +11,8 @@ output_dir: outputs
 # Training settings
 training:
   num_epochs: 100
-  batch_size: 32
-  learning_rate: 0.001
+  batch_size: 8
+  learning_rate: 0.0.006937198828044247
   early_stopping:
     patience: 10
     monitor: val_loss
@@ -28,13 +28,13 @@ logging:
   wandb:
     project: naim_tbi
     entity: naim
-    name: $naim_run_${now:%m-%d_%H-%M}
+    name: numhead_finetune #$naim_run_${now:%m-%d_%H-%M}
     tags: [naim, tbi]
     group: naim_sweep
     notes: "NAIM model for TBI dataset"
   log_interval: 100
   save_interval: 10
-  sweep_count : 50
+  sweep_count : 6
 sweep_configuration:
   method: grid
   metric:

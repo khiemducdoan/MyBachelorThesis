@@ -19,6 +19,8 @@ logger = logging.getLogger(__name__)
 wandb.login()
 # @hydra.main(config_path="./configs", config_name="default")
 def train(config):
+    wandb.init(
+        project=config.logging.wandb.project)
     # Set random seed
     print("Training started...")
     torch.manual_seed(config.seed)
@@ -99,6 +101,7 @@ def train(config):
                           f'({100. * batch_idx / len(train_loader):.0f}%)]\t'
                           f'Loss: {loss.item():.6f}')
                 writer.add_scalar('Train/Loss', loss.item(), epoch * len(train_loader) + batch_idx)
+                wandb.log({"Train Loss": loss.item()})  # Log to wandb
         
         # Validation
         model.eval()
@@ -131,9 +134,11 @@ def train(config):
         val_accuracy = metrics.get("accuracy", 0.0)
         # Log validation loss and metrics
         logger.info(f'Epoch {epoch}: Val Loss: {val_loss:.4f}, Accuracy: {val_accuracy:.4f}, Metrics: {metrics}')
+        wandb.log({"Validation Loss": val_loss, "Validation Accuracy": val_accuracy})  # Log to wandb
         writer.add_scalar('Validation/Loss', val_loss, epoch)
         for metric_name, metric_value in metrics.items():
             writer.add_scalar(f'Validation/{metric_name}', metric_value, epoch)
+            wandb.log({f"Validation {metric_name}": metric_value})  # Log to wandb
         
         # Log best accuracy to wandb
         if val_accuracy > best_accuracy:
@@ -156,6 +161,7 @@ def train(config):
             # Ghi confusion matrix vào TensorBoard
             writer.add_image('Validation/Confusion Matrix', 
                              torch.tensor(plt.imread(cm_path)), epoch, dataformats='HWC')
+            wandb.log({"Confusion Matrix": wandb.Image(cm_path)})  # Log confusion matrix to wandb
 
         # Early stopping
         if val_loss < best_val_loss:
@@ -199,11 +205,23 @@ def train_with_sweep(config):
         },
         'parameters': {
             'batch_size': {
-                'values': [16, 32, 64]  # Possible values for batch size
+                'values': [4, 8, 16, 32, 64]  # Possible values for batch size
             },
             'learning_rate': {
-                'min': 0.0001,  # Minimum value for learning rate
-                'max': 0.1   # Maximum value for learning rate
+                'distribution': 'log_uniform',
+                'min': -6,
+                'max': -2
+            },
+            'd_token': {
+                'values': [8, 16, 32, 64]  # Possible values for d_token
+            },
+            "dropout_rate": {
+                "distribution": "uniform",
+                "min": 0.1,
+                "max": 0.5
+            },
+            'num_heads': {
+                'values': [1, 2, 4, 8, 16, 32]  # Possible values for number of heads
             },
             "num_layers": {
                 "values": [1, 2, 3,4,5,6,7,8,9,10]  # Possible values for number of layers
@@ -220,9 +238,12 @@ def train_with_sweep(config):
         sweep_params = wandb.config
 
         # Update config with sweep parameters
-        config.training.batch_size = sweep_params.batch_size
-        config.model.optimizer.lr = sweep_params.learning_rate
-        config.model.model.params.num_layers = sweep_params.num_layers
+        # config.training.batch_size = sweep_params.batch_size
+        # config.model.optimizer.lr = sweep_params.learning_rate
+        # config.model.model.params.num_layers = sweep_params.num_layers
+        # config.model.model.params.d_token = sweep_params.d_token
+        # config.model.model.params.dropout_rate = sweep_params.dropout_rate
+        config.model.model.params.num_heads = sweep_params.num_heads
 
         # Call the train function with updated config
         train(config)
@@ -234,6 +255,7 @@ def train_with_sweep(config):
 @hydra.main(config_path="./configs", config_name="main")
 def main(config):
     if not config.logging.sweep:
+        
         train(config.default)
     else:
         train_with_sweep(config.default_sweep)

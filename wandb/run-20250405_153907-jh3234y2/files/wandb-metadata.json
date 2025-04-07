@@ -1,0 +1,53 @@
+{
+  "os": "Linux-5.15.0-134-generic-x86_64-with-glibc2.35",
+  "python": "CPython 3.9.21",
+  "startedAt": "2025-04-05T15:39:07.949245Z",
+  "program": "/home/khanhnt/Khiem/MyBachelorThesis/train.py",
+  "codePath": "train.py",
+  "git": {
+    "remote": "git@github.com:vinakhiem120/MyBachelorThesis.git",
+    "commit": "323795613320422f718588570ce708f586b4292c"
+  },
+  "email": "vinakhiem120@gmail.com",
+  "root": "/home/khanhnt/Khiem/MyBachelorThesis",
+  "host": "aiotlab-server",
+  "executable": "/home/khanhnt/.conda/envs/naim/bin/python",
+  "cpu_count": 24,
+  "cpu_count_logical": 48,
+  "gpu": "NVIDIA A30",
+  "gpu_count": 3,
+  "disk": {
+    "/": {
+      "total": "940211900416",
+      "used": "675813801984"
+    }
+  },
+  "memory": {
+    "total": "134849126400"
+  },
+  "cpu": {
+    "count": 24,
+    "countLogical": 48
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA A30",
+      "memoryTotal": "25769803776",
+      "cudaCores": 3584,
+      "architecture": "Ampere"
+    },
+    {
+      "name": "NVIDIA A30",
+      "memoryTotal": "25769803776",
+      "cudaCores": 3584,
+      "architecture": "Ampere"
+    },
+    {
+      "name": "NVIDIA A30",
+      "memoryTotal": "25769803776",
+      "cudaCores": 3584,
+      "architecture": "Ampere"
+    }
+  ],
+  "cudaVersion": "12.2"
+}

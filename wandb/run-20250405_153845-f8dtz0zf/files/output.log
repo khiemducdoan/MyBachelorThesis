@@ -1,0 +1,71 @@
+Training started...
+/home/khanhnt/.conda/envs/naim/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1497: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+[2025-04-05 15:38:48,831][__main__][INFO] - Train Epoch: 0 [0/7 (0%)]	Loss: 1.384536
+[2025-04-05 15:38:49,169][__main__][INFO] - Epoch 0: Val Loss: 1.1601, Accuracy: 0.5743, Metrics: {'accuracy': 0.5742574257425742, 'f1_macro': 0.3843651384992987, 'f1_weighted': 0.5242047008873398, 'precision_macro': 0.4091787439613527, 'recall_macro': 0.43892526964560863}
+[2025-04-05 15:38:49,346][tensorboardX.summary][INFO] - Summary name Validation/Confusion Matrix is illegal; using Validation/Confusion_Matrix instead.
+[2025-04-05 15:38:49,900][__main__][INFO] - Train Epoch: 1 [0/7 (0%)]	Loss: 0.976603
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+[2025-04-05 15:38:50,185][__main__][INFO] - Epoch 1: Val Loss: 0.9673, Accuracy: 0.6139, Metrics: {'accuracy': 0.6138613861386139, 'f1_macro': 0.3904646204194972, 'f1_weighted': 0.5650157815900596, 'precision_macro': 0.5069565217391304, 'recall_macro': 0.3842835130970724}
+[2025-04-05 15:38:50,312][tensorboardX.summary][INFO] - Summary name Validation/Confusion Matrix is illegal; using Validation/Confusion_Matrix instead.
+/home/khanhnt/.conda/envs/naim/lib/python3.9/site-packages/sklearn/metrics/_classification.py:1497: UndefinedMetricWarning: Precision is ill-defined and being set to 0.0 in labels with no predicted samples. Use `zero_division` parameter to control this behavior.
+[2025-04-05 15:38:50,380][__main__][INFO] - Train Epoch: 2 [0/7 (0%)]	Loss: 0.852480
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+[2025-04-05 15:38:50,661][__main__][INFO] - Epoch 2: Val Loss: 0.9561, Accuracy: 0.5941, Metrics: {'accuracy': 0.594059405940594, 'f1_macro': 0.3408965135583841, 'f1_weighted': 0.531508380500474, 'precision_macro': 0.49144736842105263, 'recall_macro': 0.3407935285053929}
+Epoch 16 [Train]:   0%|                                                                                     | 0/7 [00:00<?, ?it/s]
+[2025-04-05 15:38:50,702][__main__][INFO] - Train Epoch: 3 [0/7 (0%)]	Loss: 0.734006
+[2025-04-05 15:38:50,970][__main__][INFO] - Epoch 3: Val Loss: 0.8944, Accuracy: 0.6832, Metrics: {'accuracy': 0.6831683168316832, 'f1_macro': 0.6386905044503678, 'f1_weighted': 0.6880006127863687, 'precision_macro': 0.7313183601903648, 'recall_macro': 0.6031779661016949}
+[2025-04-05 15:38:51,110][tensorboardX.summary][INFO] - Summary name Validation/Confusion Matrix is illegal; using Validation/Confusion_Matrix instead.
+[2025-04-05 15:38:51,182][__main__][INFO] - Train Epoch: 4 [0/7 (0%)]	Loss: 0.654028
+[2025-04-05 15:38:51,454][__main__][INFO] - Epoch 4: Val Loss: 0.8972, Accuracy: 0.6832, Metrics: {'accuracy': 0.6831683168316832, 'f1_macro': 0.6159361376222457, 'f1_weighted': 0.6780175154312886, 'precision_macro': 0.7364783653846154, 'recall_macro': 0.5764252696456086}
+[2025-04-05 15:38:51,498][__main__][INFO] - Train Epoch: 5 [0/7 (0%)]	Loss: 0.485778
+[2025-04-05 15:38:51,771][__main__][INFO] - Epoch 5: Val Loss: 0.8772, Accuracy: 0.6535, Metrics: {'accuracy': 0.6534653465346535, 'f1_macro': 0.6212215320910972, 'f1_weighted': 0.6603857901318083, 'precision_macro': 0.6404914529914529, 'recall_macro': 0.6109206471494607}
+[2025-04-05 15:38:51,814][__main__][INFO] - Train Epoch: 6 [0/7 (0%)]	Loss: 0.493049
+[2025-04-05 15:38:52,092][__main__][INFO] - Epoch 6: Val Loss: 0.8431, Accuracy: 0.7030, Metrics: {'accuracy': 0.7029702970297029, 'f1_macro': 0.5945749389599029, 'f1_weighted': 0.6658451198107836, 'precision_macro': 0.7482638888888888, 'recall_macro': 0.5455508474576272}
+[2025-04-05 15:38:52,209][tensorboardX.summary][INFO] - Summary name Validation/Confusion Matrix is illegal; using Validation/Confusion_Matrix instead.
+[2025-04-05 15:38:52,275][__main__][INFO] - Train Epoch: 7 [0/7 (0%)]	Loss: 0.541258
+[2025-04-05 15:38:52,545][__main__][INFO] - Epoch 7: Val Loss: 0.8481, Accuracy: 0.7129, Metrics: {'accuracy': 0.7128712871287128, 'f1_macro': 0.5881662648988885, 'f1_weighted': 0.682536493906522, 'precision_macro': 0.8180555555555555, 'recall_macro': 0.5623844375963021}
+[2025-04-05 15:38:52,667][tensorboardX.summary][INFO] - Summary name Validation/Confusion Matrix is illegal; using Validation/Confusion_Matrix instead.
+[2025-04-05 15:38:52,734][__main__][INFO] - Train Epoch: 8 [0/7 (0%)]	Loss: 0.541410
+[2025-04-05 15:38:52,996][__main__][INFO] - Epoch 8: Val Loss: 0.8055, Accuracy: 0.7030, Metrics: {'accuracy': 0.7029702970297029, 'f1_macro': 0.646, 'f1_weighted': 0.6962292860865035, 'precision_macro': 0.6890782828282829, 'recall_macro': 0.6155816640986133}
+[2025-04-05 15:38:53,041][__main__][INFO] - Train Epoch: 9 [0/7 (0%)]	Loss: 0.643548
+[2025-04-05 15:38:53,311][__main__][INFO] - Epoch 9: Val Loss: 0.8107, Accuracy: 0.7030, Metrics: {'accuracy': 0.7029702970297029, 'f1_macro': 0.6437213909954225, 'f1_weighted': 0.6980340747745608, 'precision_macro': 0.7013888888888888, 'recall_macro': 0.6136171032357474}
+[2025-04-05 15:38:53,354][__main__][INFO] - Train Epoch: 10 [0/7 (0%)]	Loss: 0.367857
+[2025-04-05 15:38:53,613][__main__][INFO] - Epoch 10: Val Loss: 0.8209, Accuracy: 0.7327, Metrics: {'accuracy': 0.7326732673267327, 'f1_macro': 0.6377321981424149, 'f1_weighted': 0.7067697636636728, 'precision_macro': 0.7827380952380952, 'recall_macro': 0.583050847457627}
+[2025-04-05 15:38:53,723][tensorboardX.summary][INFO] - Summary name Validation/Confusion Matrix is illegal; using Validation/Confusion_Matrix instead.
+[2025-04-05 15:38:53,786][__main__][INFO] - Train Epoch: 11 [0/7 (0%)]	Loss: 0.440803
+[2025-04-05 15:38:54,047][__main__][INFO] - Epoch 11: Val Loss: 0.8184, Accuracy: 0.6931, Metrics: {'accuracy': 0.693069306930693, 'f1_macro': 0.6591761550036053, 'f1_weighted': 0.7001278119507193, 'precision_macro': 0.6917989417989417, 'recall_macro': 0.6443952234206471}
+[2025-04-05 15:38:54,085][__main__][INFO] - Train Epoch: 12 [0/7 (0%)]	Loss: 0.414829
+[2025-04-05 15:38:54,356][__main__][INFO] - Epoch 12: Val Loss: 0.8503, Accuracy: 0.7129, Metrics: {'accuracy': 0.7128712871287128, 'f1_macro': 0.6176470588235294, 'f1_weighted': 0.6849155503785673, 'precision_macro': 0.7165204678362573, 'recall_macro': 0.5765408320493066}
+[2025-04-05 15:38:54,395][__main__][INFO] - Train Epoch: 13 [0/7 (0%)]	Loss: 0.370146
+[2025-04-05 15:38:54,668][__main__][INFO] - Epoch 13: Val Loss: 0.7814, Accuracy: 0.7822, Metrics: {'accuracy': 0.7821782178217822, 'f1_macro': 0.7263993316624895, 'f1_weighted': 0.7756685442980388, 'precision_macro': 0.7973852541802267, 'recall_macro': 0.6825308166409862}
+[2025-04-05 15:38:54,788][tensorboardX.summary][INFO] - Summary name Validation/Confusion Matrix is illegal; using Validation/Confusion_Matrix instead.
+[2025-04-05 15:38:54,859][__main__][INFO] - Train Epoch: 14 [0/7 (0%)]	Loss: 0.426234
+[2025-04-05 15:38:55,119][__main__][INFO] - Epoch 14: Val Loss: 0.7918, Accuracy: 0.7327, Metrics: {'accuracy': 0.7326732673267327, 'f1_macro': 0.6887214389888187, 'f1_weighted': 0.7297482154632576, 'precision_macro': 0.7456317204301075, 'recall_macro': 0.6613443759630201}
+[2025-04-05 15:38:55,158][__main__][INFO] - Train Epoch: 15 [0/7 (0%)]	Loss: 0.367416
+[2025-04-05 15:38:55,413][__main__][INFO] - Epoch 15: Val Loss: 0.7735, Accuracy: 0.7822, Metrics: {'accuracy': 0.7821782178217822, 'f1_macro': 0.7217204596857999, 'f1_weighted': 0.7772174338284737, 'precision_macro': 0.7475694444444444, 'recall_macro': 0.7010208012326656}
+[2025-04-05 15:38:55,450][__main__][INFO] - Train Epoch: 16 [0/7 (0%)]	Loss: 0.416014
+[2025-04-05 15:38:55,696][__main__][INFO] - Epoch 16: Val Loss: 0.7846, Accuracy: 0.7921, Metrics: {'accuracy': 0.7920792079207921, 'f1_macro': 0.7092309261525908, 'f1_weighted': 0.7751909707494617, 'precision_macro': 0.814484126984127, 'recall_macro': 0.6682781201848998}
+[2025-04-05 15:38:55,821][tensorboardX.summary][INFO] - Summary name Validation/Confusion Matrix is illegal; using Validation/Confusion_Matrix instead.
+[2025-04-05 15:38:55,903][__main__][INFO] - Train Epoch: 17 [0/7 (0%)]	Loss: 0.636804
+[2025-04-05 15:38:56,168][__main__][INFO] - Epoch 17: Val Loss: 0.8334, Accuracy: 0.7822, Metrics: {'accuracy': 0.7821782178217822, 'f1_macro': 0.7185508061492314, 'f1_weighted': 0.7716349812709057, 'precision_macro': 0.7739758403361344, 'recall_macro': 0.6844953775038521}
+[2025-04-05 15:38:56,207][__main__][INFO] - Train Epoch: 18 [0/7 (0%)]	Loss: 0.464907
+[2025-04-05 15:38:56,465][__main__][INFO] - Epoch 18: Val Loss: 0.7983, Accuracy: 0.7822, Metrics: {'accuracy': 0.7821782178217822, 'f1_macro': 0.7200268238162976, 'f1_weighted': 0.7744853275817319, 'precision_macro': 0.7584781639928698, 'recall_macro': 0.6927580893682589}
+[2025-04-05 15:38:56,507][__main__][INFO] - Train Epoch: 19 [0/7 (0%)]	Loss: 0.476262
+[2025-04-05 15:38:56,776][__main__][INFO] - Epoch 19: Val Loss: 0.8082, Accuracy: 0.7723, Metrics: {'accuracy': 0.7722772277227723, 'f1_macro': 0.6594149094149094, 'f1_weighted': 0.7472027571037473, 'precision_macro': 0.7617992267329466, 'recall_macro': 0.6330508474576272}
+[2025-04-05 15:38:56,817][__main__][INFO] - Train Epoch: 20 [0/7 (0%)]	Loss: 0.588487
+[2025-04-05 15:38:57,091][__main__][INFO] - Epoch 20: Val Loss: 0.8302, Accuracy: 0.7624, Metrics: {'accuracy': 0.7623762376237624, 'f1_macro': 0.6620107323232324, 'f1_weighted': 0.7438462596259626, 'precision_macro': 0.7220726284584981, 'recall_macro': 0.6390408320493066}
+[2025-04-05 15:38:57,130][__main__][INFO] - Train Epoch: 21 [0/7 (0%)]	Loss: 0.302089
+[2025-04-05 15:38:57,395][__main__][INFO] - Epoch 21: Val Loss: 0.8369, Accuracy: 0.7624, Metrics: {'accuracy': 0.7623762376237624, 'f1_macro': 0.7025113057721754, 'f1_weighted': 0.7598845078397383, 'precision_macro': 0.7052522573858158, 'recall_macro': 0.702773497688752}
+[2025-04-05 15:38:57,436][__main__][INFO] - Train Epoch: 22 [0/7 (0%)]	Loss: 0.428525
+  _warn_prf(average, modifier, f"{metric.capitalize()} is", len(result))
+[2025-04-05 15:38:57,706][__main__][INFO] - Epoch 22: Val Loss: 0.9885, Accuracy: 0.7525, Metrics: {'accuracy': 0.7524752475247525, 'f1_macro': 0.576018715944089, 'f1_weighted': 0.7026161038278667, 'precision_macro': 0.5835416666666666, 'recall_macro': 0.5793335901386749}
+                                                                                                                                  
+[2025-04-05 15:38:57,742][__main__][INFO] - Train Epoch: 23 [0/7 (0%)]	Loss: 0.426343
+[2025-04-05 15:38:58,005][__main__][INFO] - Epoch 23: Val Loss: 0.8418, Accuracy: 0.7426, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6765074192369794, 'f1_weighted': 0.7328208247180396, 'precision_macro': 0.6943681318681318, 'recall_macro': 0.6695107858243451}
+[2025-04-05 15:38:58,046][__main__][INFO] - Train Epoch: 24 [0/7 (0%)]	Loss: 0.340070
+[2025-04-05 15:38:58,312][__main__][INFO] - Epoch 24: Val Loss: 0.8433, Accuracy: 0.8020, Metrics: {'accuracy': 0.801980198019802, 'f1_macro': 0.7402272347535506, 'f1_weighted': 0.7940583471881023, 'precision_macro': 0.7886724386724386, 'recall_macro': 0.7094953775038522}
+[2025-04-05 15:38:58,739][tensorboardX.summary][INFO] - Summary name Validation/Confusion Matrix is illegal; using Validation/Confusion_Matrix instead.
+[2025-04-05 15:38:58,806][__main__][INFO] - Train Epoch: 25 [0/7 (0%)]	Loss: 0.393342
+[2025-04-05 15:38:59,071][__main__][INFO] - Epoch 25: Val Loss: 0.9106, Accuracy: 0.7426, Metrics: {'accuracy': 0.7425742574257426, 'f1_macro': 0.6248341441839894, 'f1_weighted': 0.712442142047022, 'precision_macro': 0.7381917631917632, 'recall_macro': 0.5955508474576271}
+[2025-04-05 15:38:59,073][__main__][INFO] - Early stopping triggered after 25 epochs
+[2025-04-05 15:38:59,073][__main__][INFO] - Saving best confusion matrix with accuracy: 0.8020

@@ -6,16 +6,16 @@ model:
     output_size: ${default_sweep.data.caller.num_classes}
     cat_idxs: null
     cat_dims: null
-    d_token: 6
+    d_token: 64
     embedder_initialization: normal
     bias: false
     mask_type: 2
     missing_value: ~inf
-    num_heads: 2
+    num_heads: 4
     feedforward_dim: 1000
-    dropout_rate: 0.2
+    dropout_rate: 0.0.13494352349372787
     activation: relu
-    num_layers: 5
+    num_layers: 1
     extractor: false
 # back bone embedding (quan trong nhat)
 # xem thử cái L ảnh hưởng thế nào
