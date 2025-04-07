@@ -13,7 +13,7 @@ model:
     missing_value: ~inf
     num_heads: 4
     feedforward_dim: 1000
-    dropout_rate: 0.0.13494352349372787
+    dropout_rate: 0.13494352349372787
     activation: relu
     num_layers: 1
     extractor: false
@@ -45,3 +45,6 @@ scheduler:
   factor: 0.1
   patience: 10
   verbose: False
+loss:
+  _target_: torch.nn.CrossEntropyLoss
+  weight: nan

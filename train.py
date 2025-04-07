@@ -2,6 +2,8 @@ import os
 import hydra
 import logging
 import torch
+from sklearn.utils.class_weight import compute_class_weight
+import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -21,17 +23,17 @@ wandb.login()
 def train(config):
     wandb.init(
         project=config.logging.wandb.project)
-    # Set random seed
+    # ========================================================Set random seed========================================================
     print("Training started...")
     torch.manual_seed(config.seed)
     
-    # Initialize TensorBoard writer
+    # ========================================================Initialize TensorBoard writer========================================================
     writer = SummaryWriter(log_dir=os.path.join(config.output_dir, 'logs'))
     
-    # Load and preprocess data
+    # ========================================================Load and preprocess data========================================================
     data = pd.read_csv(config.data.data_path)
 
-    # Split data
+    # ========================================================Split data======================================================
     train_data, val_data = train_test_split(
         data, 
         test_size=config.validation.split_ratio,
@@ -39,11 +41,11 @@ def train(config):
         stratify=data[config.data.caller.target_column]
     )
 
-    # Create datasets
+    # ==========================================================Create datasets========================================
     train_dataset = hydra.utils.instantiate(config.data.caller, data = train_data)
     val_dataset = hydra.utils.instantiate(config.data.caller, data = val_data)
     
-    # Create dataloaders
+    # =====================================================Create dataloaders================================================
     train_loader = DataLoader(
         train_dataset,
         batch_size=config.training.batch_size,
@@ -54,7 +56,7 @@ def train(config):
         batch_size=config.training.batch_size
     )
     
-    # Initialize model
+    # =======================================================Initialize model============================================
     model = hydra.utils.instantiate(config.model.model)
     model = model.to(config.device)
     
@@ -62,13 +64,18 @@ def train(config):
     optim_config = model.configure_optimizers(config.model)
     optimizer = optim_config['optimizer']
     scheduler = optim_config['scheduler']
-    
-    # Training loop
+    # =============================================UNCOMMENT IF YOU WANT TO USE CLASS WEIGHTS=====================================================================
+    # Compute class weights
+    # classes = np.unique(train_data[config.data.caller.target_column])
+    # class_weights = compute_class_weight(class_weight='balanced', classes=classes, y=train_data[config.data.caller.target_column])
+    # config.model.loss.weight = class_weights.tolist()
+    loss_fn = model.configure_loss(config.model)
+    # ====================================================Training loop=====================================================================
     best_val_loss = float('inf')
     best_accuracy = 0.0
     patience_counter = 0
     best_conf_matrix = None  # Lưu confusion matrix tốt nhất
-
+    # =========================================================================================================================
     for epoch in range(config.training.num_epochs):
         # Training
         model.train()
@@ -90,7 +97,7 @@ def train(config):
             # lets go
             # optimizer.zero_grad()
             # output = model(*features)  # Pass all feature sets to the model
-            loss = torch.nn.functional.cross_entropy(output, target)
+            loss = loss_fn(output, target)
             loss.backward()
             optimizer.step()
             
@@ -103,7 +110,7 @@ def train(config):
                 writer.add_scalar('Train/Loss', loss.item(), epoch * len(train_loader) + batch_idx)
                 wandb.log({"Train Loss": loss.item()})  # Log to wandb
         
-        # Validation
+        # ====================================================Validation====================================================
         model.eval()
         val_loss = 0
         val_predictions = []
@@ -124,7 +131,7 @@ def train(config):
                 
                 # *features, target = [item.to(config.device) for item in batch]
                 # output = model(*features)  # Pass all feature sets to the model
-                val_loss += torch.nn.functional.cross_entropy(output, target).item()
+                val_loss += loss_fn(output, target).item()
                 
                 val_predictions.extend(output.argmax(dim=1).cpu().numpy())
                 val_targets.extend(target.cpu().numpy())
@@ -132,7 +139,7 @@ def train(config):
         val_loss /= len(val_loader)
         metrics = calculate_metrics(val_targets, val_predictions)
         val_accuracy = metrics.get("accuracy", 0.0)
-        # Log validation loss and metrics
+        # ====================================================Log validation loss and metrics====================================================
         logger.info(f'Epoch {epoch}: Val Loss: {val_loss:.4f}, Accuracy: {val_accuracy:.4f}, Metrics: {metrics}')
         wandb.log({"Validation Loss": val_loss, "Validation Accuracy": val_accuracy})  # Log to wandb
         writer.add_scalar('Validation/Loss', val_loss, epoch)
@@ -140,7 +147,7 @@ def train(config):
             writer.add_scalar(f'Validation/{metric_name}', metric_value, epoch)
             wandb.log({f"Validation {metric_name}": metric_value})  # Log to wandb
         
-        # Log best accuracy to wandb
+        # ====================================================Log best accuracy to wandb====================================================
         if val_accuracy > best_accuracy:
             best_accuracy = val_accuracy
             wandb.log({"Best Accuracy": best_accuracy})  # Log best accuracy to wandb
@@ -178,7 +185,7 @@ def train(config):
         # Update scheduler
         scheduler.step(val_loss)
     
-    # Lưu confusion matrix tốt nhất
+    # ====================================================Lưu confusion matrix tốt nhất====================================================
     if best_conf_matrix is not None:
         logger.info(f'Saving best confusion matrix with accuracy: {best_accuracy:.4f}')
         cm_path_final = os.path.join(config.output_dir, 'final_best_confusion_matrix.png')
@@ -198,34 +205,34 @@ def train_with_sweep(config):
     # Define sweep configuration
     sweep_config = {
         "name": config.logging.wandb.name,
-        'method': 'bayes',  # Optimization method (e.g., grid, random, bayes)
+        'method': 'grid',  # Optimization method (e.g., grid, random, bayes)
         'metric': {
             'name': 'Best Accuracy',  # Metric to optimize
             'goal': 'maximize'  # Goal: maximize or minimize
         },
         'parameters': {
-            'batch_size': {
-                'values': [4, 8, 16, 32, 64]  # Possible values for batch size
-            },
-            'learning_rate': {
-                'distribution': 'log_uniform',
-                'min': -6,
-                'max': -2
-            },
-            'd_token': {
-                'values': [8, 16, 32, 64]  # Possible values for d_token
-            },
-            "dropout_rate": {
-                "distribution": "uniform",
-                "min": 0.1,
-                "max": 0.5
-            },
+            # 'batch_size': {
+            #     'values': [4, 8, 16, 32, 64]  # Possible values for batch size
+            # },
+            # 'learning_rate': {
+            #     'distribution': 'log_uniform',
+            #     'min': -6,
+            #     'max': -2
+            # },
+            # 'd_token': {
+            #     'values': [8, 16, 32, 64]  # Possible values for d_token
+            # },
+            # "dropout_rate": {
+            #     "distribution": "uniform",
+            #     "min": 0.1,
+            #     "max": 0.5
+            # },
             'num_heads': {
                 'values': [1, 2, 4, 8, 16, 32]  # Possible values for number of heads
-            },
-            "num_layers": {
-                "values": [1, 2, 3,4,5,6,7,8,9,10]  # Possible values for number of layers
-            },
+            }
+            # "num_layers": {
+            #     "values": [1, 2, 3,4,5,6,7,8,9,10]  # Possible values for number of layers
+            # },
             }
         }
 

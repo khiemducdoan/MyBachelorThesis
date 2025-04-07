@@ -2,8 +2,8 @@ name: naim
 model:
   _target_: src.models.naim.NAIMclassifier
   params:
-    input_size: ${default.data.caller.num_features}
-    output_size: ${default.data.caller.num_classes}
+    input_size: ${default_sweep.data.caller.num_features}
+    output_size: ${default_sweep.data.caller.num_classes}
     cat_idxs: null
     cat_dims: null
     d_token: 64
@@ -11,11 +11,11 @@ model:
     bias: false
     mask_type: 2
     missing_value: ~inf
-    num_heads: 2
+    num_heads: 4
     feedforward_dim: 1000
-    dropout_rate: 0.2
+    dropout_rate: 0.13494352349372787
     activation: relu
-    num_layers: 2
+    num_layers: 1
     extractor: false
 # back bone embedding (quan trong nhat)
 # xem thử cái L ảnh hưởng thế nào
@@ -30,7 +30,7 @@ model:
 # trước hết là cái này, còn text thì làm thêm
 # phân tích Mij 
 optimizer:
-  lr: ${default.training.learning_rate}
+  lr: ${default_sweep.training.learning_rate}
   betas: [ 0.9, 0.999 ]
   eps: 1e-8   
   weight_decay: 0.01
@@ -39,9 +39,12 @@ optimizer:
   maximize: False
   capturable: False
 scheduler:
-  T_max: ${default.training.num_epochs}
+  T_max: ${default_sweep.training.num_epochs}
   eta_min: 1e-6 
   mode: min
   factor: 0.1
   patience: 10
   verbose: False
+loss:
+  _target_: torch.nn.CrossEntropyLoss
+  weight: None

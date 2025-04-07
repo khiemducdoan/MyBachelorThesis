@@ -1,0 +1,12 @@
+Training started...
+Error executing job with overrides: []
+Traceback (most recent call last):
+  File "/home/khanhnt/Khiem/MyBachelorThesis/train.py", line 266, in main
+    train(config.default)
+  File "/home/khanhnt/Khiem/MyBachelorThesis/train.py", line 67, in train
+    loss_fn = model.configure_loss(config.model)
+  File "/home/khanhnt/Khiem/MyBachelorThesis/src/models/naim.py", line 302, in configure_loss
+    weight_tensor = torch.tensor(config.loss.weight, dtype=torch.float32)
+TypeError: new(): invalid data type 'str'
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.

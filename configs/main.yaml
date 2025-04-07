@@ -3,7 +3,7 @@ defaults:
   - default_sweep@default_sweep: default_sweep
   - _self_
 logging:
-  sweep : true
+  sweep : false
   wandb:
     project: naim
     entity: naim

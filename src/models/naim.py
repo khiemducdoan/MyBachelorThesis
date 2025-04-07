@@ -298,8 +298,13 @@ class NAIMclassifier(BaseModel):
             'monitor': 'val_loss'
         } 
     def configure_loss(self, config):
-        loss = hydra.utils.instantiate(config.loss)
-        return loss
+        if config.loss.weight is not None:
+            weight_tensor = torch.tensor(config.loss.weight, dtype=torch.float32)
+            weight_tensor = weight_tensor.to(next(self.parameters()).device)
+            loss_fn = hydra.utils.instantiate(config.loss, weight=weight_tensor)
+        elif config.loss.weight is None:
+            loss_fn = hydra.utils.instantiate(config.loss, weight = None)
+        return loss_fn
 
 
 if __name__ == "__main__":
