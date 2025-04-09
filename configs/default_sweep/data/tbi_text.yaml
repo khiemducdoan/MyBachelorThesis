@@ -3,6 +3,7 @@ caller:
   tokenizer: demdecuong/vihealthbert-base-word
   data: None
   target_column: d_kl_tl
+  categorical_features : null
   transform: null
 
 data_path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/text_modality/tbi_text.csv

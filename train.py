@@ -17,7 +17,15 @@ import wandb
 from src.utils import set_naim_params
 from src.data.dataset import TBIDataset
 from src.utils.metrics import calculate_metrics
-
+categorical_features =  ['sex', 'tbi_cli_reason', 'tbi_cli_awaken', 'tbi_cli_headache', 'tbi_cli_blue', 'tbi_cli_para_ner', 'tbi_cli_quadriplegia', 
+ 'tbi_cli_epileptic', 'tbi_cli_stiff_neck', 'tbi_cli_dam_chest_abdomen', 'tbi_cli_recall', 'tbi_cli_pupils_left_reflex', 
+ 'tbi_cli_pupils_right_reflex', 'tbi_cli_diabetes', 'tbi_cli_hypertension', 'tbi_cli_stroke', 'tbi_cli_cardiovascular', 
+ 'tbi_ct_brain_parenchyma___1', 'tbi_ct_brain_parenchyma___2', 'tbi_ct_brain_parenchyma___3', 'tbi_ct_brain_parenchyma___4', 
+ 'tbi_ct_brain_parenchyma___5', 'tbi_ct_brain_parenchyma___6', 'tbi_ct_brain_parenchyma___8', 'tbi_ct_epidural_hematoma_proportion', 
+ 'tbi_ct_subdural_hematoma_position_proprotion', 'tbi_ct_blood_hematoma_proportion', 'tbi_ct_subarachnoid_characteristic', 
+ 'tbi_ct_bottom_tank_characteristic', 'tbi_ct_skull_fracture_characteristic', 'tbi_ct_skull_risk', 'hong_cau_v2', 'bach_cau_v2',
+ 'tieu_cau_v2', 'd_1_hst', 'ast_v2', 'alt_v2', 'd_2_protein', 'albumin_v2', 'ure_v2', 'creatinin_v2', 'prothrombin_v2', 
+ 'd_3_aptt', 'd_4_dtim', 'd_kl_tl']
 logger = logging.getLogger(__name__)
 wandb.login()
 # @hydra.main(config_path="./configs", config_name="default")
@@ -43,9 +51,9 @@ def train(config):
     )
 
     # ==========================================================Create datasets========================================
-    train_dataset = hydra.utils.instantiate(config.data.caller, data = train_data)
-    val_dataset = hydra.utils.instantiate(config.data.caller, data = val_data)
-    config.model = set_naim_params(config.model, train_dataset)
+    train_dataset = hydra.utils.instantiate(config.data.caller, data = train_data, categorical_features=categorical_features if config.data.caller.name == "TBIDataset" else None)
+    val_dataset = hydra.utils.instantiate(config.data.caller, data = val_data , categorical_features=categorical_features if config.data.caller.name == "TBIDataset" else None)
+    config.model = set_naim_params(config.model, train_dataset) if config.data.caller.name == "TBIDataset" else config.model
     # =====================================================Create dataloaders================================================
     train_loader = DataLoader(
         train_dataset,
