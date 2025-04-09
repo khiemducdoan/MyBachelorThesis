@@ -35,7 +35,7 @@ class DynamicClassifier(nn.Module):
         super().__init__()
         layers = []
         for i in range(num_layers):
-            output_dim = input_dim // 2
+            output_dim = input_dim
             layers.append(nn.Linear(input_dim, output_dim))
             layers.append(nn.ReLU())
             input_dim = output_dim
@@ -55,8 +55,8 @@ class ViTBERTClassifier(nn.Module):
                 num_layers=4):
         super().__init__()
         self.bert = AutoModel.from_pretrained(pretrained_model_name)
-        # for param in self.bert.parameters():
-        #     param.requires_grad = False
+        for param in self.bert.parameters():
+            param.requires_grad = False
         self.dynamic_classifier = DynamicClassifier(input_dim=self.bert.config.hidden_size,
                                             num_classes=num_classes,
                                             dropout_rate=dropout_rate,
@@ -78,7 +78,7 @@ class ViTBERTClassifier(nn.Module):
         # else:
         #     # Mean pooling over the last hidden state
         #     logits = self.classifier(last_hidden_state.mean(dim=1))
-        logits = self.static_classifier(pooled_output)
+        logits = self.dynamic_classifier(pooled_output)
         return logits
 
 class viTBI(BaseModel):
@@ -111,7 +111,15 @@ class viTBI(BaseModel):
     def configure_loss(self, config):
         loss = hydra.utils.instantiate(config.loss)
         return loss
- 
+    def configure_loss(self, config):
+        if config.loss.weight == 0:
+            weight_tensor = torch.tensor(config.loss.weight, dtype=torch.float32)
+            weight_tensor = weight_tensor.to(next(self.parameters()).device)
+            loss_fn = hydra.utils.instantiate(config.loss, weight=weight_tensor)
+        elif config.loss.weight == 1:
+            loss_fn = hydra.utils.instantiate(config.loss, weight = None)
+        return loss_fn
+
 # To use your modified classifier, you just need to specify the desired number of layers and dropout rate when initializing it:
 def main():
     pass

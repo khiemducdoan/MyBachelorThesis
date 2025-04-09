@@ -1,0 +1,10 @@
+Training started...
+Error executing job with overrides: []
+Traceback (most recent call last):
+  File "/home/khanhnt/Khiem/MyBachelorThesis/train_test.py", line 48, in train
+    config.model = set_naim_params(config.model, train_dataset)
+  File "/home/khanhnt/Khiem/MyBachelorThesis/src/utils/metrics.py", line 17, in set_naim_params
+    cat_idxs, cat_dims = compute_categorical_idxs_dims(dataset.features.columns)
+AttributeError: 'ViTBERT' object has no attribute 'features'
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.

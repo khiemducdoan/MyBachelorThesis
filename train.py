@@ -14,6 +14,7 @@ from sklearn.metrics import confusion_matrix
 from tqdm.auto import tqdm
 from tensorboardX import SummaryWriter
 import wandb
+from src.utils import set_naim_params
 from src.data.dataset import TBIDataset
 from src.utils.metrics import calculate_metrics
 
@@ -44,7 +45,7 @@ def train(config):
     # ==========================================================Create datasets========================================
     train_dataset = hydra.utils.instantiate(config.data.caller, data = train_data)
     val_dataset = hydra.utils.instantiate(config.data.caller, data = val_data)
-    
+    config.model = set_naim_params(config.model, train_dataset)
     # =====================================================Create dataloaders================================================
     train_loader = DataLoader(
         train_dataset,
@@ -205,34 +206,37 @@ def train_with_sweep(config):
     # Define sweep configuration
     sweep_config = {
         "name": config.logging.wandb.name,
-        'method': 'grid',  # Optimization method (e.g., grid, random, bayes)
+        'method': 'bayes',  # Optimization method (e.g., grid, random, bayes)
         'metric': {
             'name': 'Best Accuracy',  # Metric to optimize
             'goal': 'maximize'  # Goal: maximize or minimize
         },
         'parameters': {
-            # 'batch_size': {
-            #     'values': [4, 8, 16, 32, 64]  # Possible values for batch size
-            # },
-            # 'learning_rate': {
-            #     'distribution': 'log_uniform',
-            #     'min': -6,
-            #     'max': -2
-            # },
+            'batch_size': {
+                'values': [1, 4, 8, 16, 32, 64]  # Possible values for batch size
+            },
+            'learning_rate': {
+                'distribution': 'log_uniform',
+                'min': -6,
+                'max': -2
+            },
             # 'd_token': {
             #     'values': [8, 16, 32, 64]  # Possible values for d_token
             # },
-            # "dropout_rate": {
-            #     "distribution": "uniform",
-            #     "min": 0.1,
-            #     "max": 0.5
-            # },
-            'num_heads': {
-                'values': [1, 2, 4, 8, 16, 32]  # Possible values for number of heads
-            }
+            "dropout_rate": {
+                "distribution": "uniform",
+                "min": 0.1,
+                "max": 0.4
+            },
+            # 'num_heads': {
+            #     'values': [1, 2, 4, 8, 16, 32]  # Possible values for number of heads
+            # }
             # "num_layers": {
             #     "values": [1, 2, 3,4,5,6,7,8,9,10]  # Possible values for number of layers
             # },
+            'num_layers': {
+                'values': [1, 2, 3, 4, 5, 6, 7, 8]  # Possible values for number of layers
+            },
             }
         }
 
@@ -249,8 +253,8 @@ def train_with_sweep(config):
         # config.model.optimizer.lr = sweep_params.learning_rate
         # config.model.model.params.num_layers = sweep_params.num_layers
         # config.model.model.params.d_token = sweep_params.d_token
-        # config.model.model.params.dropout_rate = sweep_params.dropout_rate
-        config.model.model.params.num_heads = sweep_params.num_heads
+        config.model.model.params.dropout_rate = sweep_params.dropout_rate
+        config.model.model.params.num_layers = sweep_params.num_layers
 
         # Call the train function with updated config
         train(config)
