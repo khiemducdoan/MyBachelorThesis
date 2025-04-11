@@ -8,11 +8,11 @@ import transformers
 class TBIDataset(Dataset):
     def __init__(
         self,
-        data: pd.DataFrame,
+        data,
         target_column: str,
         num_classes: int,
         num_features: 64,
-        categorical_features: list,
+        categorical_features: Optional[callable] = None,
         transform: Optional[callable] = None
     ):
         self.data = data
@@ -20,7 +20,6 @@ class TBIDataset(Dataset):
         self.num_classes = num_classes
         self.num_features = num_features
         self.transform = transform
-        
         # Separate features and target
         self.features = self.data.drop(columns=[self.target_column])
         self.targets = self.data[self.target_column]

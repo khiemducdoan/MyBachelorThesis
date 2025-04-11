@@ -26,9 +26,9 @@ validation:
 logging:
   sweep: true
   wandb:
-    project: vi_tbi
+    project: naim_tbi
     entity: naim
-    name:  vitbi_run_${now:%m-%d_%H-%M}
+    name:  naim_run_${now:%m-%d_%H-%M}
     tags: [naim, tbi]
     group: naim_sweep
     notes: "NAIM model for TBI dataset"

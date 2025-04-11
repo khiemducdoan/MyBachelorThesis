@@ -1,0 +1,16 @@
+{"time":"2025-04-10T05:23:00.470771509Z","level":"INFO","msg":"stream: starting","core version":"0.19.9","symlink path":"/home/khanhnt/Khiem/MyBachelorThesis/wandb/run-20250410_052300-2kz91yqg/logs/debug-core.log"}
+{"time":"2025-04-10T05:23:05.497070016Z","level":"ERROR","msg":"monitor: failed to initialize GPU asset: monitor: could not get GPU binary port: timeout reading portfile /tmp/.system-monitor-portfile39429160"}
+{"time":"2025-04-10T05:23:05.786871054Z","level":"INFO","msg":"created new stream","id":"2kz91yqg"}
+{"time":"2025-04-10T05:23:05.786939391Z","level":"INFO","msg":"stream: started","id":"2kz91yqg"}
+{"time":"2025-04-10T05:23:05.786961521Z","level":"INFO","msg":"writer: Do: started","stream_id":"2kz91yqg"}
+{"time":"2025-04-10T05:23:05.786978701Z","level":"INFO","msg":"sender: started","stream_id":"2kz91yqg"}
+{"time":"2025-04-10T05:23:05.787108386Z","level":"INFO","msg":"handler: started","stream_id":"2kz91yqg"}
+{"time":"2025-04-10T05:23:06.112786854Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-04-10T05:23:08.677743987Z","level":"INFO","msg":"stream: closing","id":"2kz91yqg"}
+{"time":"2025-04-10T05:23:08.677807642Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-04-10T05:23:08.677870292Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-04-10T05:23:09.881329212Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-04-10T05:23:10.208013396Z","level":"INFO","msg":"handler: closed","stream_id":"2kz91yqg"}
+{"time":"2025-04-10T05:23:10.208097703Z","level":"INFO","msg":"sender: closed","stream_id":"2kz91yqg"}
+{"time":"2025-04-10T05:23:10.208073833Z","level":"INFO","msg":"writer: Close: closed","stream_id":"2kz91yqg"}
+{"time":"2025-04-10T05:23:10.208278821Z","level":"INFO","msg":"stream: closed","id":"2kz91yqg"}

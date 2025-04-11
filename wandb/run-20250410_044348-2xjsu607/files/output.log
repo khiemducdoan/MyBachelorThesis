@@ -1,0 +1,6 @@
+Training started...
+Error executing job with overrides: []
+Error locating target 'src.models.naim.NAIMclassifier', set env var HYDRA_FULL_ERROR=1 to see chained exception.
+full_key: default.model.model
+
+Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.

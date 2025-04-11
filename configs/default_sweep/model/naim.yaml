@@ -47,4 +47,4 @@ scheduler:
   verbose: False
 loss:
   _target_: torch.nn.CrossEntropyLoss
-  weight: nan
+  weight: None

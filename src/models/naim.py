@@ -7,69 +7,70 @@ from src.models.tabular_tokenizer import CategoricalFeatureTokenizer
 from src.models.base import BaseModel
 from typing import Tuple, Optional
 import hydra
+from typing import Union
 
 __all__ = ["NAIMclassifier"]
-def set_naim_params(model_cfg: dict, preprocessing_params: Union[dict, DictConfig], train_set: SupervisedTabularDatasetTorch, **_) -> dict:
-    """
-    Set the parameters of the NAIM model
-    Parameters
-    ----------
-    model_cfg : dict
-    preprocessing_params : Union[dict, DictConfig]
-    train_set : SupervisedTabularDatasetTorch
+# def set_naim_params(model_cfg: dict, preprocessing_params: Union[dict, DictConfig], train_set: SupervisedTabularDatasetTorch, **_) -> dict:
+#     """
+#     Set the parameters of the NAIM model
+#     Parameters
+#     ----------
+#     model_cfg : dict
+#     preprocessing_params : Union[dict, DictConfig]
+#     train_set : SupervisedTabularDatasetTorch
 
-    Returns
-    -------
-    dict
-        model_cfg
-    """
-    model_cfg["init_params"]["input_size"] = train_set.input_size
-    model_cfg["init_params"]["output_size"] = train_set.output_size
+#     Returns
+#     -------
+#     dict
+#         model_cfg
+#     """
+#     model_cfg["init_params"]["input_size"] = train_set.input_size
+#     model_cfg["init_params"]["output_size"] = train_set.output_size
 
-    cat_idxs, cat_dims = compute_categorical_idxs_dims(train_set.columns, preprocessing_params)
-    model_cfg["init_params"]["cat_idxs"] = cat_idxs
-    model_cfg["init_params"]["cat_dims"] = cat_dims
+#     cat_idxs, cat_dims = compute_categorical_idxs_dims(train_set.columns, preprocessing_params)
+#     model_cfg["init_params"]["cat_idxs"] = cat_idxs
+#     model_cfg["init_params"]["cat_dims"] = cat_dims
 
-    searched_value, key_found = recursive_cfg_search(model_cfg, "d_token")
-    if searched_value is None and key_found:
-        d_token, _ = recursive_cfg_search(model_cfg, "input_size")
-        log.info(f"Token dimension: {d_token}")
-        model_cfg = recursive_cfg_substitute(model_cfg, {"d_token": d_token})
+#     searched_value, key_found = recursive_cfg_search(model_cfg, "d_token")
+#     if searched_value is None and key_found:
+#         d_token, _ = recursive_cfg_search(model_cfg, "input_size")
+#         log.info(f"Token dimension: {d_token}")
+#         model_cfg = recursive_cfg_substitute(model_cfg, {"d_token": d_token})
 
-    searched_value, key_found = recursive_cfg_search(model_cfg, "num_heads")
-    if searched_value is None and key_found:
-        divisor = 2
-        log.info(f"N. attention heads: {divisor}")
-        model_cfg = recursive_cfg_substitute(model_cfg, {"num_heads": divisor})
+#     searched_value, key_found = recursive_cfg_search(model_cfg, "num_heads")
+#     if searched_value is None and key_found:
+#         divisor = 2
+#         log.info(f"N. attention heads: {divisor}")
+#         model_cfg = recursive_cfg_substitute(model_cfg, {"num_heads": divisor})
 
-    return model_cfg
-def compute_categorical_idxs_dims(columns: list, 
-                                  preprocessing_params: Union[dict, DictConfig]) -> Tuple[list, list]:
-    """
-    Compute the indexes and dimensions of the categorical features in the dataset
-    Parameters
-    ----------
-    columns : list
-    preprocessing_params : Union[dict, DictConfig]
+#     return model_cfg
+# def compute_categorical_idxs_dims(columns: list, 
+#                                   preprocessing_params: Union[dict, DictConfig]) -> Tuple[list, list]:
+#     """
+#     Compute the indexes and dimensions of the categorical features in the dataset
+#     Parameters
+#     ----------
+#     columns : list
+#     preprocessing_params : Union[dict, DictConfig]
 
-    Returns
-    -------
-    Tuple[list, list]
-        categorical_idxs, categorical_dims
-    """
-    unique_values = preprocessing_params.categorical_unique_values
-    categorical_columns = tuple(unique_values.index.to_list())
+#     Returns
+#     -------
+#     Tuple[list, list]
+#         categorical_idxs, categorical_dims
+#     """
+#     unique_values = preprocessing_params.categorical_unique_values
+#     categorical_columns = tuple(unique_values.index.to_list())
 
-    categorical_idxs = []
-    categorical_dims = []
-    for idx, col in enumerate(columns):
-        if col in categorical_columns:
-            categorical_idxs.append(idx)
-            categorical_dims.append(len(unique_values[col]))
-        elif col.split("_")[0] in categorical_columns:
-            categorical_idxs.append(idx)
-            categorical_dims.append(2)
-    return categorical_idxs, categorical_dims
+#     categorical_idxs = []
+#     categorical_dims = []
+#     for idx, col in enumerate(columns):
+#         if col in categorical_columns:
+#             categorical_idxs.append(idx)
+#             categorical_dims.append(len(unique_values[col]))
+#         elif col.split("_")[0] in categorical_columns:
+#             categorical_idxs.append(idx)
+#             categorical_dims.append(2)
+#     return categorical_idxs, categorical_dims
 
 class TabularMasker:
     def __init__(self, mask_type: int = 0, missing_value: str = "-inf"):
@@ -316,9 +317,9 @@ class NAIM(torch.nn.Module):
 
         # transformer
         for encoder_layer in self.encoder:
-            residual = embeddings
+            #residual = embeddings
             embeddings = encoder_layer(embeddings, mask=masks, mask2=masks2)
-            embeddings = embeddings + residual  # residual connection
+            #embeddings = embeddings + residual  # residual connection
 
         embeddings = self.norm(embeddings)
 
@@ -358,12 +359,13 @@ class NAIMclassifier(BaseModel):
             'monitor': 'val_loss'
         } 
     def configure_loss(self, config):
-        if config.loss.weight is not None:
+        if config.loss.weight == 0:
+            loss_fn = hydra.utils.instantiate(config.loss, weight = None)
+
+        else:
             weight_tensor = torch.tensor(config.loss.weight, dtype=torch.float32)
             weight_tensor = weight_tensor.to(next(self.parameters()).device)
             loss_fn = hydra.utils.instantiate(config.loss, weight=weight_tensor)
-        elif config.loss.weight is None:
-            loss_fn = hydra.utils.instantiate(config.loss, weight = None)
         return loss_fn
 
 

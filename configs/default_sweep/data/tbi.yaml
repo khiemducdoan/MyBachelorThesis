@@ -7,4 +7,6 @@ caller:
   categorical_features: null
   transform: null
 
+name : tbi
+
 data_path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/dataset.csv

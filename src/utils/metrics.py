@@ -14,29 +14,37 @@ def calculate_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> Dict[str, float
     } 
 
 def set_naim_params(config,dataset :TBIDataset ,  **_):
-    cat_idxs, cat_dims = compute_categorical_idxs_dims(dataset.features_categorical)
+    cat_idxs, cat_dims = compute_categorical_idxs_dims(dataset,dataset.features_categorical)
     config.model.params.cat_idxs = cat_idxs
     config.model.params.cat_dims = cat_dims
     return config
-def compute_categorical_idxs_dims(columns: list):
+
+def compute_categorical_idxs_dims(df, categorical_features: list):
     """
-    Compute categorical indices and dimensions from a list of columns.
-    
+    Compute categorical indices and dimensions from a DataFrame, ignoring NaN values.
+
     Parameters
     ----------
-    columns : list
-        List of column names.
-        
+    df : pd.DataFrame
+        Input dataframe.
+    categorical_features : list
+        List of categorical column names.
+
     Returns
     -------
     Tuple[list, list]
-        Categorical indices and dimensions.
+        Categorical indices and dimensions (number of unique non-NaN values per categorical feature).
     """
     cat_idxs = []
     cat_dims = []
-    
-    for i, col in enumerate(columns):
+
+    for i, col in enumerate(df.features):
+        if col not in categorical_features:
+            continue
         cat_idxs.append(i)
-        cat_dims.append(len(set(columns[col])))
-    
+        # Bỏ NaN trước khi lấy số lượng giá trị unique
+        unique_vals = df[col].dropna().unique()
+        cat_dims.append(len(unique_vals))
+
     return cat_idxs, cat_dims
+

@@ -4,6 +4,9 @@ caller:
   target_column: d_kl_tl
   num_classes: 4
   num_features: 64
+  categorical_features: null
   transform: null
+
+name : tbi
 
 data_path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/dataset.csv
