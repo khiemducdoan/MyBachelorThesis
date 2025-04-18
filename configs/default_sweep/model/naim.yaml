@@ -4,8 +4,8 @@ model:
   params:
     input_size: ${default_sweep.data.caller.num_features}
     output_size: ${default_sweep.data.caller.num_classes}
-    cat_idxs: null
-    cat_dims: null
+    cat_idxs: [1, 2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 35, 38, 42, 44, 46, 47, 48]
+    cat_dims: [3, 8, 4, 4, 4, 4, 4, 4, 3, 4, 4, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 2]
     d_token: 64
     embedder_initialization: normal
     bias: false
@@ -39,7 +39,7 @@ optimizer:
   maximize: False
   capturable: False
 scheduler:
-  T_max: ${default_sweep.training.num_epochs}
+  T_max: ${default_sweeep.training.num_epochs}
   eta_min: 1e-6 
   mode: min
   factor: 0.1
@@ -47,4 +47,4 @@ scheduler:
   verbose: False
 loss:
   _target_: torch.nn.CrossEntropyLoss
-  weight: None
+  weight: 0

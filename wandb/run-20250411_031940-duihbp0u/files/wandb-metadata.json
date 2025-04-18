@@ -1,0 +1,30 @@
+{
+  "os": "Linux-5.15.0-134-generic-x86_64-with-glibc2.35",
+  "python": "CPython 3.9.21",
+  "startedAt": "2025-04-11T03:19:40.781936Z",
+  "program": "/home/khanhnt/Khiem/MyBachelorThesis/train.py",
+  "codePath": "train.py",
+  "git": {
+    "remote": "git@github.com:vinakhiem120/MyBachelorThesis.git",
+    "commit": "d9c8f28910f0ed356985a828de2a05af28472d73"
+  },
+  "email": "vinakhiem120@gmail.com",
+  "root": "/home/khanhnt/Khiem/MyBachelorThesis",
+  "host": "aiotlab-server",
+  "executable": "/home/khanhnt/.conda/envs/naim/bin/python",
+  "cpu_count": 24,
+  "cpu_count_logical": 48,
+  "disk": {
+    "/": {
+      "total": "940211900416",
+      "used": "766535155712"
+    }
+  },
+  "memory": {
+    "total": "134849114112"
+  },
+  "cpu": {
+    "count": 24,
+    "countLogical": 48
+  }
+}

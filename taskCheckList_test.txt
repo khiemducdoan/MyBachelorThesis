@@ -1,0 +1,22 @@
+back bone embedding (quan trong nhat)
+xem thử cái L ảnh hưởng thế nào    =====================DONE===============
+xem feature importance của cái này.
+feature engineering thông thường 
+xem thử 1 subset nhỏ hơn với dataset missing value ít hơn 1 threshold (cáo màu để so sánh với)
+raise ra được problem của dữ liệu 
+xem cái mạng có thể học được như nào
+chạy thử trên TBI 102 ====================== sáng mai chạy xD==================
+fuse của text và tabnet = MMiunet chủ yếu là cross
+trước hết là cái này, còn text thì làm thêm
+phân tích Mij 
+
+
+1, bỏ đi dữ liệu thiếu
+2, support được thiếu tới bnhieu phần trăm, khi thiếu quá nhiều thì bnhieu phần trăm, 10 -> 50%, lấy ngưỡng ablabtion study
+3, soft masking
+4, xem xgboost, feature của nó là gì
+5, thử chạy tbi
+6, thử bỏ cái lớp 4 đi.
+CỐT LÕI XEM PHẦN MASK.
+chạy feature importtance của xgboost cho vào naim
+xem huấn luyện riêng cho 3 lớp thì như nào

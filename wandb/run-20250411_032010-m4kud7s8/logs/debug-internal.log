@@ -1,0 +1,17 @@
+{"time":"2025-04-11T03:20:10.489830147Z","level":"INFO","msg":"stream: starting","core version":"0.19.9","symlink path":"/home/khanhnt/Khiem/MyBachelorThesis/wandb/run-20250411_032010-m4kud7s8/logs/debug-core.log"}
+{"time":"2025-04-11T03:20:15.517533454Z","level":"ERROR","msg":"monitor: failed to initialize GPU asset: monitor: could not get GPU binary port: timeout reading portfile /tmp/.system-monitor-portfile3914034441"}
+{"time":"2025-04-11T03:20:16.092577146Z","level":"INFO","msg":"created new stream","id":"m4kud7s8"}
+{"time":"2025-04-11T03:20:16.092635789Z","level":"INFO","msg":"stream: started","id":"m4kud7s8"}
+{"time":"2025-04-11T03:20:16.09266958Z","level":"INFO","msg":"writer: Do: started","stream_id":"m4kud7s8"}
+{"time":"2025-04-11T03:20:16.092797602Z","level":"INFO","msg":"sender: started","stream_id":"m4kud7s8"}
+{"time":"2025-04-11T03:20:16.092695558Z","level":"INFO","msg":"handler: started","stream_id":"m4kud7s8"}
+{"time":"2025-04-11T03:20:16.430973263Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-04-11T03:20:32.762303024Z","level":"INFO","msg":"stream: closing","id":"m4kud7s8"}
+{"time":"2025-04-11T03:20:32.762342435Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-04-11T03:20:32.762395728Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-04-11T03:21:34.770880714Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-04-11T03:22:22.750212912Z","level":"INFO","msg":"api: retrying HTTP error","status":408,"url":"https://api.wandb.ai/files/vinakhiem120/naim_tbi/m4kud7s8/file_stream","body":"\n<html><head>\n<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<title>408 Request Timeout</title>\n</head>\n<body text=#000000 bgcolor=#ffffff>\n<h1>Error: Request Timeout</h1>\n<h2>Your client has taken too long to issue its request.</h2>\n<h2></h2>\n</body></html>\n"}
+{"time":"2025-04-11T03:22:25.663498034Z","level":"INFO","msg":"handler: closed","stream_id":"m4kud7s8"}
+{"time":"2025-04-11T03:22:25.663601793Z","level":"INFO","msg":"writer: Close: closed","stream_id":"m4kud7s8"}
+{"time":"2025-04-11T03:22:25.663617833Z","level":"INFO","msg":"sender: closed","stream_id":"m4kud7s8"}
+{"time":"2025-04-11T03:22:25.663697917Z","level":"INFO","msg":"stream: closed","id":"m4kud7s8"}

@@ -7,6 +7,7 @@ from src.models.tabular_tokenizer import CategoricalFeatureTokenizer
 from src.models.base import BaseModel
 from typing import Tuple, Optional
 import hydra
+from tab_transformer_pytorch import FTTransformer
 from typing import Union
 
 __all__ = ["NAIMclassifier"]
@@ -332,13 +333,31 @@ class NAIM(torch.nn.Module):
         logits = self.classifier(features)
 
         return logits
-class NAIMclassifier(BaseModel):
-    def __init__(self, params):
-        super(NAIMclassifier, self).__init__()
-        self.naim = NAIM(**params)
+    
+class NAIMFT(torch.nn.Module):
+    def __init__(self,
+                 naim_pararms,
+                 ft_params):
 
-    def forward(self, x):
-        return self.naim(x)
+        super().__init__()
+        self.naim = NAIM(**naim_pararms)
+
+        self.ft_transformer = FTTransformer(**ft_params)
+        
+    def forward(self, x, mask):
+        naim_features = self.naim(x)  # [B, d_token * input_size]
+        mask_features = self.ft_transformer(mask)  # [B, ft_d_model]
+        combined = torch.cat([naim_features, mask_features], dim=-1)
+        return self.classifier(combined)
+
+        
+class NAIMFTclassifier(BaseModel):
+    def __init__(self, params):
+        super(NAIMFTclassifier, self).__init__()
+        self.naimft = NAIMFT(**params)
+
+    def forward(self, x, mask ):
+        return self.naift(x, mask)
     def configure_optimizers(self, config):
         optimizer = torch.optim.Adam(
             self.parameters(),

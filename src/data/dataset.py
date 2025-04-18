@@ -80,6 +80,51 @@ class ViTBERT(Dataset):
 
     def __len__(self):
         return len(self.data)
+    
+
+
+class TBIDatasetDualStream(Dataset):
+    def __init__(
+        self,
+        data,
+        target_column: str,
+        num_classes: int,
+        num_features: 64,
+        categorical_features: Optional[callable] = None,
+        transform: Optional[callable] = None
+    ):
+        self.data = data
+        self.target_column = target_column
+        self.num_classes = num_classes
+        self.num_features = num_features
+        self.transform = transform
+        # Separate features and target
+        self.features = self.data.drop(columns=[self.target_column])
+        self.targets = self.data[self.target_column]
+        self.features_categorical = self.data[categorical_features]
+        
+    def __len__(self):
+        return len(self.data)
+        
+    def __getitem__(self, idx):
+        x = self.features.iloc[idx].values
+        y = self.targets.iloc[idx]
+        
+        # Create mask for missing data
+        mask = np.where(pd.isnull(x), 1, 0)
+        
+        # Replace missing values with 0
+        x = np.nan_to_num(x)
+        
+        # Convert to tensor
+        x = torch.FloatTensor(x)
+        mask = torch.FloatTensor(mask)
+        y = torch.LongTensor([y])[0]
+        
+        if self.transform:
+            x = self.transform(x)
+            
+        return (x, mask), y
 def main():
     dataset = ViTBERT(data, tokenizer='bert-base-uncased')
     
