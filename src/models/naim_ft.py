@@ -3,8 +3,8 @@ import torch
 from torch import Tensor
 from torch.nn import Sigmoid
 import torch.nn.functional as F
-from src.models.tabular_tokenizer import CategoricalFeatureTokenizer
-from src.models.base import BaseModel
+from tabular_tokenizer import CategoricalFeatureTokenizer
+from base import BaseModel
 from typing import Tuple, Optional
 import hydra
 from tab_transformer_pytorch import FTTransformer
@@ -343,7 +343,10 @@ class NAIMFT(torch.nn.Module):
         self.naim = NAIM(**naim_pararms)
 
         self.ft_transformer = FTTransformer(**ft_params)
-        
+        self.classfier = torch.nn.Sequential(
+            torch.nn.Linear(naim_pararms['d_token'] * naim_pararms['input_size'] + ft_params['d_model'], ft_params['num_classes'])
+        )
+        self.classifier.apply(self._init_weights)
     def forward(self, x, mask):
         naim_features = self.naim(x)  # [B, d_token * input_size]
         mask_features = self.ft_transformer(mask)  # [B, ft_d_model]
@@ -387,6 +390,49 @@ class NAIMFTclassifier(BaseModel):
             loss_fn = hydra.utils.instantiate(config.loss, weight=weight_tensor)
         return loss_fn
 
+def main():
+    # Example usage
+    naim_params = {
+        'input_size': 64,
+        'output_size': 4,
+        'cat_idxs': [1, 2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 35, 38, 42, 44, 46, 47, 48],
+        'cat_dims': [3, 8, 4, 4, 4, 4, 4, 4, 3, 4, 4, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 2],
+        'd_token': 64,
+        'embedder_initialization': 'normal',
+        'bias': False,
+        'mask_type': 2,
+        'missing_value': '-inf',
+        'num_heads': 4,
+        'feedforward_dim': 256,
+        'dropout_rate': 0.1,
+        'activation': 'relu',
+        'num_layers': 6,
+        'extractor': True
+    }
 
+    ft_params = {
+        "categories": (2,) * 64,  
+        "num_continuous": 0,         # a tuple of number = 2, len = 64 
+        "dim": 32,                         # dimension, paper set at 32
+        "dim_out": 1,                      # binary prediction, but could be anything
+        "depth": 6,                        # depth, paper recommended 6
+        "heads": 8,                        # heads, paper recommends 8
+        "attn_dropout": 0.1,               # post-attention dropout
+        "ff_dropout": 0.1,
+        "extractor" : True                  # feedforward dropout
+    }
+    #initialize toy data with 64 features
+    x = torch.randn(32, 64)  # 32 samples, 64 features
+    naim = NAIM(**naim_params)
+    ft = FTTransformer(**ft_params) 
+    # example mask
+    mask = torch.randint(0, 2, (32, 64))  # nếu bạn muốn mô phỏng categorical inputs từ 0 đến 1
+    mask = mask.long()
+    # model = NAIMFT(naim_params, ft_params)
+    # print(model)
+    print("=======================================FTtransformer Model============================================:")
+    print(ft(mask, x_numer = None))
+    print("=======================================NAIM Model============================================:")
+    print(naim(x))
 if __name__ == "__main__":
-    pass
+    main()
