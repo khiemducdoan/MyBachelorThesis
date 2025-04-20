@@ -3,14 +3,14 @@ import torch
 from torch import Tensor
 from torch.nn import Sigmoid
 import torch.nn.functional as F
-from tabular_tokenizer import CategoricalFeatureTokenizer
-from base import BaseModel
+from src.models.tabular_tokenizer import CategoricalFeatureTokenizer
+from src.models.base import BaseModel
 from typing import Tuple, Optional
 import hydra
 from tab_transformer_pytorch import FTTransformer
 from typing import Union
 
-__all__ = ["NAIMclassifier"]
+__all__ = ["NAIMFTclassifier"]
 # def set_naim_params(model_cfg: dict, preprocessing_params: Union[dict, DictConfig], train_set: SupervisedTabularDatasetTorch, **_) -> dict:
 #     """
 #     Set the parameters of the NAIM model
@@ -327,7 +327,7 @@ class NAIM(torch.nn.Module):
         features = embeddings.view(embeddings.shape[0], -1)
 
         if self.extractor:
-            return features
+            return embeddings
 
         # classifier
         logits = self.classifier(features)
@@ -335,32 +335,40 @@ class NAIM(torch.nn.Module):
         return logits
     
 class NAIMFT(torch.nn.Module):
-    def __init__(self,
-                 naim_pararms,
-                 ft_params):
-
+    def __init__(self, feature_params, mask_params):
         super().__init__()
-        self.naim = NAIM(**naim_pararms)
-
-        self.ft_transformer = FTTransformer(**ft_params)
-        self.classfier = torch.nn.Sequential(
-            torch.nn.Linear(naim_pararms['d_token'] * naim_pararms['input_size'] + ft_params['d_model'], ft_params['num_classes'])
+        # Giả định NAIM là một encoder riêng biệt
+        self.naim_x = NAIM(**feature_params)   # cho x
+        self.naim_mask = NAIM(**mask_params)  # cho mask
+        
+        # Cross-attention
+        self.attn = MultiHeadAttention(input_size=feature_params['d_token'], num_heads=feature_params['num_heads'], dropout_rate=feature_params['dropout_rate'])
+        
+        self.classifier = torch.nn.Sequential(
+            torch.nn.Linear(feature_params['d_token'] * feature_params['input_size'], feature_params['output_size'])
         )
-        self.classifier.apply(self._init_weights)
+
     def forward(self, x, mask):
-        naim_features = self.naim(x)  # [B, d_token * input_size]
-        mask_features = self.ft_transformer(mask)  # [B, ft_d_model]
-        combined = torch.cat([naim_features, mask_features], dim=-1)
+        # Trích xuất đặc trưng
+        x_feat = self.naim_x(x)       # [B, d_token * input_size]
+        mask_feat = self.naim_mask(mask)  # [B, d_token * input_size]
+
+        # Cross-attention
+        attended_features = self.attn(x_feat, mask_feat, mask_feat)  # dùng x_feat làm query và mask_feat làm key-value
+
+        # Flatten the features
+        combined = attended_features.view(attended_features.shape[0], -1)
+
         return self.classifier(combined)
 
         
 class NAIMFTclassifier(BaseModel):
-    def __init__(self, params):
+    def __init__(self, feature_params, mask_params):
         super(NAIMFTclassifier, self).__init__()
-        self.naimft = NAIMFT(**params)
+        self.naimft = NAIMFT(feature_params,mask_params)
 
     def forward(self, x, mask ):
-        return self.naift(x, mask)
+        return self.naimft(x, mask)
     def configure_optimizers(self, config):
         optimizer = torch.optim.Adam(
             self.parameters(),
@@ -392,11 +400,28 @@ class NAIMFTclassifier(BaseModel):
 
 def main():
     # Example usage
-    naim_params = {
+    feature_params = {
         'input_size': 64,
         'output_size': 4,
-        'cat_idxs': [1, 2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 35, 38, 42, 44, 46, 47, 48],
-        'cat_dims': [3, 8, 4, 4, 4, 4, 4, 4, 3, 4, 4, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 2],
+        'cat_idxs': None,
+        'cat_dims': None,
+        'd_token': 64,
+        'embedder_initialization': 'normal',
+        'bias': False,
+        'mask_type': 2,
+        'missing_value': '-inf',
+        'num_heads': 4,
+        'feedforward_dim': 256,
+        'dropout_rate': 0.1,
+        'activation': 'relu',
+        'num_layers': 6,
+        'extractor': True
+    }
+    mask_params = {
+        'input_size': 64,
+        'output_size': 4,
+        'cat_idxs': None,
+        'cat_dims': None,
         'd_token': 64,
         'embedder_initialization': 'normal',
         'bias': False,
@@ -413,7 +438,7 @@ def main():
     ft_params = {
         "categories": (2,) * 64,  
         "num_continuous": 0,         # a tuple of number = 2, len = 64 
-        "dim": 32,                         # dimension, paper set at 32
+        "dim": 4096,                         # dimension, paper set at 32
         "dim_out": 1,                      # binary prediction, but could be anything
         "depth": 6,                        # depth, paper recommended 6
         "heads": 8,                        # heads, paper recommends 8
@@ -423,16 +448,24 @@ def main():
     }
     #initialize toy data with 64 features
     x = torch.randn(32, 64)  # 32 samples, 64 features
-    naim = NAIM(**naim_params)
-    ft = FTTransformer(**ft_params) 
+    feature_naim = NAIM(**feature_params)
+    mask_naim = NAIM(**mask_params)
+    attn = MultiHeadAttention(input_size=feature_params['d_token'], num_heads=feature_params['num_heads'], dropout_rate=feature_params['dropout_rate'])
     # example mask
     mask = torch.randint(0, 2, (32, 64))  # nếu bạn muốn mô phỏng categorical inputs từ 0 đến 1
     mask = mask.long()
     # model = NAIMFT(naim_params, ft_params)
     # print(model)
     print("=======================================FTtransformer Model============================================:")
-    print(ft(mask, x_numer = None))
-    print("=======================================NAIM Model============================================:")
-    print(naim(x))
+    print(mask_naim(mask).shape)
+    q = mask_naim(mask)
+    print("==========================================NAIM Model=================================================:")
+    print(feature_naim(x).shape)
+    k = v = feature_naim(x)
+    print("==========================================Attention=====================================================")
+    print(attn(q, k, v).shape)
+    print("==========================================NAIMFT Model=================================================")
+    model = NAIMFT(feature_params, mask_params)
+    print(model(x, mask).shape)
 if __name__ == "__main__":
     main()

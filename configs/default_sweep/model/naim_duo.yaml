@@ -1,0 +1,66 @@
+name: naim
+model:
+  _target_: src.models.naim_ft.NAIMFTclassifier
+  feature_params:
+    input_size: ${default_sweep.data.caller.num_features}
+    output_size: ${default_sweep.data.caller.num_classes}
+    cat_idxs: [1, 2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 35, 38, 42, 44, 46, 47, 48]
+    cat_dims: [3, 8, 4, 4, 4, 4, 4, 4, 3, 4, 4, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 2]
+    d_token: 64
+    embedder_initialization: normal
+    bias: false
+    mask_type: 2
+    missing_value: ~inf
+    num_heads: 4
+    feedforward_dim: 1000
+    dropout_rate: 0.13494352349372787
+    activation: relu
+    num_layers: 1
+    extractor: True
+  mask_params:
+    input_size: ${default_sweep.data.caller.num_features}
+    output_size: ${default_sweep.data.caller.num_classes}
+    cat_idxs: null   #[1, 2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 35, 38, 42, 44, 46, 47, 48]
+    cat_dims: null # [3, 8, 4, 4, 4, 4, 4, 4, 3, 4, 4, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 2]
+    d_token: 64
+    embedder_initialization: normal
+    bias: false
+    mask_type: 2
+    missing_value: ~inf
+    num_heads: 4
+    feedforward_dim: 1000
+    dropout_rate: 0.13494352349372787
+    activation: relu
+    num_layers: 1
+    extractor: True
+# back bone embedding (quan trong nhat)
+# xem thử cái L ảnh hưởng thế nào
+# xem feature importance của cái này.
+# feature engineering thông thường 
+# xem thử 1 subset nhỏ hơn với dataset missing value ít hơn 1 threshold (cáo màu để so sánh với)
+# hiểu về trường dữ liệu
+# raise ra được problem của dữ liệu 
+# xem cái mạng có thể học được như nào
+# chạy thử trên TBI 102
+# fuse của text và tabnet = MMiunet chủ yếu là cross
+# trước hết là cái này, còn text thì làm thêm
+# phân tích Mij 
+optimizer:
+  lr: ${default_sweep.training.learning_rate}
+  betas: [ 0.9, 0.999 ]
+  eps: 1e-8   
+  weight_decay: 0.01
+  amsgrad: False
+  foreach: null
+  maximize: False
+  capturable: False
+scheduler:
+  T_max: ${default_sweeep.training.num_epochs}
+  eta_min: 1e-6 
+  mode: min
+  factor: 0.1
+  patience: 10
+  verbose: False
+loss:
+  _target_: torch.nn.CrossEntropyLoss
+  weight: 0

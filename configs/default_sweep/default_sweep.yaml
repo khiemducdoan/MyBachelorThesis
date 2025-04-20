@@ -1,6 +1,6 @@
 defaults:
-  - model@model: naim  # Default model
-  - data@data: tbi     # Default dataset
+  - model@model: naim_duo  # Default model
+  - data@data: tbi_dual_stream     # Default dataset
   - _self_
 
 # General settings
