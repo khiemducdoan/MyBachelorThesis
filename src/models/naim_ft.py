@@ -3,8 +3,8 @@ import torch
 from torch import Tensor
 from torch.nn import Sigmoid
 import torch.nn.functional as F
-from tabular_tokenizer import CategoricalFeatureTokenizer
-from base import BaseModel
+from src.models.tabular_tokenizer import CategoricalFeatureTokenizer
+from src.models.base import BaseModel
 from typing import Tuple, Optional
 import hydra
 from tab_transformer_pytorch import FTTransformer

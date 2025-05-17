@@ -20,3 +20,7 @@ phân tích Mij
 CỐT LÕI XEM PHẦN MASK.
 chạy feature importtance của xgboost cho vào naim
 xem huấn luyện riêng cho 3 lớp thì như nào
+
+
+
+35ed81980fd3d96240c65c2402c3fcfc9a84a984

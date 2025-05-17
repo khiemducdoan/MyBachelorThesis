@@ -7,7 +7,7 @@ logging:
   wandb:
     project: naim
     entity: naim
-    name: naim_with_${now:%Y-%m-%d_%H-%M-%S}
+    name@name: naim_new_dataset_dual
     tags: [naim, tbi]
     group: naim
     notes: "NAIM model for TBI dataset"

@@ -219,12 +219,12 @@ def train_with_sweep(config):
         },
         'parameters': {
             'batch_size': {
-                'values': [4, 8, 16, 32, 64]  # Possible values for batch size
+                'values': [4, 8, 16, 32, 64, 128, 256]#ssible values for batch size
             },
             'learning_rate': {
                 'distribution': 'log_uniform',
-                'min': -6,
-                'max': -2
+                'min': -8,
+                'max': -4
             },
             'd_token': {
                 'values': [8, 16, 32, 64]  # Possible values for d_token
@@ -234,26 +234,26 @@ def train_with_sweep(config):
                 "min": 0.1,
                 "max": 0.5
             },
-            "Mdropout_rate": {
-                "distribution": "uniform",
-                "min": 0.1,
-                "max": 0.5
-            },
+            # "Mdropout_rate": {
+            #     "distribution": "uniform",
+            #     "min": 0.1,
+            #     "max": 0.5
+            # },
             'Fnum_heads': {
                 'values': [1, 2, 4, 8]  # Possible values for number of heads
             },
-            'Mnum_heads': {
-                'values': [1, 2, 4, 8]  # Possible values for number of heads
-            },
+            # 'Mnum_heads': {
+            #     'values': [1, 2, 4, 8]  # Possible values for number of heads
+            # },
             # "num_layers": {
             #     "values": [1, 2, 3,4,5,6,7,8,9,10]  # Possible values for number of layers
             # },
             'Fnum_layers': {
                 'values': [1, 2, 3, 4, 5, 6, 7, 8]  # Possible values for number of layers
             },
-            'Mnum_layers': {
-                'values': [1, 2, 3, 4, 5, 6, 7, 8]  # Possible values for number of layers
-            },
+            # 'Mnum_layers': {
+            #     'values': [1, 2, 3, 4, 5, 6, 7, 8]  # Possible values for number of layers
+            # },
             }
         }
 
@@ -274,10 +274,10 @@ def train_with_sweep(config):
         config.model.model.feature_params.dropout_rate = sweep_params.Fdropout_rate
         config.model.model.feature_params.num_heads = sweep_params.Fnum_heads
         #================maske transformer=========================
-        config.model.model.mask_params.num_layers = sweep_params.Mnum_layers
+        config.model.model.mask_params.num_layers = sweep_params.Fnum_layers
         config.model.model.mask_params.d_token = sweep_params.d_token
-        config.model.model.mask_params.dropout_rate = sweep_params.Mdropout_rate
-        config.model.model.mask_params.num_heads = sweep_params.Mnum_heads
+        config.model.model.mask_params.dropout_rate = sweep_params.Fdropout_rate
+        config.model.model.mask_params.num_heads = sweep_params.Fnum_heads
         # Call the train function with updated config
         train(config)
 

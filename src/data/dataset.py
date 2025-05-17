@@ -21,8 +21,8 @@ class TBIDataset(Dataset):
         self.num_features = num_features
         self.transform = transform
         # Separate features and target
-        self.features = self.data.drop(columns=[self.target_column])
-        self.targets = self.data[self.target_column]
+        self.features = self.data.drop( columns=[self.target_column]) 
+        self.targets = self.data[self.target_column] -1
         self.features_categorical = self.data[categorical_features]
         # # Get feature indices
         # self.num_indices = [self.features.columns.get_loc(col) 
@@ -42,7 +42,7 @@ class TBIDataset(Dataset):
         y = torch.LongTensor([y])[0]
         
         if self.transform:
-            x = self.transform(x)
+            x = x.apply(lambda x: (x - x.mean()) / x.std())
             
         return x, y 
     
@@ -108,7 +108,7 @@ class TBIDatasetDualStream(Dataset):
         
     def __getitem__(self, idx):
         x = self.features.iloc[idx].values
-        y = self.targets.iloc[idx]
+        y = self.targets.iloc[idx] - 1
         
         # Create mask for missing data
         mask = np.where(pd.isnull(x), 1, 0)

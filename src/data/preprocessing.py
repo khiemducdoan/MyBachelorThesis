@@ -52,3 +52,14 @@ class DataPreprocessor:
         result = pd.concat(result_dfs, axis=1)
         
         return result 
+    
+def z_transform(df: pd.DataFrame, config: Dict) -> pd.DataFrame:
+    num_features = config['features']['numerical']
+    cat_features = config['features']['categorical']
+    
+    # Apply z-transform to numerical features
+    if num_features:
+        df[num_features] = (df[num_features] - df[num_features].mean()) / df[num_features].std()
+        
+
+    return df
