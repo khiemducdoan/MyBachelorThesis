@@ -11,8 +11,8 @@ output_dir: outputs
 # Training settings
 training:
   num_epochs: 100
-  batch_size: 64
-  learning_rate: 0.006937198828044247
+  batch_size: 16
+  learning_rate: 0.012294735396516012
   early_stopping:
     patience: 10
     monitor: val_loss

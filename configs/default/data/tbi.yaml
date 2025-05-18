@@ -1,7 +1,7 @@
 caller:
   _target_: src.data.dataset.TBIDataset
   data: None
-  target_column: d_kl_tl
+  target_column: d_target
   num_classes: 4
   num_features: 64
   categorical_features: null
@@ -9,4 +9,4 @@ caller:
 
 name : tbi
 
-data_path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/dataset.csv
+data_path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/datasetok.csv
