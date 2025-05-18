@@ -23,7 +23,7 @@ class TBIDataset(Dataset):
         # Separate features and target
         self.features = self.data.drop( columns=[self.target_column]) 
         self.targets = self.data[self.target_column] -1
-        self.features_categorical = self.data[categorical_features]
+        self.features_categorical = self.data[categorical_features] if categorical_features else None
         # # Get feature indices
         # self.num_indices = [self.features.columns.get_loc(col) 
         #                    for col in config['features']['numerical']]

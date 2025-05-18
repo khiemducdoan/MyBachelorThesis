@@ -166,7 +166,7 @@ def train(config):
             plt.xlabel('Predicted Label')
             plt.ylabel('True Label')
             plt.title(f'Confusion Matrix (Epoch {epoch})')
-            model.save(os.path.join(config.output_dir, f'model_Best_{epoch}.pt'))
+            torch.save(model, os.path.join(config.output_dir, f'model_Best_{epoch}.pt'))
             logger.info(f'Saved best model at epoch {epoch} with accuracy: {best_accuracy:.4f}')
             # Ghi confusion matrix vào TensorBoard
             # Lưu hình ảnh confusion matrix
