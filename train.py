@@ -166,7 +166,9 @@ def train(config):
             plt.xlabel('Predicted Label')
             plt.ylabel('True Label')
             plt.title(f'Confusion Matrix (Epoch {epoch})')
-
+            model.save(os.path.join(config.output_dir, f'model_Best_{epoch}.pt'))
+            logger.info(f'Saved best model at epoch {epoch} with accuracy: {best_accuracy:.4f}')
+            # Ghi confusion matrix vào TensorBoard
             # Lưu hình ảnh confusion matrix
             cm_path = os.path.join(config.output_dir, f'best_confusion_matrix.png')
             plt.savefig(cm_path)
@@ -182,7 +184,8 @@ def train(config):
             best_val_loss = val_loss
             patience_counter = 0
             if epoch % config.logging.save_interval == 0:
-                model.save(os.path.join(config.output_dir, f'model_epoch_{epoch}.pt'))
+                model.save(os.path.join(config.output_dir, f'model_{epoch}.pt'))
+                logger.info(f'Saved model at epoch {epoch}')
         else:
             patience_counter += 1
             if patience_counter >= config.training.early_stopping.patience:
