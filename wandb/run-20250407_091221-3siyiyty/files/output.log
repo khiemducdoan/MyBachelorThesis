@@ -1,7 +1,0 @@
-Training started...
-Error executing job with overrides: []
-Error in call to target 'torch.nn.modules.loss.CrossEntropyLoss':
-TypeError("cannot assign 'str' object to buffer 'weight' (torch Tensor or None required)")
-full_key: default.model.loss
-
-Set the environment variable HYDRA_FULL_ERROR=1 for a complete stack trace.

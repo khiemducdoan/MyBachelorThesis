@@ -1,6 +1,6 @@
 defaults:
-  - model@model: naim_duo  # Default model
-  - data@data: tbi_dual_stream   # Default dataset
+  - model@model: naim_text  # Default model
+  - data@data: naim_text   # Default dataset
   - _self_
 
 # General settings
@@ -28,7 +28,7 @@ logging:
   wandb:
     project: naim_tbi
     entity: naim
-    name:  naim_new_dataset_dual
+    name:  naim_and_text {now:%m-%d_%H-%M}
     tags: [naim, tbi]
     group: naim_sweep
     notes: "NAIM model for TBI dataset"

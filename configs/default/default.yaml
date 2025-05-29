@@ -1,6 +1,6 @@
 defaults:
-  - model@model: naim  # Default model
-  - data@data: tbi      # Default dataset
+  - model@model: naim_text  # Default model
+  - data@data: naim_text    # Default dataset
   - _self_
 
 # General settings

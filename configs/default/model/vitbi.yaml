@@ -8,7 +8,7 @@ model:
     num_layers: 3
 
 optimizer:
-  lr: ${training.learning_rate}
+  lr: ${default.training.learning_rate}
   betas: [ 0.9, 0.999 ]
   eps: 1e-8   
   weight_decay: 0.01
@@ -17,9 +17,12 @@ optimizer:
   maximize: False
   capturable: False
 scheduler:
-  T_max: ${training.num_epochs}
+  T_max: ${default.training.num_epochs}
   eta_min: 1e-6 
   mode: min
   factor: 0.1
   patience: 10
   verbose: False
+loss:
+  _target_: torch.nn.CrossEntropyLoss
+  weight: 0

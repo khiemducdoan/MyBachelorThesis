@@ -49,7 +49,8 @@ def train(config):
     )
 
     # ==========================================================Create datasets========================================
-    config.data.caller.categorical_features = categorical_features if config.data.name == "tbi" else None
+    if config.data.name == "tbi":
+        config.data.caller.categorical_features = categorical_features if config.data.name == "tbi" else None
     train_dataset = hydra.utils.instantiate(config.data.caller, data = train_data)
     val_dataset = hydra.utils.instantiate(config.data.caller, data = val_data)
     # =====================================================Create dataloaders================================================
@@ -184,7 +185,7 @@ def train(config):
             best_val_loss = val_loss
             patience_counter = 0
             if epoch % config.logging.save_interval == 0:
-                model.save(os.path.join(config.output_dir, f'model_{epoch}.pt'))
+                # model.save(os.path.join(config.output_dir, f'model_{epoch}.pt'))
                 logger.info(f'Saved model at epoch {epoch}')
         else:
             patience_counter += 1
@@ -226,8 +227,8 @@ def train_with_sweep(config):
             },
             'learning_rate': {
                 'distribution': 'log_uniform',
-                'min': -8,
-                'max': -4
+                'min': -4,
+                'max': -2
             },
             'd_token': {
                 'values': [8, 16, 32, 64]  # Possible values for d_token
@@ -237,11 +238,11 @@ def train_with_sweep(config):
                 "min": 0.1,
                 "max": 0.5
             },
-            # "Mdropout_rate": {
-            #     "distribution": "uniform",
-            #     "min": 0.1,
-            #     "max": 0.5
-            # },
+            "Mdropout_rate": {
+                "distribution": "uniform",
+                "min": 0.1,
+                "max": 0.4
+            },
             'Fnum_heads': {
                 'values': [1, 2, 4, 8]  # Possible values for number of heads
             },
@@ -254,9 +255,17 @@ def train_with_sweep(config):
             'Fnum_layers': {
                 'values': [1, 2, 3, 4, 5, 6, 7, 8]  # Possible values for number of layers
             },
-            # 'Mnum_layers': {
-            #     'values': [1, 2, 3, 4, 5, 6, 7, 8]  # Possible values for number of layers
-            # },
+            'Mnum_layers': {
+                'values': [1, 2, 3, 4]  # Possible values for number of layers
+            },
+            'pretrained_model_name': {
+                'values': ["emilyalsentzer/Bio_ClinicalBERT",
+                           "dmis-lab/biobert-base-cased-v1.1",
+                           "bionlp/bluebert_pubmed_mimic_uncased_L-12_H-768_A-12",
+                           "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract",
+                           "nvidia/biomegatron-345m-uncased",
+                           ]  # Possible values for pretrained model
+            }
             }
         }
 
@@ -272,15 +281,20 @@ def train_with_sweep(config):
         config.training.batch_size = sweep_params.batch_size
         config.model.optimizer.lr = sweep_params.learning_rate
         #================feature transformer=========================
-        config.model.model.feature_params.num_layers = sweep_params.Fnum_layers
-        config.model.model.feature_params.d_token = sweep_params.d_token
-        config.model.model.feature_params.dropout_rate = sweep_params.Fdropout_rate
-        config.model.model.feature_params.num_heads = sweep_params.Fnum_heads
+        config.model.model.params_naim.num_layers = sweep_params.Fnum_layers
+        config.model.model.params_naim.d_token = sweep_params.d_token
+        config.model.model.params_naim.dropout_rate = sweep_params.Fdropout_rate
+        config.model.model.params_naim.num_heads = sweep_params.Fnum_heads
         #================maske transformer=========================
-        config.model.model.mask_params.num_layers = sweep_params.Fnum_layers
-        config.model.model.mask_params.d_token = sweep_params.d_token
-        config.model.model.mask_params.dropout_rate = sweep_params.Fdropout_rate
-        config.model.model.mask_params.num_heads = sweep_params.Fnum_heads
+        # config.model.model.params.num_layers = sweep_params.Fnum_layers
+        # config.model.model.mask_params.d_token = sweep_params.d_token
+        # config.model.model.mask_params.dropout_rate = sweep_params.Fdropout_rate
+        # config.model.model.mask_params.num_heads = sweep_params.Fnum_heads
+        #================text branch=========================
+        config.model.model.params_vibert.dropout_rate = sweep_params.Mdropout_rate
+        config.model.model.params_vibert.num_layers = sweep_params.Mnum_layers
+        config.model.model.params_vibert.pretrained_model_name = sweep_params.pretrained_model_name
+        config.data.caller.tokenizer = sweep_params.pretrained_model_name
         # Call the train function with updated config
         train(config)
 

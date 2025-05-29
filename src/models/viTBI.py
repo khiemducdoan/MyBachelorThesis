@@ -78,7 +78,7 @@ class ViTBERTClassifier(nn.Module):
         # else:
         #     # Mean pooling over the last hidden state
         #     logits = self.classifier(last_hidden_state.mean(dim=1))
-        logits = self.dynamic_classifier(pooled_output)
+        logits = self.static_classifier(pooled_output)
         return logits
 
 class viTBI(BaseModel):
@@ -113,11 +113,12 @@ class viTBI(BaseModel):
         return loss
     def configure_loss(self, config):
         if config.loss.weight == 0:
+            loss_fn = hydra.utils.instantiate(config.loss, weight = None)
+
+        else:
             weight_tensor = torch.tensor(config.loss.weight, dtype=torch.float32)
             weight_tensor = weight_tensor.to(next(self.parameters()).device)
             loss_fn = hydra.utils.instantiate(config.loss, weight=weight_tensor)
-        elif config.loss.weight == 1:
-            loss_fn = hydra.utils.instantiate(config.loss, weight = None)
         return loss_fn
 
 # To use your modified classifier, you just need to specify the desired number of layers and dropout rate when initializing it:

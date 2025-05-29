@@ -1,5 +1,5 @@
 
-*.csv
+
 *_test.py
 *_test.ipynb
 git.sh
@@ -7,3 +7,5 @@ git.sh
 work-to-do.md
 outputs
 *.png
+
+wandb

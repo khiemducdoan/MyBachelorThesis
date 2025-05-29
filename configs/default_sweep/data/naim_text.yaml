@@ -4,7 +4,7 @@ caller:
   target_column: d_target
   num_classes: 4
   num_features: 64
-  tokenizer: demdecuong/vihealthbert-base-word
+  tokenizer: emilyalsentzer/Bio_ClinicalBERT
   categorical_features: null
   transform: null
 
