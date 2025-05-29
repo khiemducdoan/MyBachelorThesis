@@ -131,7 +131,7 @@ class ViTBERTClassifier(nn.Module):
                 dropout_rate=0.25, 
                 num_layers=4):
         super().__init__()
-        self.bert = LongformerModel.from_pretrained(pretrained_model_name)
+        self.bert = AutoModel.from_pretrained(pretrained_model_name)
         for param in self.bert.parameters():
             param.requires_grad = False
         self.dynamic_classifier = DynamicClassifier(input_dim=self.bert.config.hidden_size,
@@ -143,18 +143,19 @@ class ViTBERTClassifier(nn.Module):
         self.classifier = nn.Linear(self.bert.config.hidden_size, num_classes)
     def forward(self, input_ids, attention_mask=None):
         outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
-        
-        # Always available: last_hidden_state
-        last_hidden_state = outputs.last_hidden_state  # (batch_size, seq_len, hidden_dim)
-
-        # Option 1: CLS token (rất phổ biến)
-        cls_token = last_hidden_state[:, 0, :]  # (batch_size, hidden_dim)
-
-        # Option 2: Mean pooling (ít sensitive hơn CLS)
-        # mean_pool = last_hidden_state.mean(dim=1)
-
-        # Lưu ý: static_classifier đầu vào phải là (B, hidden_dim)
-        logits = self.static_classifier(cls_token)
+        features_bert = outputs[0] # Last hidden state
+        features_cls = features_bert[:, 0, :].unsqueeze(1) # CLS token
+        pooled_output = outputs[1] # Pooled output
+        # Access last_hidden_state (mandatory) and optionally pooler_output
+        # last_hidden_state = outputs.last_hidden_state  # Always available
+        # pooler_output = outputs.pooler_output if hasattr(outputs, 'pooler_output') else None
+        # Use pooler_output if available; otherwise, use mean pooling
+        # if pooler_output is not None:
+        #     logits = self.classifier(pooler_output)
+        # else:
+        #     # Mean pooling over the last hidden state
+        #     logits = self.classifier(last_hidden_state.mean(dim=1))
+        logits = self.static_classifier(pooled_output)
         return logits
 class TabularMasker:
     def __init__(self, mask_type: int = 0, missing_value: str = "-inf"):
