@@ -1,0 +1,39 @@
+python: can't open file '/home/khanhnt/Khiem/MyBachelorThesis/train.y': [Errno 2] No such file or directory
+wandb: Using wandb-core as the SDK backend.  Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: khanhnguyenthai-5 (drkhanusa) to https://api.wandb.ai. Use `wandb login --relogin` to force relogin
+/home/khanhnt/Khiem/MyBachelorThesis/train.py:305: UserWarning: 
+The version_base parameter is not specified.
+Please specify a compatability version level, or None.
+Will assume defaults for version 1.1
+  @hydra.main(config_path="./configs", config_name="main")
+/home/khanhnt/.conda/envs/naim/lib/python3.9/site-packages/hydra/_internal/hydra.py:119: UserWarning: Future Hydra versions will no longer change working directory at job runtime by default.
+See https://hydra.cc/docs/1.2/upgrades/1.1_to_1.2/changes_to_job_working_dir/ for more information.
+  ret = run_job(
+wandb: WARNING Malformed sweep config detected! This may cause your sweep to behave in unexpected ways.
+wandb: WARNING To avoid this, please fix the sweep config schema violations below:
+wandb: WARNING   Violation 1. learning_rate uses log_uniform, where min/max specify base-e exponents. Use log_uniform_values to specify limit values.
+wandb: Agent Starting Run: wcc2rg8k with config:
+wandb: 	Fdropout_rate: 0.2898397031187636
+wandb: 	Fnum_heads: 1
+wandb: 	Fnum_layers: 5
+wandb: 	Mdropout_rate: 0.3267180289609627
+wandb: 	Mnum_layers: 3
+wandb: 	batch_size: 4
+wandb: 	d_token: 64
+wandb: 	learning_rate: 0.03777197204957371
+wandb: 	pretrained_model_name: microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract
+wandb: creating run
+wandb: Tracking run with wandb version 0.19.9
+wandb: Run data is saved locally in /home/khanhnt/Khiem/MyBachelorThesis/outputs/2025-05-29/16-30-38/wandb/run-20250529_163048-wcc2rg8k
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run copper-sweep-1
+wandb: ⭐️ View project at https://wandb.ai/drkhanusa/naim_tbi
+wandb: 🧹 View sweep at https://wandb.ai/drkhanusa/naim_tbi/sweeps/9fgj5942
+wandb: 🚀 View run at https://wandb.ai/drkhanusa/naim_tbi/runs/wcc2rg8k
+wandb: WARNING Ignoring project 'naim_tbi' when running a sweep.
+Create sweep with ID: 9fgj5942
+Sweep URL: https://wandb.ai/drkhanusa/naim_tbi/sweeps/9fgj5942
+Training started...
+Epoch 0 [Train]:   0%|          | 0/101 [00:00<?, ?it/s][2025-05-29 16:31:09,311][__main__][INFO] - Train Epoch: 0 [0/101 (0%)]	Loss: 1.874918
+Epoch 0 [Train]:   1%|          | 1/101 [00:01<02:16,  1.37s/it]Epoch 0 [Train]:   2%|▏         | 2/101 [00:01<01:02,  1.59it/s]Epoch 0 [Train]:   3%|▎         | 3/101 [00:01<00:37,  2.59it/s]Epoch 0 [Train]:   5%|▍         | 5/101 [00:01<00:21,  4.57it/s]Epoch 0 [Train]:   7%|▋         | 7/101 [00:01<00:14,  6.37it/s]Epoch 0 [Train]:   9%|▉         | 9/101 [00:02<00:11,  7.84it/s]Epoch 0 [Train]:  11%|█         | 11/101 [00:02<00:10,  8.98it/s]Epoch 0 [Train]:  13%|█▎        | 13/101 [00:02<00:08,  9.90it/s]Epoch 0 [Train]:  15%|█▍        | 15/101 [00:02<00:08, 10.59it/s]Epoch 0 [Train]:  17%|█▋        | 17/101 [00:02<00:07, 11.09it/s]Epoch 0 [Train]:  19%|█▉        | 19/101 [00:02<00:07, 11.47it/s]Epoch 0 [Train]:  21%|██        | 21/101 [00:03<00:06, 11.77it/s]Epoch 0 [Train]:  23%|██▎       | 23/101 [00:03<00:06, 11.96it/s]Epoch 0 [Train]:  25%|██▍       | 25/101 [00:03<00:06, 12.10it/s]Epoch 0 [Train]:  27%|██▋       | 27/101 [00:03<00:06, 12.13it/s]Epoch 0 [Train]:  29%|██▊       | 29/101 [00:03<00:05, 12.23it/s]Epoch 0 [Train]:  31%|███       | 31/101 [00:03<00:05, 12.28it/s]Epoch 0 [Train]:  33%|███▎      | 33/101 [00:04<00:05, 12.21it/s]Epoch 0 [Train]:  35%|███▍      | 35/101 [00:04<00:05, 12.28it/s]Epoch 0 [Train]:  37%|███▋      | 37/101 [00:04<00:05, 12.30it/s]Epoch 0 [Train]:  39%|███▊      | 39/101 [00:04<00:05, 12.31it/s]Epoch 0 [Train]:  41%|████      | 41/101 [00:04<00:04, 12.34it/s]Epoch 0 [Train]:  43%|████▎     | 43/101 [00:04<00:04, 12.25it/s]Epoch 0 [Train]:  45%|████▍     | 45/101 [00:05<00:04, 12.27it/s]Epoch 0 [Train]:  47%|████▋     | 47/101 [00:05<00:04, 12.28it/s]Epoch 0 [Train]:  49%|████▊     | 49/101 [00:05<00:04, 12.13it/s]Epoch 0 [Train]:  50%|█████     | 51/101 [00:05<00:04, 12.15it/s]Epoch 0 [Train]:  52%|█████▏    | 53/101 [00:05<00:03, 12.19it/s]Epoch 0 [Train]:  54%|█████▍    | 55/101 [00:05<00:03, 12.26it/s]Epoch 0 [Train]:  56%|█████▋    | 57/101 [00:05<00:03, 12.30it/s]Epoch 0 [Train]:  58%|█████▊    | 59/101 [00:06<00:03, 12.33it/s]Epoch 0 [Train]:  60%|██████    | 61/101 [00:06<00:03, 12.36it/s]Epoch 0 [Train]:  62%|██████▏   | 63/101 [00:06<00:03, 12.28it/s]Epoch 0 [Train]:  64%|██████▍   | 65/101 [00:06<00:02, 12.23it/s]Epoch 0 [Train]:  66%|██████▋   | 67/101 [00:06<00:02, 12.29it/s]Epoch 0 [Train]:  68%|██████▊   | 69/101 [00:06<00:02, 12.33it/s]Epoch 0 [Train]:  70%|███████   | 71/101 [00:07<00:02, 12.37it/s]Epoch 0 [Train]:  72%|███████▏  | 73/101 [00:07<00:02, 12.37it/s]Epoch 0 [Train]:  74%|███████▍  | 75/101 [00:07<00:02, 12.36it/s]Epoch 0 [Train]:  76%|███████▌  | 77/101 [00:07<00:01, 12.36it/s]Epoch 0 [Train]:  78%|███████▊  | 79/101 [00:07<00:01, 12.37it/s]Epoch 0 [Train]:  80%|████████  | 81/101 [00:07<00:01, 12.36it/s]Epoch 0 [Train]:  82%|████████▏ | 83/101 [00:08<00:01, 12.35it/s]Epoch 0 [Train]:  84%|████████▍ | 85/101 [00:08<00:01, 12.18it/s]Epoch 0 [Train]:  86%|████████▌ | 87/101 [00:08<00:01, 12.23it/s]Epoch 0 [Train]:  88%|████████▊ | 89/101 [00:08<00:00, 12.28it/s]Epoch 0 [Train]:  90%|█████████ | 91/101 [00:08<00:00, 12.30it/s]Epoch 0 [Train]:  92%|█████████▏| 93/101 [00:08<00:00, 12.33it/s]Epoch 0 [Train]:  94%|█████████▍| 95/101 [00:09<00:00, 12.30it/s]Epoch 0 [Train]:  96%|█████████▌| 97/101 [00:09<00:00, 12.32it/s]Epoch 0 [Train]:  98%|█████████▊| 99/101 [00:09<00:00, 12.34it/s][2025-05-29 16:31:17,476][__main__][INFO] - Train Epoch: 0 [100/101 (99%)]	Loss: 1.872271
+Epoch 0 [Train]: 100%|██████████| 101/101 [00:09<00:00, 12.91it/s]                                                                  Epoch 0 [Val]:   0%|          | 0/26 [00:00<?, ?it/s]Epoch 0 [Val]:   8%|▊         | 2/26 [00:00<00:01, 12.92it/s]Epoch 0 [Val]:  15%|█▌        | 4/26 [00:00<00:01, 13.25it/s]Epoch 0 [Val]:  23%|██▎       | 6/26 [00:00<00:01, 13.22it/s]

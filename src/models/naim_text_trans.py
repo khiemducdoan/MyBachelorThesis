@@ -156,7 +156,7 @@ class ViTBERTClassifier(nn.Module):
         #     # Mean pooling over the last hidden state
         #     logits = self.classifier(last_hidden_state.mean(dim=1))
         logits = self.dynamic_classifier(pooled_output)
-        return logits
+        return features_bert
 class TabularMasker:
     def __init__(self, mask_type: int = 0, missing_value: str = "-inf"):
         self.mask_type = mask_type
@@ -408,7 +408,9 @@ class NAIM(torch.nn.Module):
 
         embeddings = self.norm(embeddings)
 
-        features = embeddings.view(embeddings.shape[0], -1)
+        # features = embeddings.view(embeddings.shape[0], -1)
+
+        features = embeddings
 
         if self.extractor:
             return features
@@ -453,28 +455,42 @@ class NAIMclassifier(BaseModel):
             weight_tensor = weight_tensor.to(next(self.parameters()).device)
             loss_fn = hydra.utils.instantiate(config.loss, weight=weight_tensor)
         return loss_fn
-class WeightedSumFuse(nn.Module):
-    def __init__(self):
-        super().__init__()
-        # Khai báo alpha, beta là tham số learnable scalar (hoặc bạn có thể fix cứng)
-        self.alpha = nn.Parameter(torch.tensor(1.0))
-        self.beta = nn.Parameter(torch.tensor(1.0))
-
-    def forward(self, x1, x2):
-        # x1, x2 shape: (batch, seq_len, dim)
-        return self.alpha * x1 + self.beta * x2   
-class NAIM_TEXTclassifier(BaseModel):
-    def __init__(self, params_naim, params_vibert):
+    
+class NAIM_TEXTclassifier(nn.Module):
+    def __init__(self, params_naim, params_vibert, num_heads=4, dropout_rate = 0.1, num_layers=2):
         super(NAIM_TEXTclassifier, self).__init__()
-        self.naim = NAIM(**params_naim)
-        self.vitbi = ViTBERTClassifier(**params_vibert)
-        self.combinator = WeightedSumFuse()
+        self.naim = NAIM(**params_naim)  # output shape: (B, L1, D1)
+        self.vitbi = ViTBERTClassifier(**params_vibert)  # output shape: (B, L2, D2)
+        self.naim.d_token = self.vitbi.bert.config.hidden_size  # Đảm bảo d_token của NAIM trùng với kích thước đầu ra của ViTBERT
+
+        # MultiheadAttention cho cross-attention
+        self.cross_attn = nn.MultiheadAttention(embed_dim=self.naim.d_token, num_heads=num_heads, batch_first=True)
+        self.dynamic_classifier = DynamicClassifier(input_dim=self.bert.config.hidden_size,
+                                            num_classes=self.naim.output_size,
+                                            dropout_rate=dropout_rate,
+                                            num_layers=num_layers)
+        # Classifier đầu ra 4 lớp
+
     def forward(self, x, input_ids, attention_mask=None):
-        clinical_features = self.naim(x)
-        text_features = self.vitbi(input_ids, attention_mask)
-        #add clinical features to text features
-        final = self.combinator(clinical_features, text_features)
-        return final
+        clinical_features = self.naim(x)  # (B, L1, D1)
+        text_features = self.vitbi(input_ids, attention_mask)  # (B, L2, D2)
+
+        # Projection về cùng dim
+        clinical_proj = clinical_features  # (B, L1, embed_dim)
+        text_proj = text_features       # (B, L2, embed_dim)
+
+        # Cross-attention: query=clinical, key=value=text
+        attn_output, attn_weights = self.cross_attn(query=clinical_proj,
+                                                   key=text_proj,
+                                                   value=text_proj)  # (B, L1, embed_dim)
+
+        # Có thể pooling kết quả attention để lấy đặc trưng chung, ví dụ mean pooling
+        pooled = attn_output.mean(dim=1)  # (B, embed_dim)
+
+        # Classify
+        logits = self.dynamic_classifier(pooled)  # (B, num_classes)
+
+        return logits
     def configure_optimizers(self, config):
         optimizer = torch.optim.Adam(
             self.parameters(),
@@ -510,7 +526,7 @@ def main():
     "output_size": 4,  # bỏ qua nếu extractor=True
     "cat_idxs": [],  # không có feature dạng category
     "cat_dims": [],
-    "d_token": 32,
+    "d_token": 768,
     "embedder_initialization": "normal",
     "bias": True,
     "mask_type": 0,
@@ -539,6 +555,7 @@ def main():
     # === Step 1: Khởi tạo mô hình ===
     naim = NAIMclassifier(params=params_naim)
     vibert = ViTBERTClassifier(**params_vibert)
+    naim_vibert = NAIM_TEXTclassifier(params_naim=params_naim, params_vibert=params_vibert, embed_dim=768, num_heads=4, num_classes=4)
     # === Step 2: Tạo dữ liệu mẫu ===
     batch_size = 2
 
@@ -557,16 +574,18 @@ def main():
     with torch.no_grad():
         output_naim = naim(table_data)
         output_vibert = vibert(input_ids, attention_mask)
+        output_naim_vibert = naim_vibert(table_data, input_ids, attention_mask)
 
     # === Step 4: In thông tin ===
     print("Table data shape:", table_data.shape)
     print("Text input_ids shape:", input_ids.shape)
     print("Output_naim shape:", output_naim.shape)
     print("Output_vibert shape:", output_vibert.shape)
+    print("Output_naim_vibert shape:", output_naim_vibert.shape)
 
-    # Nếu NAIM là extractor:
-    naim_feature_shape = table_data.shape[0], params_naim["input_size"] * params_naim["d_token"]
-    print("Expected NAIM output (extractor):", naim_feature_shape)
+    # # Nếu NAIM là extractor:
+    # naim_feature_shape = table_data.shape[0], params_naim["input_size"] * params_naim["d_token"]
+    # print("Expected NAIM output (extractor):", naim_feature_shape)
 
 if __name__ == "__main__":
     main()
