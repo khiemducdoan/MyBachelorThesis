@@ -63,8 +63,8 @@ class ViTBERT(Dataset):
         # Tokenization
         tokenized_text = self.tokenizer(text, 
                                         add_special_tokens=True, 
-                                        max_length=512, 
-                                        padding="max_length", 
+                                        max_length=50, 
+                                        padding='max_length', 
                                         truncation=True, 
                                         return_tensors='pt')
 
@@ -171,7 +171,9 @@ class TBIDataset2stream(Dataset):
         # Tokenization
         tokenized_text = self.tokenizer(text, 
                                         add_special_tokens=True, 
-                                        padding=True,  
+                                        max_length=512, 
+                                        padding='max_length', 
+                                        truncation=True, 
                                         return_tensors='pt')
 
         # Extract fields from tokenized text
