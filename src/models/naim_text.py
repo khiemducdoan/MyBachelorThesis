@@ -471,10 +471,15 @@ class NAIM_TEXTclassifier(BaseModel):
         self.combinator = WeightedSumFuse()
     def forward(self, x, input_ids, attention_mask=None):
         clinical_features = self.naim(x)
-        text_features = self.vitbi(input_ids, attention_mask)
-        #add clinical features to text features
-        final = self.combinator(clinical_features, text_features)
-        return final
+        
+        # Kiểm tra xem input_ids có phải tensor toàn zeros hay không
+        if input_ids is not None and not torch.all(input_ids == 0):
+            text_features = self.vitbi(input_ids, attention_mask)
+            final = self.combinator(clinical_features, text_features)
+            return final
+        else:
+            # Nếu input_ids toàn 0 hoặc None thì chỉ trả về clinical_features
+            return clinical_features
     def configure_optimizers(self, config):
         optimizer = torch.optim.Adam(
             self.parameters(),

@@ -167,7 +167,7 @@ def train(config):
             plt.xlabel('Predicted Label')
             plt.ylabel('True Label')
             plt.title(f'Confusion Matrix (Epoch {epoch})')
-            torch.save(model, os.path.join(config.output_dir, f'model_Best_{epoch}.pt'))
+            # torch.save(model, os.path.join(config.output_dir, f'model_Best_{epoch}.pt'))
             logger.info(f'Saved best model at epoch {epoch} with accuracy: {best_accuracy:.4f}')
             # Ghi confusion matrix vào TensorBoard
             # Lưu hình ảnh confusion matrix
@@ -230,9 +230,9 @@ def train_with_sweep(config):
                 'min': -4,
                 'max': -2
             },
-            'd_token': {
-                'values': [8, 16, 32, 64]  # Possible values for d_token
-            },
+            # 'd_token': {
+            #     'values': [8, 16, 32, 64]  # Possible values for d_token
+            # },
             "Fdropout_rate": {
                 "distribution": "uniform",
                 "min": 0.1,
@@ -263,7 +263,6 @@ def train_with_sweep(config):
                            "dmis-lab/biobert-base-cased-v1.1",
                            "bionlp/bluebert_pubmed_mimic_uncased_L-12_H-768_A-12",
                            "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract",
-                           "nvidia/biomegatron-345m-uncased",
                            ]  # Possible values for pretrained model
             }
             }
@@ -282,7 +281,7 @@ def train_with_sweep(config):
         config.model.optimizer.lr = sweep_params.learning_rate
         #================feature transformer=========================
         config.model.model.params_naim.num_layers = sweep_params.Fnum_layers
-        config.model.model.params_naim.d_token = sweep_params.d_token
+        # config.model.model.params_naim.d_token = sweep_params.d_token
         config.model.model.params_naim.dropout_rate = sweep_params.Fdropout_rate
         config.model.model.params_naim.num_heads = sweep_params.Fnum_heads
         #================maske transformer=========================

@@ -155,7 +155,7 @@ class TBIDataset2stream(Dataset):
         self.tokenizer = transformers.AutoTokenizer.from_pretrained(tokenizer)
         # Separate features and target
         self.features = self.data.drop(columns=[self.target_column, "text"]) 
-        self.text = self.data["text"]
+        self.text = self.data["text"] 
         self.targets = self.data[self.target_column] -1
         self.features_categorical = self.data[categorical_features] if categorical_features else None
         # # Get feature indices
@@ -168,18 +168,21 @@ class TBIDataset2stream(Dataset):
         return len(self.data)
     def read_text(self, idx):
         text = self.text.iloc[idx]
-        # Tokenization
-        tokenized_text = self.tokenizer(text, 
-                                        add_special_tokens=True, 
-                                        max_length=512, 
-                                        padding='max_length', 
-                                        truncation=True, 
-                                        return_tensors='pt')
-
-        # Extract fields from tokenized text
-        input_ids = tokenized_text['input_ids'].squeeze()
-        attention_mask = tokenized_text['attention_mask'].squeeze()
-
+        if pd.isnull(text):
+            # Trả về tensor zeros nếu không có text
+            input_ids = torch.zeros(512, dtype=torch.long)
+            attention_mask = torch.zeros(512, dtype=torch.long)
+            return input_ids, attention_mask
+        tokenized_text = self.tokenizer(
+            text,
+            add_special_tokens=True,
+            max_length=512,
+            padding='max_length',
+            truncation=True,
+            return_tensors='pt'
+        )
+        input_ids = tokenized_text['input_ids'].squeeze(0)
+        attention_mask = tokenized_text['attention_mask'].squeeze(0)
         return input_ids, attention_mask
     def __getitem__(self, idx):
         x = self.features.iloc[idx].values

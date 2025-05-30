@@ -28,7 +28,7 @@ logging:
   wandb:
     project: naim_tbi
     entity: naim
-    name:  naim_and_text {now:%m-%d_%H-%M}
+    name:  naim_and_text1
     tags: [naim, tbi]
     group: naim_sweep
     notes: "NAIM model for TBI dataset"
