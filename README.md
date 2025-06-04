@@ -1,96 +1,117 @@
-# MyBachelorThesis: AI Pipeline for TBI Analysis
+# 🧠 MyBachelorThesis: AI Pipeline for TBI Analysis
 
-## Introduction
-This project implements an AI pipeline for analyzing Traumatic Brain Injury (TBI) data using multiple machine learning approaches. The pipeline supports both clinical data and text modality analysis, with configurable model architectures including NAIM and TabNet. Key features:
+> An advanced machine learning pipeline for analyzing Traumatic Brain Injury (TBI) data using multi-modal approaches.
 
-- Flexible data processing pipeline for TBI datasets
-- Support for multi-modal learning (clinical + text data)
-- Configurable model architectures via Hydra
-- Integrated logging with TensorBoard and Weights & Biases
-- Comprehensive evaluation metrics and visualization tools
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![CUDA](https://img.shields.io/badge/CUDA-compatible-green.svg)](https://developer.nvidia.com/cuda-toolkit)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## Installation
+## 🎯 Introduction
+
+This project implements a sophisticated AI pipeline for TBI analysis, leveraging state-of-the-art machine learning architectures including NAIM and TabNet.
+
+### ✨ Key Features
+
+- 📊 Flexible data processing pipeline for TBI datasets
+- 🔄 Multi-modal learning support (clinical + text data)
+- ⚙️ Hydra-based configurable model architectures
+- 📈 Integrated logging with TensorBoard and W&B
+- 📊 Comprehensive evaluation metrics and visualization
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- Python 3.8+
+
+- Python 3.8 or higher
 - CUDA-compatible GPU (recommended)
 - Git
 
-### Setup Steps
+### 🛠️ Installation
 
-1. **Clone the repository:**
+1. **Clone the repository**
 ```bash
 git clone https://github.com/khiemducdoan/MyBachelorThesis.git
 cd MyBachelorThesis
 ```
 
-2. **Create virtual environment:**
+2. **Set up virtual environment**
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-3. **Install dependencies:**
+3. **Install dependencies**
 ```bash
 pip install -r requirements.txt
 ```
 
-## Usage Instructions
+## 📖 Usage Guide
 
-### 1. Data Preparation
+### 1️⃣ Data Preparation
 
-- Place your raw TBI data in `dataset/raw/`
-- For text modality, ensure text data is in CSV format with required columns
-- Use preprocessing notebooks in `dataset/` for data cleaning and formatting
+| Step | Description |
+|------|-------------|
+| Raw Data | Place TBI data in `dataset/raw/` |
+| Text Data | Ensure CSV format with required columns |
+| Preprocessing | Use notebooks in `dataset/` for cleaning |
 
-### 2. Configuration
+### 2️⃣ Configuration
 
-All configurations are managed through Hydra in the `configs/` directory:
+Configurations are managed through Hydra in the `configs/` directory:
 
-- `configs/main.yaml`: Main configuration file
-- `configs/model/`: Model-specific configurations
-- `configs/data/`: Dataset configurations
-- `configs/default/`: Default parameters
+```
+configs/
+├── main.yaml          # Main configuration
+├── model/            # Model-specific configs
+├── data/             # Dataset configs
+└── default/          # Default parameters
+```
 
-To modify settings:
-1. Edit relevant YAML files in `configs/`
-2. Or override via command line:
+**Modifying Settings:**
 ```bash
+# Via command line
 python train.py model=naim_text data.batch_size=32
 ```
 
-### 3. Training
+### 3️⃣ Training
 
-Basic training:
 ```bash
+# Basic training
 python train.py
-```
 
-Training with specific config:
-```bash
+# With specific config
 python train.py experiment=tbi_naim
-```
 
-With hyperparameter sweep:
-```bash
+# Hyperparameter sweep
 python train.py logging.sweep=true
 ```
 
-### 4. Monitoring
+### 4️⃣ Monitoring
 
-- Training progress: Check TensorBoard logs in `outputs/logs/`
-- Model checkpoints: Saved in `outputs/<date>/`
-- Experiment tracking: Available on Weights & Biases dashboard
+| Tool | Location | Purpose |
+|------|----------|---------|
+| TensorBoard | `outputs/logs/` | Training progress |
+| Checkpoints | `outputs/<date>/` | Model saves |
+| W&B | Online dashboard | Experiment tracking |
 
-### 5. Project Structure
+### 5️⃣ Project Structure
 
 ```
 MyBachelorThesis/
-├── configs/             # Configuration files
-├── dataset/            # Data and preprocessing
-├── src/               # Source code
-│   ├── models/       # Model implementations
-│   └── utils/        # Utility functions
-├── outputs/          # Training outputs
-└── notebooks/        # Analysis notebooks
+├── 📁 configs/        # Configuration files
+├── 📁 dataset/       # Data and preprocessing
+├── 📁 src/          # Source code
+│   ├── models/     # Model implementations
+│   └── utils/      # Utility functions
+├── 📁 outputs/     # Training outputs
+└── 📁 notebooks/   # Analysis notebooks
 ```
+
+## 📫 Contact
+
+For questions about the dataset or project, please email: vinakhiem120@gmail.com
+
+---
+<div align="center">
+Made with ❤️ for Traumatic Brain Injury Research
+</div>
