@@ -7,5 +7,5 @@ git.sh
 work-to-do.md
 outputs
 *.png
-
+nohup.out
 wandb
