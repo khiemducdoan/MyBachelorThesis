@@ -20,7 +20,7 @@ This project implements an AI pipeline for analyzing Traumatic Brain Injury (TBI
 
 1. **Clone the repository:**
 ```bash
-git clone <repository-url>
+git clone https://github.com/khiemducdoan/MyBachelorThesis.git
 cd MyBachelorThesis
 ```
 
