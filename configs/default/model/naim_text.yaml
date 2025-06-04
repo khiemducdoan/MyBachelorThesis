@@ -6,22 +6,22 @@ model:
     output_size: ${default.data.caller.num_classes}
     cat_idxs: null #[1, 2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 33, 35, 38, 42, 44, 46, 47, 48]
     cat_dims: null #[3, 8, 4, 4, 4, 4, 4, 4, 3, 4, 4, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 2]
-    d_token: 8
+    d_token: 16
     embedder_initialization: normal
     bias: false
     mask_type: 2
     missing_value: ~inf
-    num_heads: 4
+    num_heads: 8
     feedforward_dim: 1000
-    dropout_rate: 0.17686867712968654
+    dropout_rate: 0.28920207525560515
     activation: relu
-    num_layers: 2
+    num_layers: 4
     extractor: False
   params_vibert:
-    pretrained_model_name :  "dmis-lab/biobert-base-cased-v1.1"
+    pretrained_model_name :  "bionlp/bluebert_pubmed_mimic_uncased_L-12_H-768_A-12"
     num_classes: 4 
-    dropout_rate : 0.23400023915938575
-    num_layers: 3
+    dropout_rate : 0.14826549766951955
+    num_layers: 4
 # back bone embedding (quan trong nhat)
 # xem thử cái L ảnh hưởng thế nào
 # xem feature importance của cái này.
@@ -52,4 +52,5 @@ scheduler:
   verbose: False
 loss:
   _target_: torch.nn.CrossEntropyLoss
-  weight: 0
+  add:
+    weight: 0

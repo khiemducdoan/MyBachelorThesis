@@ -21,7 +21,7 @@ class TBIDataset(Dataset):
         self.num_features = num_features
         self.transform = transform
         # Separate features and target
-        self.features = self.data.drop( columns=[self.target_column]) 
+        self.features = self.data.drop( columns=[self.target_column, "text"]) 
         self.targets = self.data[self.target_column] -1
         self.features_categorical = self.data[categorical_features] if categorical_features else None
         # # Get feature indices

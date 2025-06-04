@@ -132,8 +132,8 @@ class ViTBERTClassifier(nn.Module):
                 num_layers=4):
         super().__init__()
         self.bert = AutoModel.from_pretrained(pretrained_model_name)
-        for param in self.bert.parameters():
-            param.requires_grad = False
+        # for param in self.bert.parameters():
+        #     param.requires_grad = False
         self.dynamic_classifier = DynamicClassifier(input_dim=self.bert.config.hidden_size,
                                             num_classes=num_classes,
                                             dropout_rate=dropout_rate,
@@ -445,11 +445,12 @@ class NAIMclassifier(BaseModel):
             'monitor': 'val_loss'
         } 
     def configure_loss(self, config):
-        if config.loss.weight == 0:
+        if config.weight == 0:
             loss_fn = hydra.utils.instantiate(config.loss, weight = None)
-
+        elif config.weight == "focalloss":
+            loss_fn = hydra.utils.instantiate(config.loss)
         else:
-            weight_tensor = torch.tensor(config.loss.weight, dtype=torch.float32)
+            weight_tensor = torch.tensor(config.weight, dtype=torch.float32)
             weight_tensor = weight_tensor.to(next(self.parameters()).device)
             loss_fn = hydra.utils.instantiate(config.loss, weight=weight_tensor)
         return loss_fn
@@ -500,11 +501,12 @@ class NAIM_TEXTclassifier(BaseModel):
             'monitor': 'val_loss'
         } 
     def configure_loss(self, config):
-        if config.loss.weight == 0:
+        if config.weight == 0:
             loss_fn = hydra.utils.instantiate(config.loss, weight = None)
-
+        elif config.weight == "focalloss":
+            loss_fn = hydra.utils.instantiate(config.loss)
         else:
-            weight_tensor = torch.tensor(config.loss.weight, dtype=torch.float32)
+            weight_tensor = torch.tensor(config.weight, dtype=torch.float32)
             weight_tensor = weight_tensor.to(next(self.parameters()).device)
             loss_fn = hydra.utils.instantiate(config.loss, weight=weight_tensor)
         return loss_fn

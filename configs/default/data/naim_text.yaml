@@ -4,10 +4,10 @@ caller:
   target_column: d_target
   num_classes: 4
   num_features: 64
-  tokenizer: dmis-lab/biobert-base-cased-v1.1
+  tokenizer: "bionlp/bluebert_pubmed_mimic_uncased_L-12_H-768_A-12"
   categorical_features: null
   transform: null
 
 name : tbi
 
-data_path: /home/khanhhiep/Code/Khanh/Khiem/MyBachelorThesis/dataset/raw/datasetok.csv
+data_path: /home/khanhhiep/Code/Khanh/Khiem/MyBachelorThesis/dataset/raw/merged_dataset.csv

@@ -11,15 +11,15 @@ output_dir: outputs
 # Training settings
 training:
   num_epochs: 100
-  batch_size: 128
-  learning_rate: 0.02123462305596188
+  batch_size: 256
+  learning_rate: 0.03454467887889272
   early_stopping:
     patience: 10
     monitor: val_loss
     
 # Validation settings
 validation:
-  split_ratio: 0.2
+  split_ratio: 0.1
   kfold: 5
 
 logging:

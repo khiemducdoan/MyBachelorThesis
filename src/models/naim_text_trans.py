@@ -3,13 +3,13 @@ import torch
 from torch import Tensor
 from torch.nn import Sigmoid
 import torch.nn.functional as F
-from src.models.tabular_tokenizer import CategoricalFeatureTokenizer
-from src.models.base import BaseModel
+# from src.models.tabular_tokenizer import CategoricalFeatureTokenizer
+# from src.models.base import BaseModel
 
 from transformers import LongformerModel
 
-# from tabular_tokenizer import CategoricalFeatureTokenizer
-# from base import BaseModel
+from tabular_tokenizer import CategoricalFeatureTokenizer
+from base import BaseModel
 
 
 from typing import Tuple, Optional
@@ -465,7 +465,7 @@ class NAIM_TEXTclassifier(nn.Module):
 
         # MultiheadAttention cho cross-attention
         self.cross_attn = nn.MultiheadAttention(embed_dim=self.naim.d_token, num_heads=num_heads, batch_first=True)
-        self.dynamic_classifier = DynamicClassifier(input_dim=self.bert.config.hidden_size,
+        self.dynamic_classifier = DynamicClassifier(input_dim=self.vitbi.bert.config.hidden_size,
                                             num_classes=self.naim.output_size,
                                             dropout_rate=dropout_rate,
                                             num_layers=num_layers)
@@ -474,7 +474,6 @@ class NAIM_TEXTclassifier(nn.Module):
     def forward(self, x, input_ids, attention_mask=None):
         clinical_features = self.naim(x)  # (B, L1, D1)
         text_features = self.vitbi(input_ids, attention_mask)  # (B, L2, D2)
-
         # Projection về cùng dim
         clinical_proj = clinical_features  # (B, L1, embed_dim)
         text_proj = text_features       # (B, L2, embed_dim)
@@ -555,10 +554,10 @@ def main():
     # === Step 1: Khởi tạo mô hình ===
     naim = NAIMclassifier(params=params_naim)
     vibert = ViTBERTClassifier(**params_vibert)
-    naim_vibert = NAIM_TEXTclassifier(params_naim=params_naim, params_vibert=params_vibert, embed_dim=768, num_heads=4, num_classes=4)
+    naim_vibert = NAIM_TEXTclassifier(params_naim=params_naim, params_vibert=params_vibert,num_heads=4, dropout_rate = 0.1, num_layers=2)
     # === Step 2: Tạo dữ liệu mẫu ===
     batch_size = 2
-
+    cross_attn =  nn.MultiheadAttention(embed_dim=589824, num_heads=3, batch_first=True)
     # Giả lập tabular data: (B, 64)
     table_data = torch.rand((batch_size, 64))
 
@@ -575,13 +574,18 @@ def main():
         output_naim = naim(table_data)
         output_vibert = vibert(input_ids, attention_mask)
         output_naim_vibert = naim_vibert(table_data, input_ids, attention_mask)
-
+        output_kron = torch.kron(output_naim, output_vibert)
+        attn_output, attn_weights = self.cross_attn(query=output_kron,
+                                                   key=output_naim + output_vibert + output_kron  ,
+                                                   value=output_naim + output_vibert + output_kron ) 
     # === Step 4: In thông tin ===
     print("Table data shape:", table_data.shape)
     print("Text input_ids shape:", input_ids.shape)
     print("Output_naim shape:", output_naim.shape)
     print("Output_vibert shape:", output_vibert.shape)
     print("Output_naim_vibert shape:", output_naim_vibert.shape)
+    print("output_torch.kron(mat1, mat2): ", output_kron.shape)
+    print("wtf it is ", attn_output.shape)
 
     # # Nếu NAIM là extractor:
     # naim_feature_shape = table_data.shape[0], params_naim["input_size"] * params_naim["d_token"]

@@ -6,6 +6,9 @@ from sklearn.utils.class_weight import compute_class_weight
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import torch
+
+
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from omegaconf import OmegaConf
@@ -28,6 +31,7 @@ logger = logging.getLogger(__name__)
 wandb.login()
 # @hydra.main(config_path="./configs", config_name="default")
 def train(config):
+    
     wandb.init(
         project=config.logging.wandb.project)
     # ========================================================Set random seed========================================================
@@ -66,6 +70,7 @@ def train(config):
     
     # =======================================================Initialize model============================================
     model = hydra.utils.instantiate(config.model.model)
+    torch.cuda.empty_cache()
     model = model.to(config.device)
     
     # Get optimizer and scheduler
@@ -230,9 +235,9 @@ def train_with_sweep(config):
                 'min': -4,
                 'max': -2
             },
-            # 'd_token': {
-            #     'values': [8, 16, 32, 64]  # Possible values for d_token
-            # },
+            'd_token': {
+                'values': [8, 16, 32, 64]  # Possible values for d_token
+            },
             "Fdropout_rate": {
                 "distribution": "uniform",
                 "min": 0.1,
@@ -281,7 +286,7 @@ def train_with_sweep(config):
         config.model.optimizer.lr = sweep_params.learning_rate
         #================feature transformer=========================
         config.model.model.params_naim.num_layers = sweep_params.Fnum_layers
-        # config.model.model.params_naim.d_token = sweep_params.d_token
+        config.model.model.params_naim.d_token = sweep_params.d_token
         config.model.model.params_naim.dropout_rate = sweep_params.Fdropout_rate
         config.model.model.params_naim.num_heads = sweep_params.Fnum_heads
         #================maske transformer=========================

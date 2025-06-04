@@ -13,7 +13,7 @@ model:
     missing_value: ~inf
     num_heads: 1
     feedforward_dim: 1000
-    dropout_rate: 0.2268022432502361
+    dropout_rate: 0.19375063726918995
     activation: relu
     num_layers: 6
     extractor: false
