@@ -1,13 +1,12 @@
 caller:
-  _target_: src.data.dataset.TBIDataset2stream
+  _target_: src.data.dataset.TBIDataset
   data: None
   target_column: d_target
   num_classes: 4
   num_features: 64
-  tokenizer: demdecuong/vihealthbert-base-word
   categorical_features: null
   transform: null
 
 name : tbi
 
-data_path: /home/khanhnt/Khiem/MyBachelorThesis/dataset/raw/datasetok.csv
+data_path: /home/khanhhiep/Code/Khanh/Khiem/MyBachelorThesis/dataset/raw/datasetok.csv

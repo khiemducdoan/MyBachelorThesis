@@ -4,7 +4,7 @@ caller:
   target_column: d_target
   num_classes: 4
   num_features: 64
-  tokenizer: emilyalsentzer/Bio_ClinicalBERT
+  tokenizer: yikuan8/Clinical-Longformer
   categorical_features: null
   transform: null
 

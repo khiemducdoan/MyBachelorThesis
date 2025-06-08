@@ -11,11 +11,11 @@ model:
     bias: false
     mask_type: 2
     missing_value: ~inf
-    num_heads: 1
+    num_heads: 8
     feedforward_dim: 1000
-    dropout_rate: 0.19375063726918995
+    dropout_rate: 0.18824143736202317
     activation: relu
-    num_layers: 6
+    num_layers: 2
     extractor: false
 # back bone embedding (quan trong nhat)
 # xem thử cái L ảnh hưởng thế nào

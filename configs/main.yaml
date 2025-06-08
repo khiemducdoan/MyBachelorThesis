@@ -7,7 +7,7 @@ logging:
   wandb:
     project: naim
     entity: naim
-    name@name: multimodal_finetuneBERRT
+    name@name: multimodal_Longformer
     tags: [naim, tbi]
     group: naim
     notes: "NAIM model for TBI dataset"

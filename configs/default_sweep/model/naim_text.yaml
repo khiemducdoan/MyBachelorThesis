@@ -18,7 +18,7 @@ model:
     num_layers: 6
     extractor: False
   params_vibert:
-    pretrained_model_name : emilyalsentzer/Bio_ClinicalBERT
+    pretrained_model_name : yikuan8/Clinical-Longformer
     num_classes: 4 
     dropout_rate : 0.1
     num_layers: 3
@@ -51,6 +51,6 @@ scheduler:
   patience: 10
   verbose: False
 loss:
-  _target_: torch.nn.CrossEntropyLoss
+  _target_: src.losses.triple_loss.MyCustomLoss
 weight : focalloss
   

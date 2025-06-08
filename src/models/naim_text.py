@@ -15,7 +15,7 @@ from transformers import LongformerModel
 from typing import Tuple, Optional
 from transformers import AutoModel
 from torch.utils.data import DataLoader
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer,AutoModelForMaskedLM
 import hydra
 from typing import Union
 import torch.nn as nn
@@ -123,6 +123,49 @@ class DynamicClassifier(nn.Module):
     
     def forward(self, feature):
         return self.model(feature)
+class ViTLongformerClassifier(nn.Module):
+    def __init__(self, 
+                 pretrained_model_name, 
+                 num_classes=4, 
+                 dropout_rate=0.25, 
+                 num_layers=4):
+        super().__init__()
+        self.longformer = LongformerModel.from_pretrained(pretrained_model_name)
+        
+        # Freeze parameters if you want
+        for param in self.longformer.parameters():
+            param.requires_grad = False
+        
+        hidden_size = self.longformer.config.hidden_size
+
+        self.dynamic_classifier = DynamicClassifier(input_dim=hidden_size,
+                                                    num_classes=num_classes,
+                                                    dropout_rate=dropout_rate,
+                                                    num_layers=num_layers)
+        
+        self.static_classifier = Classifier(self.longformer.config, dropout_rate=dropout_rate)
+        self.dropout = nn.Dropout(dropout_rate)
+        self.classifier = nn.Linear(hidden_size, num_classes)
+
+    def mean_pooling(self, last_hidden_state, attention_mask):
+        """Perform mean pooling over valid tokens (non-padding)."""
+        input_mask_expanded = attention_mask.unsqueeze(-1).expand(last_hidden_state.size())
+        sum_embeddings = torch.sum(last_hidden_state * input_mask_expanded, 1)
+        sum_mask = torch.clamp(input_mask_expanded.sum(1), min=1e-9)
+        return sum_embeddings / sum_mask
+
+    def forward(self, input_ids, attention_mask=None):
+        outputs = self.longformer(input_ids=input_ids, attention_mask=attention_mask)
+        last_hidden_state = outputs.last_hidden_state  # [B, L, H]
+
+        # Option 1: Mean pooling
+        pooled_output = self.mean_pooling(last_hidden_state, attention_mask)
+
+        # Option 2: CLS token if using global attention (you must set it when tokenizing)
+        # pooled_output = last_hidden_state[:, 0, :]  # If [CLS] at position 0 with global attention
+
+        logits = self.dynamic_classifier(pooled_output)
+        return logits
 
 class ViTBERTClassifier(nn.Module):
     def __init__(self, 
@@ -131,9 +174,9 @@ class ViTBERTClassifier(nn.Module):
                 dropout_rate=0.25, 
                 num_layers=4):
         super().__init__()
-        self.bert = AutoModel.from_pretrained(pretrained_model_name)
-        # for param in self.bert.parameters():
-        #     param.requires_grad = False
+        self.bert = AutoModelForMaskedLM.from_pretrained(pretrained_model_name)
+        for param in self.bert.parameters():
+            param.requires_grad = False
         self.dynamic_classifier = DynamicClassifier(input_dim=self.bert.config.hidden_size,
                                             num_classes=num_classes,
                                             dropout_rate=dropout_rate,
@@ -464,6 +507,10 @@ class WeightedSumFuse(nn.Module):
     def forward(self, x1, x2):
         # x1, x2 shape: (batch, seq_len, dim)
         return self.alpha * x1 + self.beta * x2   
+    
+
+
+
 class NAIM_TEXTclassifier(BaseModel):
     def __init__(self, params_naim, params_vibert):
         super(NAIM_TEXTclassifier, self).__init__()
@@ -510,6 +557,143 @@ class NAIM_TEXTclassifier(BaseModel):
             weight_tensor = weight_tensor.to(next(self.parameters()).device)
             loss_fn = hydra.utils.instantiate(config.loss, weight=weight_tensor)
         return loss_fn
+class NAIM_TEXTclassifier_tripleLoss(BaseModel):
+    def __init__(self, params_naim, params_vibert):
+        super(NAIM_TEXTclassifier_tripleLoss, self).__init__()
+        self.naim = NAIM(**params_naim)
+        self.vitbi = ViTBERTClassifier(**params_vibert)
+        self.combinator = WeightedSumFuse()
+        self.loss_fn = nn.CrossEntropyLoss()
+    def forward(self, x, input_ids=None, attention_mask=None):
+        clinical_features = self.naim(x)  # logits_naim
+
+        if input_ids is not None and not torch.all(input_ids == 0):
+            text_features = self.vitbi(input_ids, attention_mask)  # logits_vitbi
+            combined_features = self.combinator(clinical_features, text_features)
+            return clinical_features, text_features, combined_features
+        else:
+            return clinical_features, None, clinical_features  # không có text
+
+    def compute_losses(self, clinical_logits, text_logits, combined_logits, labels, loss_fn):
+        # NAIM loss
+        loss_naim = loss_fn(clinical_logits, labels)
+
+        # ViTBERT loss (nếu có)
+        loss_vitbi = loss_fn(text_logits, labels) if text_logits is not None else 0.0
+
+        # Combined loss
+        loss_combined = loss_fn(combined_logits, labels)
+
+        # Tổng
+        total_loss = loss_naim + loss_combined
+        if text_logits is not None:
+            total_loss += loss_vitbi
+
+        return {
+            'loss': total_loss,
+            'loss_naim': loss_naim,
+            'loss_vitbi': loss_vitbi if text_logits is not None else torch.tensor(0.0).to(loss_combined.device),
+            'loss_combined': loss_combined
+        }
+
+    def configure_optimizers(self, config):
+        optimizer = torch.optim.Adam(
+            self.parameters(),
+            lr=config['optimizer']['lr'],
+            weight_decay=config['optimizer']['weight_decay']
+        )
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode=config['scheduler']['mode'],
+            factor=config['scheduler']['factor'],
+            patience=config['scheduler']['patience']
+        )
+        return {
+            'optimizer': optimizer,
+            'scheduler': scheduler,
+            'monitor': 'val_loss'
+        }
+
+    def configure_loss(self, config):
+        if config.weight == 0:
+            loss_fn = hydra.utils.instantiate(config.loss, weight=None)
+        elif config.weight == "focalloss":
+            loss_fn = hydra.utils.instantiate(config.loss)
+        else:
+            weight_tensor = torch.tensor(config.weight, dtype=torch.float32)
+            weight_tensor = weight_tensor.to(next(self.parameters()).device)
+            loss_fn = hydra.utils.instantiate(config.loss, weight=weight_tensor)
+        return loss_fn
+class NAIM_TEXTclassifier_multiLossallocation(BaseModel):
+    def __init__(self, params_naim, params_vibert):
+        super(NAIM_TEXTclassifier_multiLossallocation, self).__init__()
+        self.naim = NAIM(**params_naim)
+        self.vitbi = ViTBERTClassifier(**params_vibert)
+        self.combinator = WeightedSumFuse()
+        self.loss_weights = torch.nn.Parameter(torch.tensor([1.0, 1.0, 1.0]))  # [alpha, beta, gamma]
+        self.loss_fn = nn.CrossEntropyLoss()
+    def forward(self, x, input_ids=None, attention_mask=None):
+        clinical_features = self.naim(x)  # logits_naim
+
+        if input_ids is not None and not torch.all(input_ids == 0):
+            text_features = self.vitbi(input_ids, attention_mask)  # logits_vitbi
+            combined_features = self.combinator(clinical_features, text_features)
+            return clinical_features, text_features, combined_features
+        else:
+            return clinical_features, None, clinical_features  # không có text
+
+    def compute_losses(self, clinical_logits, text_logits, combined_logits, labels, loss_fn):
+        # NAIM loss
+        weights = torch.nn.functional.softmax(self.loss_weights, dim=0)  # softmax để tổng = 1
+        alpha, beta, gamma = weights[0], weights[1], weights[2]
+        loss_naim = loss_fn(clinical_logits, labels)
+
+        # ViTBERT loss (nếu có)
+        loss_vitbi = loss_fn(text_logits, labels) if text_logits is not None else 0.0
+
+        # Combined loss
+        loss_combined = loss_fn(combined_logits, labels)
+
+        # Tổng
+        total_loss = alpha*loss_naim + beta*loss_combined
+        if text_logits is not None:
+            total_loss += gamma*loss_vitbi
+
+        return {
+            'loss': total_loss,
+            'loss_naim': loss_naim,
+            'loss_vitbi': loss_vitbi if text_logits is not None else torch.tensor(0.0).to(loss_combined.device),
+            'loss_combined': loss_combined
+        }
+
+    def configure_optimizers(self, config):
+        optimizer = torch.optim.Adam(
+            self.parameters(),
+            lr=config['optimizer']['lr'],
+            weight_decay=config['optimizer']['weight_decay']
+        )
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode=config['scheduler']['mode'],
+            factor=config['scheduler']['factor'],
+            patience=config['scheduler']['patience']
+        )
+        return {
+            'optimizer': optimizer,
+            'scheduler': scheduler,
+            'monitor': 'val_loss'
+        }
+
+    def configure_loss(self, config):
+        if config.weight == 0:
+            loss_fn = hydra.utils.instantiate(config.loss, weight=None)
+        elif config.weight == "focalloss":
+            loss_fn = hydra.utils.instantiate(config.loss)
+        else:
+            weight_tensor = torch.tensor(config.weight, dtype=torch.float32)
+            weight_tensor = weight_tensor.to(next(self.parameters()).device)
+            loss_fn = hydra.utils.instantiate(config.loss, weight=weight_tensor)
+        return loss_fn
 
 def main():
     params_naim = {
@@ -545,7 +729,7 @@ def main():
 
     # === Step 1: Khởi tạo mô hình ===
     naim = NAIMclassifier(params=params_naim)
-    vibert = ViTBERTClassifier(**params_vibert)
+    vibert = ViTLongformerClassifier(**params_vibert)
     # === Step 2: Tạo dữ liệu mẫu ===
     batch_size = 2
 
