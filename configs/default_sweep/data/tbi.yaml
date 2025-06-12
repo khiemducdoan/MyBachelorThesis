@@ -5,7 +5,7 @@ caller:
   num_classes: 4
   num_features: 64
   categorical_features: null
-  transform: null
+  n: null
 
 name : tbi
 

@@ -63,3 +63,56 @@ def z_transform(df: pd.DataFrame, config: Dict) -> pd.DataFrame:
         
 
     return df
+
+class MissingGenerator:
+    def __init__(self, missing_percentage):
+        """
+        Initialize MissingGenerator with desired missing data percentage
+        
+        Parameters:
+        -----------
+        missing_percentage : float
+            Percentage of missing data desired (0 to 100)
+        """
+        if missing_percentage is None:
+            self.missing_percentage = 0
+        elif not 0 <= missing_percentage <= 100:
+            raise ValueError("missing_percentage must be between [0, 100]")
+        else:
+            self.missing_percentage = missing_percentage / 100  # Convert to decimal
+    
+    def __call__(self, x):
+        """
+        Apply missing data to a numpy array (from iloc[idx].values)
+        
+        Parameters:
+        -----------
+        x : numpy.ndarray
+            Input array to modify with missing values
+            
+        Returns:
+        --------
+        numpy.ndarray
+            Array with randomly inserted NaN values
+        """
+        if self.missing_percentage == 0:
+            return x
+            
+        if not isinstance(x, np.ndarray):
+            raise TypeError("Input must be a numpy array")
+        
+        # Create a copy to avoid modifying original data
+        x_missing = x.copy()
+        
+        # Calculate number of elements to make missing
+        num_elements = x_missing.size
+        num_missing = int(num_elements * self.missing_percentage)
+        
+        if num_missing > 0:
+            # Create random indices
+            indices = np.random.choice(num_elements, num_missing, replace=False)
+            
+            # Set selected elements to NaN
+            x_missing[indices] = np.nan
+            
+        return x_missing

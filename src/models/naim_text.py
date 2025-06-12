@@ -168,37 +168,26 @@ class ViTLongformerClassifier(nn.Module):
         return logits
 
 class ViTBERTClassifier(nn.Module):
-    def __init__(self, 
-                pretrained_model_name, 
-                num_classes=4, 
-                dropout_rate=0.25, 
-                num_layers=4):
+    def __init__(self, pretrained_model_name, num_classes, dropout_rate=0.1, num_layers=2):
         super().__init__()
-        self.bert = AutoModelForMaskedLM.from_pretrained(pretrained_model_name)
+        self.bert = AutoModel.from_pretrained(pretrained_model_name)
         for param in self.bert.parameters():
             param.requires_grad = False
-        self.dynamic_classifier = DynamicClassifier(input_dim=self.bert.config.hidden_size,
-                                            num_classes=num_classes,
-                                            dropout_rate=dropout_rate,
-                                            num_layers=num_layers)
-        self.static_classifier = Classifier(self.bert.config, dropout_rate=dropout_rate)
-        self.dropout = nn.Dropout(dropout_rate)
-        self.classifier = nn.Linear(self.bert.config.hidden_size, num_classes)
+        hidden_size = self.bert.config.hidden_size
+        self.dynamic_classifier = DynamicClassifier(input_dim=hidden_size,
+                                                    num_classes=num_classes,
+                                                    dropout_rate=dropout_rate,
+                                                    num_layers=num_layers)
+        
     def forward(self, input_ids, attention_mask=None):
+        # Get BERT outputs
         outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
-        features_bert = outputs[0] # Last hidden state
-        features_cls = features_bert[:, 0, :].unsqueeze(1) # CLS token
-        pooled_output = outputs[1] # Pooled output
-        # Access last_hidden_state (mandatory) and optionally pooler_output
-        # last_hidden_state = outputs.last_hidden_state  # Always available
-        # pooler_output = outputs.pooler_output if hasattr(outputs, 'pooler_output') else None
-        # Use pooler_output if available; otherwise, use mean pooling
-        # if pooler_output is not None:
-        #     logits = self.classifier(pooler_output)
-        # else:
-        #     # Mean pooling over the last hidden state
-        #     logits = self.classifier(last_hidden_state.mean(dim=1))
+        
+        # Use the [CLS] token representation (first token)
+        pooled_output = outputs.last_hidden_state[:, 0, :]
+        
         logits = self.dynamic_classifier(pooled_output)
+        
         return logits
 class TabularMasker:
     def __init__(self, mask_type: int = 0, missing_value: str = "-inf"):
@@ -510,20 +499,87 @@ class WeightedSumFuse(nn.Module):
     
 
 
-
-class NAIM_TEXTclassifier(BaseModel):
-    def __init__(self, params_naim, params_vibert):
-        super(NAIM_TEXTclassifier, self).__init__()
+class NAIM_TEXTclassifierConcat(BaseModel):
+    def __init__(self, params_naim, params_vibert, output_dim=4):  # output_dim set to 4 for 4 classes
+        super(NAIM_TEXTclassifierConcat, self).__init__()
         self.naim = NAIM(**params_naim)
-        self.vitbi = ViTBERTClassifier(**params_vibert)
+        self.vitbi = torch.load("/home/khanhhiep/Code/Khanh/Khiem/MyBachelorThesis/notebooks/best_model/best_model.pt",weights_only= False)
         self.combinator = WeightedSumFuse()
+        for param in self.vitbi.parameters():
+            param.requires_grad = False
+        # Linear layer to combine the modalities after concatenation
+        self.fc = nn.Linear(8, output_dim)  # After concatenation, we expect 8 features
+
     def forward(self, x, input_ids, attention_mask=None):
         clinical_features = self.naim(x)
         
         # Kiểm tra xem input_ids có phải tensor toàn zeros hay không
         if input_ids is not None and not torch.all(input_ids == 0):
             text_features = self.vitbi(input_ids, attention_mask)
-            final = self.combinator(clinical_features, text_features)
+            
+            # Concatenate the features from clinical and text modalities
+            combined_features = torch.cat((clinical_features, text_features.logits), dim=1)  # Concatenate on the feature dimension
+
+            # Pass through the linear layer
+            output = self.fc(combined_features)
+            
+            # Apply softmax to output for multi-class classification
+            output = torch.softmax(output, dim=-1)  # Softmax for multi-class classification
+            
+            return output
+        else:
+            # If input_ids is all zeros or None, return clinical_features directly
+            return clinical_features
+
+    def configure_optimizers(self, config):
+        optimizer = torch.optim.Adam(
+            self.parameters(),
+            lr=config['optimizer']['lr'],
+            weight_decay=config['optimizer']['weight_decay']
+        )
+        
+        scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer,
+            mode=config['scheduler']['mode'],
+            factor=config['scheduler']['factor'],
+            patience=config['scheduler']['patience']
+        )
+        
+        return {
+            'optimizer': optimizer,
+            'scheduler': scheduler,
+            'monitor': 'val_loss'
+        } 
+    
+    def configure_loss(self, config):
+        if config.weight == 0:
+            loss_fn = hydra.utils.instantiate(config.loss, weight=None)
+        elif config.weight == "focalloss":
+            loss_fn = hydra.utils.instantiate(config.loss)
+        else:
+            weight_tensor = torch.tensor(config.weight, dtype=torch.float32)
+            weight_tensor = weight_tensor.to(next(self.parameters()).device)
+            loss_fn = hydra.utils.instantiate(config.loss, weight=weight_tensor)
+        return loss_fn
+
+
+
+class NAIM_TEXTclassifier(BaseModel):
+    def __init__(self, params_naim, params_vibert):
+        super(NAIM_TEXTclassifier, self).__init__()
+        self.naim = NAIM(**params_naim)
+        self.vitbi = torch.load("/home/khanhhiep/Code/Khanh/Khiem/MyBachelorThesis/notebooks/best_model/best_model.pt",weights_only= False)
+        for param in self.vitbi.parameters():
+            param.requires_grad = False
+        self.combinator = WeightedSumFuse()
+
+    def forward(self, x, input_ids, attention_mask=None):
+        clinical_features = self.naim(x)
+        
+        # Kiểm tra xem input_ids có phải tensor toàn zeros hay không
+        if input_ids is not None and not torch.all(input_ids == 0):
+            text_features = self.vitbi(input_ids, attention_mask)
+            final = self.combinator(clinical_features, text_features.logits)
             return final
         else:
             # Nếu input_ids toàn 0 hoặc None thì chỉ trả về clinical_features
@@ -563,17 +619,18 @@ class NAIM_TEXTclassifier_tripleLoss(BaseModel):
         self.naim = NAIM(**params_naim)
         self.vitbi = ViTBERTClassifier(**params_vibert)
         self.combinator = WeightedSumFuse()
-        self.loss_fn = nn.CrossEntropyLoss()
+        self.classifier = nn.Linear(8, params_naim['output_size'])
+
     def forward(self, x, input_ids=None, attention_mask=None):
         clinical_features = self.naim(x)  # logits_naim
 
         if input_ids is not None and not torch.all(input_ids == 0):
             text_features = self.vitbi(input_ids, attention_mask)  # logits_vitbi
-            combined_features = self.combinator(clinical_features, text_features)
+            combined_features = clinical_features + text_features  # logits_combined
             return clinical_features, text_features, combined_features
         else:
-            return clinical_features, None, clinical_features  # không có text
-
+            # When no text data is available, return the same clinical features for all outputs
+            return clinical_features, clinical_features, clinical_features
     def compute_losses(self, clinical_logits, text_logits, combined_logits, labels, loss_fn):
         # NAIM loss
         loss_naim = loss_fn(clinical_logits, labels)

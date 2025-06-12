@@ -294,6 +294,11 @@ def train_with_sweep(config):
         # Update config with sweep parameters
         config.training.batch_size = sweep_params.batch_size
         config.model.optimizer.lr = sweep_params.learning_rate
+
+        # config.model.model.params.num_layers = sweep_params.Fnum_layers
+        # config.model.model.params.d_token = sweep_params.d_token
+        # config.model.model.params.dropout_rate = sweep_params.Fdropout_rate
+        # config.model.model.params.num_heads = sweep_params.Fnum_heads
         #================feature transformer=========================
         config.model.model.params_naim.num_layers = sweep_params.Fnum_layers
         config.model.model.params_naim.d_token = sweep_params.d_token
@@ -305,8 +310,8 @@ def train_with_sweep(config):
         # config.model.model.mask_params.dropout_rate = sweep_params.Fdropout_rate
         # config.model.model.mask_params.num_heads = sweep_params.Fnum_heads
         #================text branch=========================
-        config.model.model.params_vibert.dropout_rate = sweep_params.Mdropout_rate
-        config.model.model.params_vibert.num_layers = sweep_params.Mnum_layers
+        # config.model.model.params_vibert.dropout_rate = sweep_params.Mdropout_rate
+        # config.model.model.params_vibert.num_layers = sweep_params.Mnum_layers
         # config.model.model.params_vibert.pretrained_model_name = sweep_params.pretrained_model_name
         # config.data.caller.tokenizer = sweep_params.pretrained_model_name
         #Call the train function with updated config

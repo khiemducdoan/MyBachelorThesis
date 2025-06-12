@@ -28,7 +28,7 @@ logging:
   wandb:
     project: naim_tbi
     entity: naim
-    name: multimodal_Longformer
+    name: multimodal_final
     tags: [naim, tbi]
     group: naim_sweep
     notes: "NAIM model for TBI dataset"

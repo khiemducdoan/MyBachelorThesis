@@ -1,6 +1,6 @@
 name: naim_text
 model:
-  _target_: src.models.naim_text.NAIM_TEXTclassifier
+  _target_: src.models.naim_text.NAIM_TEXTclassifier_tripleLoss
   params_naim:
     input_size: ${default.data.caller.num_features}
     output_size: ${default.data.caller.num_classes}
@@ -51,6 +51,5 @@ scheduler:
   patience: 10
   verbose: False
 loss:
-  _target_: torch.nn.CrossEntropyLoss
-  add:
-    weight: 0
+  _target_: src.losses.triple_loss.MyCustomLoss
+weight: focalloss

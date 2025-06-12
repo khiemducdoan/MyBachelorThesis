@@ -9,3 +9,5 @@ outputs
 *.png
 nohup.out
 wandb
+*/results
+*.pt

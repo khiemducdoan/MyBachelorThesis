@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 from typing import Dict, Optional
 import transformers
+from src.data.preprocessing import MissingGenerator
 
 class TBIDataset(Dataset):
     def __init__(
@@ -13,13 +14,13 @@ class TBIDataset(Dataset):
         num_classes: int,
         num_features: 64,
         categorical_features: Optional[callable] = None,
-        transform: Optional[callable] = None
+        n: Optional[callable] = None
     ):
         self.data = data
         self.target_column = target_column
         self.num_classes = num_classes
         self.num_features = num_features
-        self.transform = transform
+        self.transform = MissingGenerator(n)
         # Separate features and target
         self.features = self.data.drop( columns=[self.target_column, "text"]) 
         self.targets = self.data[self.target_column] -1
@@ -36,13 +37,13 @@ class TBIDataset(Dataset):
     def __getitem__(self, idx):
         x = self.features.iloc[idx].values
         y = self.targets.iloc[idx]
-        
+        if self.transform:
+            x = self.transform(x)
         # Convert to tensor
         x = torch.FloatTensor(x)
         y = torch.LongTensor([y])[0]
         
-        if self.transform:
-            x = x.apply(lambda x: (x - x.mean()) / x.std())
+
             
         return x, y 
     
@@ -195,4 +196,4 @@ class TBIDataset2stream(Dataset):
         if self.transform:
             x = x.apply(lambda x: (x - x.mean()) / x.std())
             
-        return (x,input_ids, attention_mask), y 
+        return [x,input_ids, attention_mask], y 

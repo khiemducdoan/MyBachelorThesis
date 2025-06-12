@@ -102,79 +102,141 @@ def train(config):
     for epoch in range(config.training.num_epochs):
         # Training
         model.train()
-        train_loss = 0
+        train_loss = {"loss": 0, "loss_naim": 0, "loss_vitbi": 0, "loss_combined": 0}
+        train_predictions = []
+        train_targets = []
         train_bar = tqdm(train_loader, desc=f"Epoch {epoch} [Train]", leave=False)
         for batch_idx, batch in enumerate(train_bar):
             features,target = batch
             target = target.to(config.device)
             optimizer.zero_grad()
             if isinstance(features, list):
-            # Assume model expects multiple inputs
                 features = [f.to(config.device) for f in features]
-                output = model(*features)
+                output1, output2, output3 = model(*features)
             else:
-            # Assume model expects a single input
                 features = features.to(config.device)
-                output = model(features)
+                output1, output2, output3 = model(features)
             
-            # lets go
-            # optimizer.zero_grad()
-            # output = model(*features)  # Pass all feature sets to the model
-            loss = loss_fn(output, target)
-            loss.backward()
+            loss = loss_fn(output1, output2, output3, target)
+            loss["loss"].backward()
             optimizer.step()
             
-            train_loss += loss.item()
+            # Track individual losses
+            train_loss["loss"] += loss["loss"].item()
+            train_loss["loss_naim"] += loss["loss_naim"].item()
+            train_loss["loss_vitbi"] += loss["loss_vitbi"].item()
+            train_loss["loss_combined"] += loss["loss_combined"].item()
             
+            # Track predictions for accuracy calculation
+            train_predictions.extend(output3.argmax(dim=1).cpu().numpy())  # Using combined output for predictions
+            train_targets.extend(target.cpu().numpy())
+            train_accuracy = calculate_metrics(train_targets, train_predictions)
             if batch_idx % config.logging.log_interval == 0:
-                logger.info(f'Train Epoch: {epoch} [{batch_idx}/{len(train_loader)} '
-                          f'({100. * batch_idx / len(train_loader):.0f}%)]\t'
-                          f'Loss: {loss.item():.6f}')
-                writer.add_scalar('Train/Loss', loss.item(), epoch * len(train_loader) + batch_idx)
-                wandb.log({"Train Loss": loss.item()})  # Log to wandb
-        
+                # logger.info(f'Train Epoch: {epoch} [{batch_idx}/{len(train_loader)} '
+                #           f'({100. * batch_idx / len(train_loader):.0f}%)]\t'
+                #           f'Loss total loss: {loss["loss"].item():.6f}')
+                # writer.add_scalar('Train/Loss Total', loss["loss"].item(), epoch * len(train_loader) + batch_idx)
+                wandb.log({"Train Loss Total": loss["loss"].item()})  # Log to wandb
+        #wandb log training accuracy 
+
         # ====================================================Validation====================================================
         model.eval()
-        val_loss = 0
-        val_predictions = []
+        val_loss = {"loss": 0, "loss_naim": 0, "loss_vitbi": 0, "loss_combined": 0}
+        val_predictions1 = []  # NAIM predictions
+        val_predictions2 = []  # ViTBI predictions
+        val_predictions3 = []  # Combined predictions
         val_targets = []
+        
         val_bar = tqdm(val_loader, desc=f"Epoch {epoch} [Val]", leave=False)
         with torch.no_grad():
             for batch in val_bar:
-                features,target = batch
+                features, target = batch
                 target = target.to(config.device)
                 if isinstance(features, list):
-            # Assume model expects multiple inputs
                     features = list(f.to(config.device) for f in features)
-                    output = model(*features)
+                    output1, output2, output3 = model(*features)
                 else:
-            # Assume model expects a single input
                     features = features.to(config.device)
-                    output = model(features)
+                    output1, output2, output3 = model(features)
                 
-                # *features, target = [item.to(config.device) for item in batch]
-                # output = model(*features)  # Pass all feature sets to the model
-                val_loss += loss_fn(output, target).item()
+                loss = loss_fn(output1, output2, output3, target)
                 
-                val_predictions.extend(output.argmax(dim=1).cpu().numpy())
+                # Track losses
+                val_loss["loss"] += loss["loss"].item()
+                val_loss["loss_naim"] += loss["loss_naim"].item()
+                val_loss["loss_vitbi"] += loss["loss_vitbi"].item()
+                val_loss["loss_combined"] += loss["loss_combined"].item()
+                
+                # Track predictions for all outputs
+                val_predictions1.extend(output1.argmax(dim=1).cpu().numpy())
+                if output2 is not None:  # Only if text data is present
+                    val_predictions2.extend(output2.argmax(dim=1).cpu().numpy())
+                val_predictions3.extend(output3.argmax(dim=1).cpu().numpy())
                 val_targets.extend(target.cpu().numpy())
         
-        val_loss /= len(val_loader)
-        metrics = calculate_metrics(val_targets, val_predictions)
-        val_accuracy = metrics.get("accuracy", 0.0)
-        # ====================================================Log validation loss and metrics====================================================
-        logger.info(f'Epoch {epoch}: Val Loss: {val_loss:.4f}, Accuracy: {val_accuracy:.4f}, Metrics: {metrics}')
-        wandb.log({"Validation Loss": val_loss, "Validation Accuracy": val_accuracy})  # Log to wandb
-        writer.add_scalar('Validation/Loss', val_loss, epoch)
-        for metric_name, metric_value in metrics.items():
-            writer.add_scalar(f'Validation/{metric_name}', metric_value, epoch)
-            wandb.log({f"Validation {metric_name}": metric_value})  # Log to wandb
+        # Calculate average losses
+        num_batches = len(val_loader)
+        val_loss = {k: v / num_batches for k, v in val_loss.items()}
         
+        # Calculate metrics for all outputs
+        metrics_naim = calculate_metrics(val_targets, val_predictions1)
+        metrics_vitbi = calculate_metrics(val_targets, val_predictions2) if len(val_predictions2) > 0 else None
+        metrics_combined = calculate_metrics(val_targets, val_predictions3)
+        
+        # Log validation metrics
+        # logger.info(f'Epoch {epoch}:')
+        # logger.info(f'Total Val Loss: {val_loss["loss"]:.4f}')
+        # logger.info(f'NAIM - Loss: {val_loss["loss_naim"]:.4f}, Metrics: {metrics_naim}')
+        # if metrics_vitbi:
+        #     logger.info(f'ViTBI - Loss: {val_loss["loss_vitbi"]:.4f}, Metrics: {metrics_vitbi}')
+        # logger.info(f'Combined - Loss: {val_loss["loss_combined"]:.4f}, Metrics: {metrics_combined}')
+        
+        # Log to wandb
+        wandb_logs = {
+            "Validation Loss Total": val_loss["loss"],
+            "Validation Loss NAIM": val_loss["loss_naim"],
+            "Validation Loss Combined": val_loss["loss_combined"],
+            
+            # NAIM metrics
+            "Validation NAIM Accuracy": metrics_naim["accuracy"],
+            "Validation NAIM F1 ": metrics_naim["f1_weighted"],
+            "Validation NAIM Precision": metrics_naim["precision_macro"],
+            "Validation NAIM Recall": metrics_naim["recall_macro"],
+            
+            # Combined metrics
+            "Validation Combined Accuracy": metrics_combined["accuracy"],
+            "Validation Combined F1 ": metrics_combined["f1_weighted"],
+            "Validation Combined Precision": metrics_combined["precision_macro"],
+            "Validation Combined Recall": metrics_combined["recall_macro"],
+        }
+        
+        # Add ViTBI metrics if available
+        if metrics_vitbi:
+            wandb_logs.update({
+                "Validation Loss ViTBI": val_loss["loss_vitbi"],
+                "Validation ViTBI Accuracy": metrics_vitbi["accuracy"],
+                "Validation ViTBI F1": metrics_vitbi["f1_weighted"],
+                "Validation ViTBI Precision": metrics_vitbi["precision_macro"],
+                "Validation ViTBI Recall": metrics_vitbi["recall_macro"],
+            })
+        # Log to TensorBoard
+        # writer.add_scalar('Validation/Loss Total', val_loss["loss"], epoch)
+        # writer.add_scalar('Validation/Loss NAIM', val_loss["loss_naim"], epoch)
+        # writer.add_scalar('Validation/Loss Combined', val_loss["loss_combined"], epoch)
+        # if metrics_vitbi:
+        #     writer.add_scalar('Validation/Loss ViTBI', val_loss["loss_vitbi"], epoch)
+        wandb.log(wandb_logs)
+        # Use combined metrics for best model selection and early stopping
+        val_accuracy = metrics_combined["accuracy"]
+        wandb.log({
+            "Accuracy/Train": train_accuracy,
+            "Accuracy/Test": val_accuracy,
+        }, step=epoch)
         # ====================================================Log best accuracy to wandb====================================================
         if val_accuracy > best_accuracy:
             best_accuracy = val_accuracy
             wandb.log({"Best Accuracy": best_accuracy})  # Log best accuracy to wandb
-            best_conf_matrix = confusion_matrix(val_targets, val_predictions)
+            best_conf_matrix = confusion_matrix(val_targets, val_predictions3)
             
             # Vẽ confusion matrix
             plt.figure(figsize=(8, 6))
@@ -182,8 +244,8 @@ def train(config):
             plt.xlabel('Predicted Label')
             plt.ylabel('True Label')
             plt.title(f'Confusion Matrix (Epoch {epoch})')
-            torch.save(model, os.path.join(config.output_dir, f'model_Best_{epoch}.pt'))
-            logger.info(f'Saved best model at epoch {epoch} with accuracy: {best_accuracy:.4f}')
+            # torch.save(model, os.path.join(config.output_dir, f'model_Best_{epoch}.pt'))
+            # logger.info(f'Saved best model at epoch {epoch} with accuracy: {best_accuracy:.4f}')
             # Ghi confusion matrix vào TensorBoard
             # Lưu hình ảnh confusion matrix
             cm_path = os.path.join(config.output_dir, f'best_confusion_matrix.png')
@@ -191,29 +253,29 @@ def train(config):
             plt.close()
 
             # Ghi confusion matrix vào TensorBoard
-            writer.add_image('Validation/Confusion Matrix', 
-                             torch.tensor(plt.imread(cm_path)), epoch, dataformats='HWC')
+            # writer.add_image('Validation/Confusion Matrix', 
+            #                  torch.tensor(plt.imread(cm_path)), epoch, dataformats='HWC')
             wandb.log({"Confusion Matrix": wandb.Image(cm_path)})  # Log confusion matrix to wandb
 
         # Early stopping
-        if val_loss < best_val_loss:
-            best_val_loss = val_loss
-            patience_counter = 0
-            if epoch % config.logging.save_interval == 0:
-                # model.save(os.path.join(config.output_dir, f'model_{epoch}.pt'))
-                logger.info(f'Saved model at epoch {epoch}')
-        else:
-            patience_counter += 1
-            if patience_counter >= config.training.early_stopping.patience:
-                logger.info(f'Early stopping triggered after {epoch} epochs')
-                break
+        # if val_loss["loss"] < best_val_loss:
+        #     best_val_loss = val_loss["loss"]
+        #     patience_counter = 0
+        #     if epoch % config.logging.save_interval == 0:
+        #         # model.save(os.path.join(config.output_dir, f'model_{epoch}.pt'))
+        #         logger.info(f'Saved model at epoch {epoch}')
+        # else:
+        #     patience_counter += 1
+        #     if patience_counter >= config.training.early_stopping.patience:
+        #         logger.info(f'Early stopping triggered after {epoch} epochs')
+        #         break
         
-        # Update scheduler
-        scheduler.step(val_loss)
+        # # Update scheduler
+        # scheduler.step(val_loss)
     
     # ====================================================Lưu confusion matrix tốt nhất====================================================
     if best_conf_matrix is not None:
-        logger.info(f'Saving best confusion matrix with accuracy: {best_accuracy:.4f}')
+        # logger.info(f'Saving best confusion matrix with accuracy: {best_accuracy:.4f}')
         cm_path_final = os.path.join(config.output_dir, 'final_best_confusion_matrix.png')
         plt.figure(figsize=(8, 6))
         sns.heatmap(best_conf_matrix, annot=True, fmt='d', cmap='Blues')
@@ -273,13 +335,13 @@ def train_with_sweep(config):
             'Mnum_layers': {
                 'values': [1, 2, 3, 4]  # Possible values for number of layers
             },
-            # 'pretrained_model_name': {
-            #     'values': ["emilyalsentzer/Bio_ClinicalBERT",
-            #                "dmis-lab/biobert-base-cased-v1.1",
-            #                "bionlp/bluebert_pubmed_mimic_uncased_L-12_H-768_A-12",
-            #                "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract",
-            #                ]  # Possible values for pretrained model
-            # }
+            'pretrained_model_name': {
+                'values': ["emilyalsentzer/Bio_ClinicalBERT",
+                           "dmis-lab/biobert-base-cased-v1.1",
+                           "bionlp/bluebert_pubmed_mimic_uncased_L-12_H-768_A-12",
+                           "microsoft/BiomedNLP-PubMedBERT-base-uncased-abstract",
+                           ]  # Possible values for pretrained model
+            }
             }
         }
 

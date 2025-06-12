@@ -45,11 +45,14 @@ class MyCustomLoss(nn.Module):
 
     def forward(self, logits1, logits2, logits3, target):
         loss1 = self.loss1(logits1, target)
-        loss2 = self.loss2(logits2, target)
         loss3 = self.loss3(logits3, target)
 
-        # Apply uncertainty weighting formula
-        total_loss = loss1 + loss2 + loss3
+        if logits2 is not None:
+            loss2 = self.loss2(logits2, target)
+            total_loss = loss1 + loss2 + loss3
+        else:
+            loss2 = torch.tensor(0.0, device=loss1.device)
+            total_loss = loss1 + loss3
 
         return {
             'loss': total_loss,
@@ -57,3 +60,4 @@ class MyCustomLoss(nn.Module):
             'loss_vitbi': loss2,
             'loss_combined': loss3
         }
+

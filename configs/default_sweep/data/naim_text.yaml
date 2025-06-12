@@ -4,7 +4,7 @@ caller:
   target_column: d_target
   num_classes: 4
   num_features: 64
-  tokenizer: yikuan8/Clinical-Longformer
+  tokenizer: "bionlp/bluebert_pubmed_mimic_uncased_L-12_H-768_A-12"
   categorical_features: null
   transform: null
 
