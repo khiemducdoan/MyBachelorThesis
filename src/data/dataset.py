@@ -146,13 +146,13 @@ class TBIDataset2stream(Dataset):
         num_features: 64,
         tokenizer: str,
         categorical_features: Optional[callable] = None,
-        transform: Optional[callable] = None
+        n = None
     ):
         self.data = data
         self.target_column = target_column
         self.num_classes = num_classes
         self.num_features = num_features
-        self.transform = transform
+        self.transform = MissingGenerator(n)
         self.tokenizer = transformers.AutoTokenizer.from_pretrained(tokenizer)
         # Separate features and target
         self.features = self.data.drop(columns=[self.target_column, "text"]) 
@@ -188,12 +188,12 @@ class TBIDataset2stream(Dataset):
     def __getitem__(self, idx):
         x = self.features.iloc[idx].values
         y = self.targets.iloc[idx]
+        if self.transform:
+            x = self.transform(x)
         input_ids, attention_mask = self.read_text(idx)
         # Convert to tensor
         x = torch.FloatTensor(x)
         y = torch.LongTensor([y])[0]
-        
-        if self.transform:
-            x = x.apply(lambda x: (x - x.mean()) / x.std())
+    
             
         return [x,input_ids, attention_mask], y 

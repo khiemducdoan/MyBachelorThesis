@@ -34,7 +34,7 @@ logging:
     notes: "NAIM model for TBI dataset"
   log_interval: 100
   save_interval: 10
-  sweep_count : 100
+  sweep_count : 5
 sweep_configuration:
   method: grid
   metric:

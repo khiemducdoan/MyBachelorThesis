@@ -231,48 +231,51 @@ def train_with_sweep(config):
     # Define sweep configuration
     sweep_config = {
         "name": config.logging.wandb.name,
-        'method': 'bayes',  # Optimization method (e.g., grid, random, bayes)
+        'method': 'grid',  # Optimization method (e.g., grid, random, bayes)
         'metric': {
             'name': 'Best Accuracy',  # Metric to optimize
             'goal': 'maximize'  # Goal: maximize or minimize
         },
         'parameters': {
-            'batch_size': {
-                'values': [4, 8, 16, 32, 64, 128, 256]#ssible values for batch size
-            },
-            'learning_rate': {
-                'distribution': 'log_uniform',
-                'min': -8,
-                'max': -4
-            },
-            'd_token': {
-                'values': [8, 16, 32, 64]  # Possible values for d_token
-            },
-            "Fdropout_rate": {
-                "distribution": "uniform",
-                "min": 0.1,
-                "max": 0.5
-            },
-            "Mdropout_rate": {
-                "distribution": "uniform",
-                "min": 0.1,
-                "max": 0.4
-            },
-            'Fnum_heads': {
-                'values': [1, 2, 4, 8]  # Possible values for number of heads
-            },
+            "n": {
+                "values": [5, 10, 25, 50, 75]
+              }  # Possible values for n
+            # 'batch_size': {
+            #     'values': [4, 8, 16, 32, 64, 128, 256]#ssible values for batch size
+            # },
+            # 'learning_rate': {
+            #     'distribution': 'log_uniform',
+            #     'min': -8,
+            #     'max': -4
+            # },
+            # 'd_token': {
+            #     'values': [8, 16, 32, 64]  # Possible values for d_token
+            # },
+            # "Fdropout_rate": {
+            #     "distribution": "uniform",
+            #     "min": 0.1,
+            #     "max": 0.5
+            # },
+            # "Mdropout_rate": {
+            #     "distribution": "uniform",
+            #     "min": 0.1,
+            #     "max": 0.4
+            # },
+            # 'Fnum_heads': {
+            #     'values': [1, 2, 4, 8]  # Possible values for number of heads
+            # },
             # 'Mnum_heads': {
             #     'values': [1, 2, 4, 8]  # Possible values for number of heads
             # },
             # "num_layers": {
             #     "values": [1, 2, 3,4,5,6,7,8,9,10]  # Possible values for number of layers
             # },
-            'Fnum_layers': {
-                'values': [1, 2, 3, 4, 5, 6, 7, 8]  # Possible values for number of layers
-            },
-            'Mnum_layers': {
-                'values': [1, 2, 3, 4]  # Possible values for number of layers
-            },
+            # 'Fnum_layers': {
+            #     'values': [1, 2, 3, 4, 5, 6, 7, 8]  # Possible values for number of layers
+            # },
+            # 'Mnum_layers': {
+            #     'values': [1, 2, 3, 4]  # Possible values for number of layers
+            # },
             # 'pretrained_model_name': {
             #     'values': ["emilyalsentzer/Bio_ClinicalBERT",
             #                "dmis-lab/biobert-base-cased-v1.1",
@@ -290,20 +293,20 @@ def train_with_sweep(config):
         # Initialize wandb with sweep configuration
         wandb.init()
         sweep_params = wandb.config
-
+        config.data.caller.n = sweep_params.n
         # Update config with sweep parameters
-        config.training.batch_size = sweep_params.batch_size
-        config.model.optimizer.lr = sweep_params.learning_rate
+        # config.training.batch_size = sweep_params.batch_size
+        # config.model.optimizer.lr = sweep_params.learning_rate
 
-        # config.model.model.params.num_layers = sweep_params.Fnum_layers
-        # config.model.model.params.d_token = sweep_params.d_token
-        # config.model.model.params.dropout_rate = sweep_params.Fdropout_rate
-        # config.model.model.params.num_heads = sweep_params.Fnum_heads
-        #================feature transformer=========================
-        config.model.model.params_naim.num_layers = sweep_params.Fnum_layers
-        config.model.model.params_naim.d_token = sweep_params.d_token
-        config.model.model.params_naim.dropout_rate = sweep_params.Fdropout_rate
-        config.model.model.params_naim.num_heads = sweep_params.Fnum_heads
+        # # config.model.model.params.num_layers = sweep_params.Fnum_layers
+        # # config.model.model.params.d_token = sweep_params.d_token
+        # # config.model.model.params.dropout_rate = sweep_params.Fdropout_rate
+        # # config.model.model.params.num_heads = sweep_params.Fnum_heads
+        # #================feature transformer=========================
+        # config.model.model.params_naim.num_layers = sweep_params.Fnum_layers
+        # config.model.model.params_naim.d_token = sweep_params.d_token
+        # config.model.model.params_naim.dropout_rate = sweep_params.Fdropout_rate
+        # config.model.model.params_naim.num_heads = sweep_params.Fnum_heads
         #================maske transformer=========================
         # config.model.model.params.num_layers = sweep_params.Fnum_layers
         # config.model.model.mask_params.d_token = sweep_params.d_token

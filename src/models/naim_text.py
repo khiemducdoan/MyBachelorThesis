@@ -580,6 +580,7 @@ class NAIM_TEXTclassifier(BaseModel):
         if input_ids is not None and not torch.all(input_ids == 0):
             text_features = self.vitbi(input_ids, attention_mask)
             final = self.combinator(clinical_features, text_features.logits)
+            # final = torch.softmax(final, dim=-1)  # Softmax for multi-class classification
             return final
         else:
             # Nếu input_ids toàn 0 hoặc None thì chỉ trả về clinical_features
